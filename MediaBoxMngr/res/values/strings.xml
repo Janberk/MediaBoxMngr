@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Media Box Mngr</string>
+    <string name="itemList_header">Items</string>
+    <string name="datePicker_header">Creation date:</string>
+    <string name="item_title_hint">Enter a title.</string>
+    <string name="item_content_hint">Enter item content.</string>
+    <string name="item_title_label">Title</string>
+    <string name="item_creation_date_label">Creation Date</string>
+    <string name="item_details_label">Details</string>
+    <string name="item_favorite_label">Favorite?</string>    
+    <string name="new_item">New Item</string>
+    <string name="delete_item">Delete</string>
+
+</resources>
