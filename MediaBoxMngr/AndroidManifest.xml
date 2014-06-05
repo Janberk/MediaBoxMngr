@@ -27,6 +27,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity"
+            android:label="@string/app_name" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity" />
+        </activity>
     </application>
 
 </manifest>
