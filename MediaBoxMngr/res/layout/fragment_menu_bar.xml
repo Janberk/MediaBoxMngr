@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/custom_margin_48dp"
+    android:alpha="0.85"
+    android:background="#000000"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:weightSum="4" >
+
+    <ImageView
+        android:id="@+id/iv_fragmentMenuBar_allLists"
+        android:layout_width="@dimen/custom_margin_0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_margin_8dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/all_lists"
+        android:src="@drawable/ic_menu_itemlist_white" />
+    
+    <ImageView
+        android:id="@+id/iv_fragmentMenuBar_settings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_margin_8dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/action_settings"
+        android:src="@drawable/ic_menu_settings_white" />
+
+    <ImageView
+        android:id="@+id/iv_fragmentMenuBar_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_margin_8dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/delete_item"
+        android:src="@drawable/ic_menu_trash_white" />
+
+    <ImageView
+        android:id="@+id/iv_fragmentMenuBar_logout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_margin_8dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/logout"
+        android:src="@drawable/ic_menu_logout_white" />
+
+</LinearLayout>
