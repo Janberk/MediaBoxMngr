@@ -15,16 +15,17 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import de.canberkdemirkan.mediaboxmngr.R;
+import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
 
 public class DatePickerFragment extends DialogFragment {
-
-	public static final String EXTRA_ITEM_CREATION_DATE = "de.canberk.bignerdranchproject.item_creation_date";
 
 	private Date mCreationDate;
 
 	public static DatePickerFragment newInstance(Date creationDate) {
 		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_ITEM_CREATION_DATE, creationDate);
+
+		args.putSerializable(ProjectConstants.KEY_ITEM_CREATION_DATE,
+				creationDate);
 
 		DatePickerFragment fragment = new DatePickerFragment();
 		fragment.setArguments(args);
@@ -34,7 +35,8 @@ public class DatePickerFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		mCreationDate = (Date) getArguments().getSerializable(EXTRA_ITEM_CREATION_DATE);
+		mCreationDate = (Date) getArguments().getSerializable(
+				ProjectConstants.KEY_ITEM_CREATION_DATE);
 		// Create a Calendar to get the year, month, and day
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(mCreationDate);
@@ -52,9 +54,11 @@ public class DatePickerFragment extends DialogFragment {
 					int day) {
 				// Translate year, month, day into a Date object using a
 				// calendar
-				mCreationDate = new GregorianCalendar(year, month, day).getTime();
+				mCreationDate = new GregorianCalendar(year, month, day)
+						.getTime();
 				// Update argument to preserve selected value on rotation
-				getArguments().putSerializable(EXTRA_ITEM_CREATION_DATE, mCreationDate);
+				getArguments().putSerializable(
+						ProjectConstants.KEY_ITEM_CREATION_DATE, mCreationDate);
 			}
 		});
 
@@ -74,7 +78,7 @@ public class DatePickerFragment extends DialogFragment {
 		if (getTargetFragment() == null)
 			return;
 		Intent i = new Intent();
-		i.putExtra(EXTRA_ITEM_CREATION_DATE, mCreationDate);
+		i.putExtra(ProjectConstants.KEY_ITEM_CREATION_DATE, mCreationDate);
 		getTargetFragment().onActivityResult(getTargetRequestCode(),
 				resultCode, i);
 	}

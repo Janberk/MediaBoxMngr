@@ -24,11 +24,16 @@ public class ItemPagerActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		UUID itemId = (UUID) getIntent().getSerializableExtra(
+				ProjectConstants.KEY_ITEM_ID);
+		final String userTag = (String) getIntent().getSerializableExtra(
+				ProjectConstants.KEY_USER_TAG);
+
 		mViewPager = new ViewPager(this);
 		mViewPager.setId(R.id.viewPager);
 		setContentView(mViewPager);
 
-		mItemList = ItemStock.get(this, "w@w.de").getItemList();
+		mItemList = ItemStock.get(this, userTag).getItemList();
 
 		FragmentManager fm = getSupportFragmentManager();
 		mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
@@ -41,12 +46,10 @@ public class ItemPagerActivity extends FragmentActivity {
 			@Override
 			public Fragment getItem(int pos) {
 				Item item = mItemList.get(pos);
-				return ItemFragment.newInstance(item.getUniqueId(), "w@w.de");
+				return ItemFragment.newInstance(item.getUniqueId(), userTag);
 			}
 		});
 
-		UUID itemId = (UUID) getIntent().getSerializableExtra(
-				ProjectConstants.KEY_ITEM_ID);
 		for (int i = 0; i < mItemList.size(); i++) {
 			if (mItemList.get(i).getUniqueId().equals(itemId)) {
 				mViewPager.setCurrentItem(i);

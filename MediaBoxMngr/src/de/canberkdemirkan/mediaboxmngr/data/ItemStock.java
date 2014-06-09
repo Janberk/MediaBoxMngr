@@ -14,6 +14,7 @@ public class ItemStock {
 	private static final String FILE_NAME = "items.json";
 
 	private ArrayList<Item> mItemList;
+	private ArrayList<Item> mSerializedItemList;
 	private CustomJSONSerializer mSerializer;
 
 	private static ItemStock sItemStock;
@@ -24,15 +25,17 @@ public class ItemStock {
 	public ItemStock(Context appContext, String user) {
 		mAppContext = appContext;
 		mDAOItem = new DAOItem(mAppContext);
-		// mSerializer = new CustomJSONSerializer(mAppContext, FILE_NAME);
-		// mItemList = new ArrayList<Item>();
-		//
-		// try {
-		// mItemList = mSerializer.loadItems();
-		// } catch (Exception e) {
-		// mItemList = new ArrayList<Item>();
-		// Log.e(TAG, "Error loading items: ", e);
-		// }
+
+		mSerializer = new CustomJSONSerializer(mAppContext, FILE_NAME);
+		mSerializedItemList = new ArrayList<Item>();
+
+		try {
+			mSerializedItemList = mSerializer.loadItems();
+		} catch (Exception e) {
+			mSerializedItemList = new ArrayList<Item>();
+			Log.e(TAG, "Error loading items: ", e);
+		}
+
 		mItemList = mDAOItem.getAllItems(user);
 	}
 
@@ -47,10 +50,10 @@ public class ItemStock {
 		return mItemList;
 	}
 
-	public boolean saveItems() {
+	public boolean saveSerializedItems() {
 
 		try {
-			mSerializer.saveItems(mItemList);
+			mSerializer.saveItems(mSerializedItemList);
 			Log.d(TAG, "Items saved to file!");
 			return true;
 		} catch (Exception e) {

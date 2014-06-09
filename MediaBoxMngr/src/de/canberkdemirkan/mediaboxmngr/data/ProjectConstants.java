@@ -13,9 +13,10 @@ public class ProjectConstants {
 	public static final int MOVIE = 2;
 	
 	// intent extra keys/tags
-	public static final String KEY_MY_PREFERENCES = "de.canberkdemirkan.mediaboxmngr.my_prefs";
+	public static final String KEY_MY_PREFERENCES = "de.canberkdemirkan.mediaboxmngr.app_prefs";
 	public static final String KEY_ITEM_ID = "de.canberkdemirkan.mediaboxmngr.item_id";
-	public static final String KEY_TYPE = "de.canberkdemirkan.mediaboxmngr.type";
+	public static final String KEY_TYPE = "de.canberkdemirkan.mediaboxmngr.item_type";
+	public static final String KEY_ITEM_CREATION_DATE = "de.canberkdemirkan.mediaboxmngr.item_creation_date";
 	public static final String KEY_CREATE_NEW_ITEM = "de.canberkdemirkan.mediaboxmngr.new_item";
 	public static final String KEY_USER_TAG = "de.canberkdemirkan.mediaboxmngr.user_tag";
 	public static final String KEY_LIST_TAG = "de.canberkdemirkan.mediaboxmngr.list_tag";

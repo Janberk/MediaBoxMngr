@@ -22,6 +22,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 	}
 
 	private final Context mContext;
+	@SuppressWarnings("unused")
 	private ArrayList<Item> mItemList;
 
 	public ItemAdapter(Context context, ArrayList<Item> itemList) {

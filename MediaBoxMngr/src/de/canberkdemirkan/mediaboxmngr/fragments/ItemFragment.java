@@ -31,20 +31,23 @@ public class ItemFragment extends Fragment {
 
 	private static final String DIALOG_CREATION_DATE = "creation_date";
 
+	private String mUser;
 	private Item mItem;
+
 	private EditText mEditItemTitle;
 	private EditText mEditItemContent;
 	private Button mButtonItemCreationDate;
 	private CheckBox mCheckBoxItemFavorite;
 
-	private String mUser;
-
 	public static ItemFragment newInstance(UUID itemId, String userTag) {
 		Bundle args = new Bundle();
+		
 		args.putSerializable(ProjectConstants.KEY_ITEM_ID, itemId);
 		args.putSerializable(ProjectConstants.KEY_USER_TAG, userTag);
+
 		ItemFragment fragment = new ItemFragment();
 		fragment.setArguments(args);
+
 		return fragment;
 	}
 
@@ -52,15 +55,14 @@ public class ItemFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		
+
 		UUID itemId = (UUID) getArguments().getSerializable(
 				ProjectConstants.KEY_ITEM_ID);
 		mUser = (String) getArguments().getSerializable(
 				ProjectConstants.KEY_USER_TAG);
-		
+
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
 		mItem = itemStock.getItem(itemId);
-		
 	}
 
 	@TargetApi(11)
@@ -94,7 +96,7 @@ public class ItemFragment extends Fragment {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				ItemStock.get(getActivity(), mUser).updateItem(mItem);
+				updateItem();
 			}
 		});
 
@@ -141,6 +143,7 @@ public class ItemFragment extends Fragment {
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						mItem.setFavorite(isChecked);
+						updateItem();
 					}
 				});
 
@@ -153,7 +156,7 @@ public class ItemFragment extends Fragment {
 			return;
 		if (requestCode == ProjectConstants.REQUEST_CODE) {
 			Date creationDate = (Date) data
-					.getSerializableExtra(DatePickerFragment.EXTRA_ITEM_CREATION_DATE);
+					.getSerializableExtra(ProjectConstants.KEY_ITEM_CREATION_DATE);
 			mItem.setCreationDate(creationDate);
 			updateCreationDate();
 		}
@@ -170,7 +173,7 @@ public class ItemFragment extends Fragment {
 
 	@Override
 	public void onPause() {
-		// ItemStock.get(getActivity()).saveItems();
+		ItemStock.get(getActivity(), mUser).saveSerializedItems();
 		super.onPause();
 	}
 
@@ -185,6 +188,10 @@ public class ItemFragment extends Fragment {
 		default:
 			return super.onOptionsItemSelected(menuItem);
 		}
+	}
+
+	private void updateItem() {
+		ItemStock.get(getActivity(), mUser).updateItem(mItem);
 	}
 
 }

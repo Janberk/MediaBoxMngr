@@ -11,7 +11,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// database details
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "mediaboxmngr_db.db";
-	
+
 	// static method calling constructor - singleton
 	public static DatabaseHelper getInstance(Context context) {
 		if (sInstance == null) {
@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		return sInstance;
 	}
-	
+
 	// constructor
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
