@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,9 +21,11 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
@@ -53,6 +57,11 @@ public class ItemListFragment extends Fragment implements
 	private Spinner mSpinnerItemType;
 	private Button mButtonSaveItem;
 
+	private ImageView mImageAllLists;
+	private ImageView mImageSettings;
+	private ImageView mImageDelete;
+	private ImageView mImageLogout;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,6 +72,10 @@ public class ItemListFragment extends Fragment implements
 		mEditMode = false;
 		getActivity().setTitle(R.string.itemList_header);
 		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
+	}
+
+	private void syncWithRemoteDb() {
+
 	}
 
 	private void initViews(View view) {
@@ -85,6 +98,82 @@ public class ItemListFragment extends Fragment implements
 		mSpinnerItemType.setOnItemSelectedListener(this);
 		mButtonSaveItem = (Button) view
 				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
+		mImageAllLists = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_allLists);
+		mImageAllLists.setOnClickListener(new View.OnClickListener() {
+
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager
+					.beginTransaction();
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG)
+						.show();
+				// fragmentTransaction.replace(containerId, selectList);
+				// fragmentTransaction.commit();
+			}
+		});
+
+		mImageSettings = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_settings);
+		mImageSettings.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG)
+						.show();
+				syncWithRemoteDb();
+			}
+		});
+
+		mImageDelete = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_delete);
+		mImageDelete.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG)
+						.show();
+
+				// editMode = UtilMethods.modeSwitcher(editMode);
+				//
+				// int childCount = listView.getChildCount();
+				//
+				// for (int i = 0; i < childCount; i++) {
+				// View view = listView.getChildAt(i);
+				//
+				// if (view != null) {
+				// CheckBox cb_itemDelete = (CheckBox) view
+				// .findViewById(R.id.cb_itemDelete);
+				// ImageView iv_deleteSingleItem = (ImageView) view
+				// .findViewById(R.id.iv_deleteSingleItem);
+				// cb_itemDelete.setChecked(false);
+				//
+				// if (cb_itemDelete.getVisibility() == View.GONE) {
+				// cb_itemDelete.setVisibility(View.VISIBLE);
+				// iv_deleteSingleItem.setVisibility(View.VISIBLE);
+				// } else {
+				// cb_itemDelete.setVisibility(View.GONE);
+				// iv_deleteSingleItem.setVisibility(View.GONE);
+				// }
+				// }
+				// }
+			}
+		});
+
+		mImageLogout = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_logout);
+		mImageLogout.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getActivity(), "Logout", Toast.LENGTH_LONG)
+						.show();
+				// logout();
+			}
+		});
+
 	}
 
 	@Override
