@@ -12,10 +12,15 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.content.Context;
+import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
+import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
+import de.canberkdemirkan.mediaboxmngr.model.Movie;
+import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
 
 public class CustomJSONSerializer {
 
@@ -45,7 +50,26 @@ public class CustomJSONSerializer {
 					.nextValue();
 			// Build the array of items from JSONObjects
 			for (int i = 0; i < array.length(); i++) {
-				itemList.add(new Item(array.getJSONObject(i)));
+				JSONObject item = array.getJSONObject(i);
+
+				if (item.has(ProjectConstants.TYPE)) {
+					ItemType type = ItemType.valueOf(item
+							.getString(ProjectConstants.TYPE));
+					switch (type) {
+					case Album:
+						itemList.add(0, new MusicAlbum(array.getJSONObject(i)));
+						break;
+					case Book:
+						itemList.add(0, new Book(array.getJSONObject(i)));
+						break;
+					case Movie:
+						itemList.add(0, new Movie(array.getJSONObject(i)));
+						break;
+
+					default:
+						break;
+					}
+				}
 			}
 		} catch (FileNotFoundException e) {
 			// Ignore this one; it happens when starting fresh

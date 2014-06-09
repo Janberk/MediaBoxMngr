@@ -3,10 +3,10 @@ package de.canberkdemirkan.mediaboxmngr.data;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import de.canberkdemirkan.mediaboxmngr.model.Item;
-import de.canberkdemirkan.mediaboxmngr.util.CustomJSONSerializer;
 import android.content.Context;
 import android.util.Log;
+import de.canberkdemirkan.mediaboxmngr.model.Item;
+import de.canberkdemirkan.mediaboxmngr.util.CustomJSONSerializer;
 
 public class ItemStock {
 
@@ -21,24 +21,24 @@ public class ItemStock {
 
 	private DAOItem mDAOItem;
 
-	public ItemStock(Context appContext) {
+	public ItemStock(Context appContext, String user) {
 		mAppContext = appContext;
 		mDAOItem = new DAOItem(mAppContext);
-//		mSerializer = new CustomJSONSerializer(mAppContext, FILE_NAME);
-//		mItemList = new ArrayList<Item>();
-//
-//		try {
-//			mItemList = mSerializer.loadItems();
-//		} catch (Exception e) {
-//			mItemList = new ArrayList<Item>();
-//			Log.e(TAG, "Error loading items: ", e);
-//		}
-		mItemList = mDAOItem.getAllItems();
+		// mSerializer = new CustomJSONSerializer(mAppContext, FILE_NAME);
+		// mItemList = new ArrayList<Item>();
+		//
+		// try {
+		// mItemList = mSerializer.loadItems();
+		// } catch (Exception e) {
+		// mItemList = new ArrayList<Item>();
+		// Log.e(TAG, "Error loading items: ", e);
+		// }
+		mItemList = mDAOItem.getAllItems(user);
 	}
 
-	public static ItemStock get(Context context) {
+	public static ItemStock get(Context context, String user) {
 		if (sItemStock == null) {
-			sItemStock = new ItemStock(context.getApplicationContext());
+			sItemStock = new ItemStock(context.getApplicationContext(), user);
 		}
 		return sItemStock;
 	}
@@ -64,9 +64,9 @@ public class ItemStock {
 		mItemList.add(0, item);
 		mDAOItem.insertItem(item);
 	}
-	
+
 	public void updateItem(Item item) {
-		mDAOItem.updateItem(item);		
+		mDAOItem.updateItem(item);
 	}
 
 	public Item getItem(UUID id) {

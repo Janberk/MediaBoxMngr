@@ -14,7 +14,7 @@ import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemAdapter extends ArrayAdapter<Item> {
 
-	// TODO ViewHolder Pattern
+	// TODO ViewHolder Pattern damit Liste beim Scrollen nicht durcheinander kommt
 	static class ViewHolder {
 		TextView mTextItemTitle;
 		TextView mTextItemCreationDate;

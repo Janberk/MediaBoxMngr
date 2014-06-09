@@ -23,26 +23,26 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import de.canberkdemirkan.mediaboxmngr.R;
-import de.canberkdemirkan.mediaboxmngr.data.DAOItem;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
+import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemFragment extends Fragment {
 
-	public static final String EXTRA_ITEM_ID = "de.canberk.bignerdranchproject.item_id";
 	private static final String DIALOG_CREATION_DATE = "creation_date";
-	private static final int REQUEST_DATE = 0;
 
 	private Item mItem;
 	private EditText mEditItemTitle;
 	private EditText mEditItemContent;
 	private Button mButtonItemCreationDate;
 	private CheckBox mCheckBoxItemFavorite;
-	private DAOItem mDAOItem;
 
-	public static ItemFragment newInstance(UUID itemId) {
+	private String mUser;
+
+	public static ItemFragment newInstance(UUID itemId, String userTag) {
 		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_ITEM_ID, itemId);
+		args.putSerializable(ProjectConstants.KEY_ITEM_ID, itemId);
+		args.putSerializable(ProjectConstants.KEY_USER_TAG, userTag);
 		ItemFragment fragment = new ItemFragment();
 		fragment.setArguments(args);
 		return fragment;
@@ -51,10 +51,16 @@ public class ItemFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mDAOItem = ItemStock.get(getActivity()).getDAOItem();
-		UUID itemId = (UUID) getArguments().getSerializable(EXTRA_ITEM_ID);
-		mItem = ItemStock.get(getActivity()).getItem(itemId);
 		setHasOptionsMenu(true);
+		
+		UUID itemId = (UUID) getArguments().getSerializable(
+				ProjectConstants.KEY_ITEM_ID);
+		mUser = (String) getArguments().getSerializable(
+				ProjectConstants.KEY_USER_TAG);
+		
+		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+		mItem = itemStock.getItem(itemId);
+		
 	}
 
 	@TargetApi(11)
@@ -88,7 +94,7 @@ public class ItemFragment extends Fragment {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				ItemStock.get(getActivity()).updateItem(mItem);
+				ItemStock.get(getActivity(), mUser).updateItem(mItem);
 			}
 		});
 
@@ -109,7 +115,7 @@ public class ItemFragment extends Fragment {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				ItemStock.get(getActivity()).updateItem(mItem);
+				ItemStock.get(getActivity(), mUser).updateItem(mItem);
 			}
 		});
 
@@ -121,7 +127,8 @@ public class ItemFragment extends Fragment {
 				FragmentManager fm = getActivity().getSupportFragmentManager();
 				DatePickerFragment dialog = DatePickerFragment
 						.newInstance(mItem.getCreationDate());
-				dialog.setTargetFragment(ItemFragment.this, REQUEST_DATE);
+				dialog.setTargetFragment(ItemFragment.this,
+						ProjectConstants.REQUEST_CODE);
 				dialog.show(fm, DIALOG_CREATION_DATE);
 			}
 		});
@@ -144,7 +151,7 @@ public class ItemFragment extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != Activity.RESULT_OK)
 			return;
-		if (requestCode == REQUEST_DATE) {
+		if (requestCode == ProjectConstants.REQUEST_CODE) {
 			Date creationDate = (Date) data
 					.getSerializableExtra(DatePickerFragment.EXTRA_ITEM_CREATION_DATE);
 			mItem.setCreationDate(creationDate);

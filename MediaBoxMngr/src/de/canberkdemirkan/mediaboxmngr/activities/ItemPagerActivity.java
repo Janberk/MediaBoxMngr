@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
+import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemFragment;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
@@ -27,7 +28,7 @@ public class ItemPagerActivity extends FragmentActivity {
 		mViewPager.setId(R.id.viewPager);
 		setContentView(mViewPager);
 
-		mItemList = ItemStock.get(this).getItemList();
+		mItemList = ItemStock.get(this, "w@w.de").getItemList();
 
 		FragmentManager fm = getSupportFragmentManager();
 		mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
@@ -40,12 +41,12 @@ public class ItemPagerActivity extends FragmentActivity {
 			@Override
 			public Fragment getItem(int pos) {
 				Item item = mItemList.get(pos);
-				return ItemFragment.newInstance(item.getUniqueId());
+				return ItemFragment.newInstance(item.getUniqueId(), "w@w.de");
 			}
 		});
 
 		UUID itemId = (UUID) getIntent().getSerializableExtra(
-				ItemFragment.EXTRA_ITEM_ID);
+				ProjectConstants.KEY_ITEM_ID);
 		for (int i = 0; i < mItemList.size(); i++) {
 			if (mItemList.get(i).getUniqueId().equals(itemId)) {
 				mViewPager.setCurrentItem(i);

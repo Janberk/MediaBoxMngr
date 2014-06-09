@@ -2,7 +2,9 @@ package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,10 +24,14 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
-import de.canberkdemirkan.mediaboxmngr.data.DAOItem;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
+import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
+import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
+import de.canberkdemirkan.mediaboxmngr.model.Movie;
+import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
 import de.canberkdemirkan.mediaboxmngr.util.ItemAdapter;
+import de.canberkdemirkan.mediaboxmngr.util.ItemType;
 
 public class ItemListFragment extends Fragment implements
 		OnItemSelectedListener {
@@ -43,20 +49,29 @@ public class ItemListFragment extends Fragment implements
 	private Spinner mSpinnerItemType;
 	private Button mButtonSaveItem;
 
-	private DAOItem mDAOItem;
+	private String mTypeAsString;
+
+	private String mUser;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		// TODO user aus login fragment holen
+		//mUser = getUser();
+		mUser = "w@w.de";
 		mEditMode = false;
 		getActivity().setTitle(R.string.itemList_header);
-		mItemList = ItemStock.get(getActivity()).getItemList();
-		// mItemList = ItemStock.get(getActivity()).getDAOItem().getAllItems();
-		mDAOItem = ItemStock.get(getActivity()).getDAOItem();
+		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
+	}
 
-		// ItemAdapter adapter = new ItemAdapter(mItemList);
-		// setListAdapter(adapter);
+	public String getUser() {
+		SharedPreferences sharedPreferences = getActivity()
+				.getSharedPreferences(ProjectConstants.KEY_MY_PREFERENCES,
+						Context.MODE_PRIVATE);
+		// String user = sharedPreferences.getString(LoginFragment.EMAIL, "");
+		String user = sharedPreferences.getString("w@w.de", "");
+		return user;
 	}
 
 	private void initViews(View view) {
@@ -98,7 +113,7 @@ public class ItemListFragment extends Fragment implements
 
 				Item item = (Item) mListView.getAdapter().getItem(position);
 				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(ItemFragment.EXTRA_ITEM_ID, item.getUniqueId());
+				i.putExtra(ProjectConstants.KEY_ITEM_ID, item.getUniqueId());
 				startActivity(i);
 			}
 		});
@@ -107,17 +122,40 @@ public class ItemListFragment extends Fragment implements
 
 			@Override
 			public void onClick(View v) {
-				Item newItem = new Item();
-				newItem.setTitle(mEditEditTitle.getText().toString());
-				ItemStock.get(getActivity()).addItem(newItem);
+				ItemType type = ItemType.valueOf(mTypeAsString);
+				Item newItem = createItem(type);
+				ItemStock.get(getActivity(), mUser).addItem(newItem);
 				mItemAdapter.refresh(mItemList);
-
+				mEditEditTitle.setText("");
 				mEditor.setVisibility(View.GONE);
 				changeAlphaOfView(mListView, 0.2F, 1.0F);
 			}
 		});
 
 		return view;
+	}
+
+	public Item createItem(ItemType type) {
+		Item item = null;
+
+		switch (type) {
+		case Album:
+			item = new MusicAlbum();
+			break;
+		case Book:
+			item = new Book();
+			break;
+		case Movie:
+			item = new Movie();
+			break;
+
+		default:
+			break;
+		}
+		item.setTitle(mEditEditTitle.getText().toString());
+		item.setType(type);
+		item.setUser(mUser);
+		return item;
 	}
 
 	@Override
@@ -144,8 +182,8 @@ public class ItemListFragment extends Fragment implements
 			// Intent intent = new Intent(getActivity(),
 			// ItemPagerActivity.class);
 			// intent.putExtra(ItemFragment.EXTRA_ITEM_ID, item.getUniqueId());
-			// startActivityForResult(intent, 0);			
-			
+			// startActivityForResult(intent, 0);
+
 			if (!mEditMode) {
 				mEditMode = true;
 				mEditor.setVisibility(View.VISIBLE);
@@ -155,7 +193,7 @@ public class ItemListFragment extends Fragment implements
 				mEditor.setVisibility(View.GONE);
 				changeAlphaOfView(mListView, 0.2F, 1.0F);
 			}
-			
+
 			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
@@ -165,14 +203,11 @@ public class ItemListFragment extends Fragment implements
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
-		// TODO Auto-generated method stub
-
+		mTypeAsString = (String) parent.getItemAtPosition(position);
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void changeAlphaOfView(View view, float from, float to) {
