@@ -1,12 +1,16 @@
 package de.canberkdemirkan.mediaboxmngr.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+
+import com.google.gson.Gson;
+
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
@@ -15,6 +19,38 @@ import de.canberkdemirkan.mediaboxmngr.util.ItemType;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class DAOItem {
+
+	public static int colId;
+	public static int colUser;
+	public static int colTitle;
+	public static int colType;
+	public static int colCover;
+	public static int colGenre;
+	public static int colFavorite;
+	public static int colCreationDate;
+	public static int colDeleted;
+	public static int colDeletionDate;
+	public static int colInPossession;
+	public static int colOriginalTitle;
+	public static int colCountry;
+	public static int colYearPublished;
+	public static int colContent;
+	public static int colRating;
+	public static int colProducer;
+	public static int colDirector;
+	public static int colScript;
+	public static int colActors;
+	public static int colMusic;
+	public static int colLength;
+	public static int colLabel;
+	public static int colStudio;
+	public static int colArtist;
+	public static int colFormat;
+	public static int colTitleCount;
+	public static int colEdition;
+	public static int colPublishingHouse;
+	public static int colAuthor;
+	public static int colIsbn;
 
 	private Context mAppContext;
 	private SQLiteDatabase mSQLiteDB;
@@ -112,36 +148,109 @@ public class DAOItem {
 		return itemList;
 	}
 
+	public String buildJSONfromSQLite(String user) {
+		open();
+		ArrayList<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
+		Cursor cursor = null;
+		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
+				+ " WHERE " + ProjectConstants.USER + "=" + '"' + user + '"';
+		Gson gson = new Gson();
+
+		try {
+			cursor = mSQLiteDB.rawQuery(selectQuery, null);
+
+			if (cursor != null) {
+
+				getColumnIndices(cursor);
+				for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
+						.moveToNext()) {
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put(ProjectConstants.ID, cursor.getString(colId));
+					map.put(ProjectConstants.USER, cursor.getString(colUser));
+					map.put(ProjectConstants.TITLE, cursor.getString(colTitle));
+					map.put(ProjectConstants.TYPE, cursor.getString(colType));
+					map.put(ProjectConstants.COVER, cursor.getString(colCover));
+					map.put(ProjectConstants.GENRE, cursor.getString(colGenre));
+					map.put(ProjectConstants.FAVORITE,
+							cursor.getString(colFavorite));
+					map.put(ProjectConstants.CREATION_DATE,
+							cursor.getString(colCreationDate));
+					map.put(ProjectConstants.DELETED,
+							cursor.getString(colDeleted));
+					map.put(ProjectConstants.DELETION_DATE,
+							cursor.getString(colDeletionDate));
+					map.put(ProjectConstants.IN_POSSESSION,
+							cursor.getString(colInPossession));
+					map.put(ProjectConstants.ORIGINAL_TITLE,
+							cursor.getString(colOriginalTitle));
+					map.put(ProjectConstants.COUNTRY,
+							cursor.getString(colCountry));
+					map.put(ProjectConstants.YEAR_PUBLISHED,
+							cursor.getString(colYearPublished));
+					map.put(ProjectConstants.CONTENT,
+							cursor.getString(colContent));
+					map.put(ProjectConstants.RATING,
+							cursor.getString(colRating));
+					map.put(ProjectConstants.PRODUCER,
+							cursor.getString(colProducer));
+					map.put(ProjectConstants.DIRECTOR,
+							cursor.getString(colDirector));
+					map.put(ProjectConstants.SCRIPT,
+							cursor.getString(colScript));
+					map.put(ProjectConstants.ACTORS,
+							cursor.getString(colActors));
+					map.put(ProjectConstants.MUSIC, cursor.getString(colMusic));
+					map.put(ProjectConstants.LENGTH,
+							cursor.getString(colLength));
+					map.put(ProjectConstants.LABEL, cursor.getString(colLabel));
+					map.put(ProjectConstants.STUDIO,
+							cursor.getString(colStudio));
+					map.put(ProjectConstants.ARTIST,
+							cursor.getString(colArtist));
+					map.put(ProjectConstants.FORMAT,
+							cursor.getString(colFormat));
+					map.put(ProjectConstants.TITLE_COUNT,
+							cursor.getString(colTitleCount));
+					map.put(ProjectConstants.EDITION,
+							cursor.getString(colEdition));
+					map.put(ProjectConstants.PUBLISHING_HOUSE,
+							cursor.getString(colPublishingHouse));
+					map.put(ProjectConstants.AUTHOR,
+							cursor.getString(colAuthor));
+					map.put(ProjectConstants.ISBN, cursor.getString(colIsbn));
+					values.add(map);
+				}
+			}
+		} catch (Exception e) {
+			values = new ArrayList<HashMap<String, String>>();
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+		String result = gson.toJson(values);
+		System.out.println(result);
+		return result;
+	}
+
 	public Item createItemFromTableValues(Cursor cursor) {
 		Item item = null;
+		getColumnIndices(cursor);
 
-		int iRow = cursor.getColumnIndex(ProjectConstants.ID);
-		// int iCover = cursor.getColumnIndex(ProjectConstants.COVER);
-		int iCreationDate = cursor
-				.getColumnIndex(ProjectConstants.CREATION_DATE);
-		int iUser = cursor.getColumnIndex(ProjectConstants.USER);
-		int iTitle = cursor.getColumnIndex(ProjectConstants.TITLE);
-		int iType = cursor.getColumnIndex(ProjectConstants.TYPE);
-		int iGenre = cursor.getColumnIndex(ProjectConstants.GENRE);
-		int iFavorite = cursor.getColumnIndex(ProjectConstants.FAVORITE);
-		int iInPossession = cursor
-				.getColumnIndex(ProjectConstants.IN_POSSESSION);
-		int iDeleted = cursor.getColumnIndex(ProjectConstants.DELETED);
+		ItemType type = ItemType.valueOf(cursor.getString(colType));
 
-		ItemType type = ItemType.valueOf(cursor.getString(iType));
-
-		int favoriteAsInt = (Integer.parseInt(cursor.getString(iFavorite)));
+		int favoriteAsInt = (Integer.parseInt(cursor.getString(colFavorite)));
 		int inPossessionAsInt = (Integer.parseInt(cursor
-				.getString(iInPossession)));
-		int deletedAsInt = (Integer.parseInt(cursor.getString(iDeleted)));
+				.getString(colInPossession)));
+		int deletedAsInt = (Integer.parseInt(cursor.getString(colDeleted)));
 
-		int id = Integer.parseInt(cursor.getString(iRow));
+		int id = Integer.parseInt(cursor.getString(colId));
 		// byte[] bytes = cursor.getBlob(iCover);
 		// Bitmap cover = CoverUtil.getBitmap(bytes);
-		String creationDate = cursor.getString(iCreationDate);
-		String user = cursor.getString(iUser);
-		String title = cursor.getString(iTitle);
-		String genre = cursor.getString(iGenre);
+		String creationDate = cursor.getString(colCreationDate);
+		String user = cursor.getString(colUser);
+		String title = cursor.getString(colTitle);
+		String genre = cursor.getString(colGenre);
 
 		switch (type) {
 		case Album:
@@ -219,6 +328,43 @@ public class DAOItem {
 			values.put(ProjectConstants.ISBN, ((Book) item).getIsbn());
 		}
 
+	}
+
+	public void getColumnIndices(Cursor cursor) {
+		colId = cursor.getColumnIndex(ProjectConstants.ID);
+		colUser = cursor.getColumnIndex(ProjectConstants.USER);
+		colTitle = cursor.getColumnIndex(ProjectConstants.TITLE);
+		colType = cursor.getColumnIndex(ProjectConstants.TYPE);
+		colCover = cursor.getColumnIndex(ProjectConstants.COVER);
+		colGenre = cursor.getColumnIndex(ProjectConstants.GENRE);
+		colFavorite = cursor.getColumnIndex(ProjectConstants.FAVORITE);
+		colCreationDate = cursor.getColumnIndex(ProjectConstants.CREATION_DATE);
+		colDeleted = cursor.getColumnIndex(ProjectConstants.DELETED);
+		colDeletionDate = cursor.getColumnIndex(ProjectConstants.DELETION_DATE);
+		colInPossession = cursor.getColumnIndex(ProjectConstants.IN_POSSESSION);
+		colOriginalTitle = cursor
+				.getColumnIndex(ProjectConstants.ORIGINAL_TITLE);
+		colCountry = cursor.getColumnIndex(ProjectConstants.COUNTRY);
+		colYearPublished = cursor
+				.getColumnIndex(ProjectConstants.YEAR_PUBLISHED);
+		colContent = cursor.getColumnIndex(ProjectConstants.CONTENT);
+		colRating = cursor.getColumnIndex(ProjectConstants.RATING);
+		colProducer = cursor.getColumnIndex(ProjectConstants.PRODUCER);
+		colDirector = cursor.getColumnIndex(ProjectConstants.DIRECTOR);
+		colScript = cursor.getColumnIndex(ProjectConstants.SCRIPT);
+		colActors = cursor.getColumnIndex(ProjectConstants.ACTORS);
+		colMusic = cursor.getColumnIndex(ProjectConstants.MUSIC);
+		colLength = cursor.getColumnIndex(ProjectConstants.LENGTH);
+		colLabel = cursor.getColumnIndex(ProjectConstants.LABEL);
+		colStudio = cursor.getColumnIndex(ProjectConstants.STUDIO);
+		colArtist = cursor.getColumnIndex(ProjectConstants.ARTIST);
+		colFormat = cursor.getColumnIndex(ProjectConstants.FORMAT);
+		colTitleCount = cursor.getColumnIndex(ProjectConstants.TITLE_COUNT);
+		colEdition = cursor.getColumnIndex(ProjectConstants.EDITION);
+		colPublishingHouse = cursor
+				.getColumnIndex(ProjectConstants.PUBLISHING_HOUSE);
+		colAuthor = cursor.getColumnIndex(ProjectConstants.AUTHOR);
+		colIsbn = cursor.getColumnIndex(ProjectConstants.ISBN);
 	}
 
 }
