@@ -32,6 +32,7 @@ public class ProjectConstants {
 	// item table column names
 	// common
 	public static final String ID = "_id";
+	public static final String SQLITE_ID = "sqlite_id";
 	public static final String TITLE = "title";
 	public static final String USER = "created_by";
 	public static final String TYPE = "type";
