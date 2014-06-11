@@ -30,7 +30,7 @@ public class ItemStock {
 		mSerializedItemList = new ArrayList<Item>();
 
 		try {
-			mSerializedItemList = mSerializer.loadItems();
+			// mSerializedItemList = mSerializer.loadItems();
 		} catch (Exception e) {
 			mSerializedItemList = new ArrayList<Item>();
 			Log.e(TAG, "Error loading items: ", e);
@@ -46,10 +46,6 @@ public class ItemStock {
 		return sItemStock;
 	}
 
-	public ArrayList<Item> getItemList() {
-		return mItemList;
-	}
-
 	public boolean saveSerializedItems() {
 
 		try {
@@ -62,7 +58,7 @@ public class ItemStock {
 		}
 
 	}
-	
+
 	public String getSQLiteAsJSON(String user) {
 		return mDAOItem.buildJSONfromSQLite(user);
 	}
@@ -83,6 +79,10 @@ public class ItemStock {
 			}
 		}
 		return null;
+	}
+
+	public ArrayList<Item> getItemList() {
+		return mItemList;
 	}
 
 	public DAOItem getDAOItem() {
