@@ -63,17 +63,19 @@ public abstract class Item {
 	}
 
 	public Item(JSONObject json) throws JSONException {
-		mUniqueId = UUID.fromString(json.getString(JSON_UID));
+		if (json.has(JSON_UID)) {
+			mUniqueId = UUID.fromString(json.getString(JSON_UID));
+		}
 		if (json.has(JSON_ID)) {
 			mId = json.getLong(JSON_ID);
 		}
 		// TODO überprüfen
-		mCreationDate = new Date(json.getLong(JSON_CREATION_DATE));
-		
-		// if (json.has(JSON_COVER)) {
-		// mCover = json.getBitmap(JSON_COVER);
-		// }
-		
+		if (json.has(JSON_CREATION_DATE)) {
+			mCreationDate = new Date(json.getLong(JSON_CREATION_DATE));
+		}
+//		if (json.has(JSON_COVER)) {
+//			mCover = json.getBitmap(JSON_COVER);
+//		}
 		if (json.has(JSON_USER)) {
 			mUser = json.getString(JSON_USER);
 		}

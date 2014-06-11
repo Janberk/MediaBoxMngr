@@ -1,14 +1,17 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +29,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
@@ -39,8 +47,6 @@ import de.canberkdemirkan.mediaboxmngr.util.ItemType;
 
 public class ItemListFragment extends Fragment implements
 		OnItemSelectedListener {
-
-	// private static final String TAG = "ItemListFragment";
 
 	private String mUser;
 	private boolean mEditMode;
@@ -62,6 +68,8 @@ public class ItemListFragment extends Fragment implements
 	private ImageView mImageDelete;
 	private ImageView mImageLogout;
 
+	private String json;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -72,10 +80,6 @@ public class ItemListFragment extends Fragment implements
 		mEditMode = false;
 		getActivity().setTitle(R.string.itemList_header);
 		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
-	}
-
-	private void syncWithRemoteDb() {
-
 	}
 
 	private void initViews(View view) {
@@ -102,9 +106,9 @@ public class ItemListFragment extends Fragment implements
 				.findViewById(R.id.iv_fragmentMenuBar_allLists);
 		mImageAllLists.setOnClickListener(new View.OnClickListener() {
 
-			FragmentManager fragmentManager = getFragmentManager();
-			FragmentTransaction fragmentTransaction = fragmentManager
-					.beginTransaction();
+			// FragmentManager fragmentManager = getFragmentManager();
+			// FragmentTransaction fragmentTransaction = fragmentManager
+			// .beginTransaction();
 
 			@Override
 			public void onClick(View v) {
@@ -123,7 +127,13 @@ public class ItemListFragment extends Fragment implements
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG)
 						.show();
-				syncWithRemoteDb();
+				try {
+					syncWithRemoteDb();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -209,12 +219,67 @@ public class ItemListFragment extends Fragment implements
 				ItemStock.get(getActivity(), mUser).addItem(newItem);
 				mItemAdapter.refresh(mItemList);
 				mEditEditTitle.setText("");
-				mEditor.setVisibility(View.GONE);
-				changeAlphaOfView(mListView, 0.2F, 1.0F);
+				switchMode();
 			}
 		});
 
 		return view;
+	}
+
+	private void syncWithRemoteDb() throws JSONException, IOException {
+		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+		json = itemStock.getSQLiteAsJSON(mUser);
+
+		AsyncHttpClient client = new AsyncHttpClient();
+		RequestParams params = new RequestParams();
+
+		params.put("items", json);
+		client.post(
+				"http://10.0.2.2:80/development/mediaboxmngr_backend/items/insert_items.php",
+				params, new AsyncHttpResponseHandler() {
+					@Override
+					public void onSuccess(String response) {
+						System.out.println("Response from Server: \n"
+								+ response);
+						try {
+							JSONArray jsonArray = new JSONArray(response);
+							System.out.println("JSONArray.length: "
+									+ jsonArray.length());
+							for (int i = 0; i < jsonArray.length(); i++) {
+								JSONObject jsonObject = (JSONObject) jsonArray
+										.get(i);
+								System.out.println(jsonObject.get("id"));
+								System.out.println(jsonObject.get("title"));
+							}
+							Toast.makeText(getActivity(), "DB Sync completed!",
+									Toast.LENGTH_LONG).show();
+						} catch (JSONException e) {
+							Toast.makeText(getActivity(),
+									"Error! JSON response might be invalid!",
+									Toast.LENGTH_LONG).show();
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onFailure(int statusCode, Throwable error,
+							String content) {
+						if (statusCode == 404) {
+							Toast.makeText(getActivity(),
+									"404 - Resource not found.",
+									Toast.LENGTH_LONG).show();
+						} else if (statusCode == 500) {
+							Toast.makeText(getActivity(),
+									"505 - Server Error.", Toast.LENGTH_LONG)
+									.show();
+						} else {
+							Toast.makeText(
+									getActivity(),
+									"Unexpected Error! Please check your network connection.",
+									Toast.LENGTH_LONG).show();
+						}
+					}
+				});
 	}
 
 	@Override
@@ -238,19 +303,7 @@ public class ItemListFragment extends Fragment implements
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 		case R.id.menu__newItem:
-
-			if (!mEditMode) {
-				mEditMode = true;
-				mEditor.setVisibility(View.VISIBLE);
-				changeAlphaOfView(mListView, 1.0F, 0.2F);
-				mMenuBar.setVisibility(View.GONE);
-			} else if (mEditMode) {
-				mEditor.setVisibility(View.GONE);
-				changeAlphaOfView(mListView, 0.2F, 1.0F);
-				mMenuBar.setVisibility(View.VISIBLE);
-				mEditMode = false;
-			}
-
+			switchMode();
 			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
@@ -297,6 +350,20 @@ public class ItemListFragment extends Fragment implements
 		// String user = sharedPreferences.getString(LoginFragment.EMAIL, "");
 		String user = sharedPreferences.getString("w@w.de", "");
 		return user;
+	}
+
+	private void switchMode() {
+		if (!mEditMode) {
+			mEditMode = true;
+			mEditor.setVisibility(View.VISIBLE);
+			changeAlphaOfView(mListView, 1.0F, 0.2F);
+			mMenuBar.setVisibility(View.GONE);
+		} else if (mEditMode) {
+			mEditor.setVisibility(View.GONE);
+			changeAlphaOfView(mListView, 0.2F, 1.0F);
+			mMenuBar.setVisibility(View.VISIBLE);
+			mEditMode = false;
+		}
 	}
 
 	private void changeAlphaOfView(View view, float from, float to) {
