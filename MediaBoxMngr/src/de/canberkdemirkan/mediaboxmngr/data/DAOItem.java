@@ -2,6 +2,7 @@ package de.canberkdemirkan.mediaboxmngr.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
@@ -62,11 +64,13 @@ public class DAOItem {
 		mDBHelper = DatabaseHelper.getInstance(mAppContext);
 		open();
 	}
-
+	
+	// open writable database
 	public void open() throws SQLiteException {
 		mSQLiteDB = mDBHelper.getWritableDatabase();
 	}
-
+	
+	// close database
 	public void close() {
 		mSQLiteDB.close();
 	}
@@ -122,6 +126,7 @@ public class DAOItem {
 
 	// get all items as a list
 	public ArrayList<Item> getAllItems(String user) {
+		open();
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		Cursor cursor = null;
 		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
@@ -144,17 +149,88 @@ public class DAOItem {
 			if (cursor != null) {
 				cursor.close();
 			}
+			close();
 		}
 		return itemList;
 	}
 
+	// public String buildJSONfromSQLiteTest(String user) throws JSONException,
+	// IOException {
+	// ArrayList<Item> itemListFromDb = getAllItems(user);
+	// JSONArray jsonArray = new JSONArray();
+	// for (Item item : itemListFromDb) {
+	// JSONObject json = new JSONObject();
+	// json.put(ProjectConstants.ID, item.getId());
+	// json.put(ProjectConstants.USER, item.getUser());
+	// json.put(ProjectConstants.TITLE, item.getTitle());
+	// json.put(ProjectConstants.TYPE, item.getType());
+	// json.put(ProjectConstants.COVER, item.getCover());
+	// json.put(ProjectConstants.GENRE, item.getGenre());
+	// json.put(ProjectConstants.FAVORITE, item.isFavorite());
+	// json.put(ProjectConstants.CREATION_DATE, item.getCreationDate());
+	// json.put(ProjectConstants.DELETED, item.isDeleted());
+	// json.put(ProjectConstants.DELETION_DATE, item.getDeletionDate());
+	// json.put(ProjectConstants.IN_POSSESSION, item.isInPossession());
+	// json.put(ProjectConstants.ORIGINAL_TITLE, item.getOriginalTitle());
+	// json.put(ProjectConstants.COUNTRY, item.getCountry());
+	// json.put(ProjectConstants.YEAR_PUBLISHED, item.getYearPublished());
+	// json.put(ProjectConstants.CONTENT, item.getContent());
+	// json.put(ProjectConstants.RATING, item.getRating());
+	// if (item instanceof Movie) {
+	//
+	// json.put(ProjectConstants.PRODUCER,
+	// ((Movie) item).getProducer());
+	// json.put(ProjectConstants.DIRECTOR,
+	// ((Movie) item).getDirector());
+	// json.put(ProjectConstants.SCRIPT, ((Movie) item).getScript());
+	// json.put(ProjectConstants.ACTORS, ((Movie) item).getActors());
+	// json.put(ProjectConstants.MUSIC, ((Movie) item).getMusic());
+	// json.put(ProjectConstants.LENGTH, ((Movie) item).getLength());
+	// }
+	// if (item instanceof MusicAlbum) {
+	// json.put(ProjectConstants.LABEL, ((MusicAlbum) item).getLabel());
+	// json.put(ProjectConstants.STUDIO,
+	// ((MusicAlbum) item).getStudio());
+	// json.put(ProjectConstants.ARTIST,
+	// ((MusicAlbum) item).getArtist());
+	// json.put(ProjectConstants.FORMAT,
+	// ((MusicAlbum) item).getFormat());
+	// json.put(ProjectConstants.TITLE_COUNT,
+	// ((MusicAlbum) item).getTitleCount());
+	// }
+	// if (item instanceof Book) {
+	//
+	// json.put(ProjectConstants.EDITION, ((Book) item).getEdition());
+	// json.put(ProjectConstants.PUBLISHING_HOUSE,
+	// ((Book) item).getPublishingHouse());
+	// json.put(ProjectConstants.AUTHOR, ((Book) item).getAuthor());
+	// json.put(ProjectConstants.ISBN, ((Book) item).getIsbn());
+	// }
+	// jsonArray.put(json);
+	// Writer writer = null;
+	// try {
+	// OutputStream out = mAppContext.openFileOutput(mFileName,
+	// Context.MODE_PRIVATE);
+	// writer = new OutputStreamWriter(out);
+	// writer.write(jsonArray.toString());
+	// System.out.println(writer.toString());
+	// } finally {
+	// if (writer != null)
+	// writer.close();
+	// }
+	// }
+	// System.out.println(jsonArray.toString(2));
+	// return jsonArray.toString();
+	// }
+	
+	// build JSONString from SQLite database values
 	public String buildJSONfromSQLite(String user) {
 		open();
 		ArrayList<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
 		Cursor cursor = null;
 		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
 				+ " WHERE " + ProjectConstants.USER + "=" + '"' + user + '"';
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().create();
 
 		try {
 			cursor = mSQLiteDB.rawQuery(selectQuery, null);
@@ -164,8 +240,9 @@ public class DAOItem {
 				getColumnIndices(cursor);
 				for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
 						.moveToNext()) {
-					HashMap<String, String> map = new HashMap<String, String>();
-					map.put(ProjectConstants.ID, cursor.getString(colId));
+					HashMap<String, String> map = new LinkedHashMap<String, String>();
+
+					map.put(ProjectConstants.SQLITE_ID, cursor.getString(colId));
 					map.put(ProjectConstants.USER, cursor.getString(colUser));
 					map.put(ProjectConstants.TITLE, cursor.getString(colTitle));
 					map.put(ProjectConstants.TYPE, cursor.getString(colType));
@@ -227,12 +304,13 @@ public class DAOItem {
 			if (cursor != null) {
 				cursor.close();
 			}
+			close();
 		}
-		String result = gson.toJson(values);
-		System.out.println(result);
-		return result;
-	}
 
+		return gson.toJson(values);
+	}
+	
+	// create items from SQLite table values
 	public Item createItemFromTableValues(Cursor cursor) {
 		Item item = null;
 		getColumnIndices(cursor);
@@ -276,7 +354,8 @@ public class DAOItem {
 		item.setDeleted(UtilMethods.isTrue(deletedAsInt));
 		return item;
 	}
-
+	
+	// put values to insert into SQLite database
 	public void putValues(Item item, ContentValues values) {
 		// byte[] bytes = CoverUtil.getByteArray(item.getCover());
 		// values.put(ProjectConstants.COVER, bytes);
@@ -329,7 +408,8 @@ public class DAOItem {
 		}
 
 	}
-
+	
+	// return integer values of cursor query
 	public void getColumnIndices(Cursor cursor) {
 		colId = cursor.getColumnIndex(ProjectConstants.ID);
 		colUser = cursor.getColumnIndex(ProjectConstants.USER);
