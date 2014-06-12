@@ -239,7 +239,7 @@ public class ItemListFragment extends Fragment implements
 				params, new AsyncHttpResponseHandler() {
 					@Override
 					public void onSuccess(String response) {
-						System.out.println("Response from Server:" + response);
+						System.out.println("Response from Server: \n" + response);
 						try {
 							JSONArray jsonArray = new JSONArray(response);
 							System.out.println("JSONArray.length: "
