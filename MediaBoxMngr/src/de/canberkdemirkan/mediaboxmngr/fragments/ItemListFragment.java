@@ -239,8 +239,7 @@ public class ItemListFragment extends Fragment implements
 				params, new AsyncHttpResponseHandler() {
 					@Override
 					public void onSuccess(String response) {
-						System.out.println("Response from Server: \n"
-								+ response);
+						System.out.println("Response from Server:" + response);
 						try {
 							JSONArray jsonArray = new JSONArray(response);
 							System.out.println("JSONArray.length: "
@@ -248,7 +247,7 @@ public class ItemListFragment extends Fragment implements
 							for (int i = 0; i < jsonArray.length(); i++) {
 								JSONObject jsonObject = (JSONObject) jsonArray
 										.get(i);
-								System.out.println(jsonObject.get("id"));
+								System.out.println(jsonObject.get("sqlite_id"));
 								System.out.println(jsonObject.get("title"));
 							}
 							Toast.makeText(getActivity(), "DB Sync completed!",
