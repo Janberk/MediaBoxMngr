@@ -4,13 +4,13 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     
-    <dimen name="custom_margin_0dp">0dp</dimen>
-    <dimen name="custom_margin_2dp">2dp</dimen>
-    <dimen name="custom_margin_4dp">4dp</dimen>
-    <dimen name="custom_margin_8dp">8dp</dimen>
-    <dimen name="custom_margin_12dp">12dp</dimen>
-    <dimen name="custom_margin_24dp">24dp</dimen>
-    <dimen name="custom_margin_32dp">32dp</dimen>
-    <dimen name="custom_margin_48dp">48dp</dimen>
+    <dimen name="custom_value_0dp">0dp</dimen>
+    <dimen name="custom_value_2dp">2dp</dimen>
+    <dimen name="custom_value_4dp">4dp</dimen>
+    <dimen name="custom_value_8dp">8dp</dimen>
+    <dimen name="custom_value_12dp">12dp</dimen>
+    <dimen name="custom_value_24dp">24dp</dimen>
+    <dimen name="custom_value_32dp">32dp</dimen>
+    <dimen name="custom_value_48dp">48dp</dimen>
 
 </resources>

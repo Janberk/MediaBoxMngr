@@ -8,6 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:choiceMode="multipleChoice"
-        android:dividerHeight="@dimen/custom_margin_2dp" />
+        android:dividerHeight="@dimen/custom_value_2dp" />
 
 </LinearLayout>

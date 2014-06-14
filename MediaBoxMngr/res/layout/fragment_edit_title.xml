@@ -1,12 +1,12 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000022"
     android:orientation="vertical" >
 
     <EditText
         android:id="@+id/et_fragmentEditTitle_editTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/editTextForm.textStyle.input"
         android:hint="@string/item_title_hint"
         android:inputType="text" >
 
@@ -14,21 +14,27 @@
     </EditText>
 
     <TextView
+        android:id="@+id/textView1"
+        style="@style/textViewForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/item_type_label"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:layout_below="@+id/et_fragmentEditTitle_editTitle"
+        android:layout_centerHorizontal="true"
+        android:text="@string/item_type_label" />
 
     <Spinner
         android:id="@+id/sp_fragmentEditTitle_itemType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1"
+        android:textColor="#ffffff" />
 
     <Button
         android:id="@+id/btn_fragmentEditTitle_saveItem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/buttonForm.textStyle.big"
+        android:layout_alignLeft="@+id/et_fragmentEditTitle_editTitle"
+        android:layout_below="@+id/sp_fragmentEditTitle_itemType"
         android:text="@string/save" />
 
-</LinearLayout>
+</RelativeLayout>

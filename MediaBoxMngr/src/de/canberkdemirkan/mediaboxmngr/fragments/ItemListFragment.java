@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -56,7 +57,7 @@ public class ItemListFragment extends Fragment implements
 	private ArrayList<Item> mItemList;
 	private ItemAdapter mItemAdapter;
 
-	private LinearLayout mEditor;
+	private RelativeLayout mEditor;
 	private LinearLayout mMenuBar;
 
 	private EditText mEditEditTitle;
@@ -87,7 +88,7 @@ public class ItemListFragment extends Fragment implements
 				.findViewById(R.id.listView_fragmentItemList);
 		mMenuBar = (LinearLayout) view
 				.findViewById(R.id.fragmentItemList_menuBar);
-		mEditor = (LinearLayout) view
+		mEditor = (RelativeLayout) view
 				.findViewById(R.id.fragmentItemList_editTitle);
 		mEditor.setVisibility(View.GONE);
 		mEditEditTitle = (EditText) view
@@ -239,7 +240,8 @@ public class ItemListFragment extends Fragment implements
 				params, new AsyncHttpResponseHandler() {
 					@Override
 					public void onSuccess(String response) {
-						System.out.println("Response from Server: \n" + response);
+						System.out.println("Response from Server: \n"
+								+ response);
 						try {
 							JSONArray jsonArray = new JSONArray(response);
 							System.out.println("JSONArray.length: "

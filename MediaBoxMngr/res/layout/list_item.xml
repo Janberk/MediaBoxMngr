@@ -8,19 +8,19 @@
         android:id="@+id/cb_listItem_itemFavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:focusable="false"
         android:layout_alignParentRight="true"
         android:enabled="false"
-        android:padding="@dimen/custom_margin_4dp" />
+        android:focusable="false"
+        android:gravity="center"
+        android:padding="@dimen/custom_value_4dp" />
 
     <TextView
         android:id="@+id/tv_listItem_itemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/cb_listItem_itemFavorite"
-        android:paddingLeft="@dimen/custom_margin_4dp"
-        android:paddingRight="@dimen/custom_margin_4dp"
+        android:paddingLeft="@dimen/custom_value_4dp"
+        android:paddingRight="@dimen/custom_value_4dp"
         android:text="@string/item_title_label" />
 
     <TextView
@@ -29,9 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_listItem_itemTitle"
         android:layout_toLeftOf="@id/cb_listItem_itemFavorite"
-        android:paddingTop="@dimen/custom_margin_4dp"
-        android:paddingLeft="@dimen/custom_margin_4dp"
-        android:paddingRight="@dimen/custom_margin_4dp"
+        android:paddingLeft="@dimen/custom_value_4dp"
+        android:paddingRight="@dimen/custom_value_4dp"
+        android:paddingTop="@dimen/custom_value_4dp"
         android:text="@string/item_creation_date_label" />
 
 </RelativeLayout>

@@ -5,13 +5,20 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.loopj.android.http.AsyncHttpClient;
+
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.CustomJSONSerializer;
 
 public class ItemStock {
 
+	public static final String URL = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/build_json.php";
+
 	private static final String TAG = "ItemStock";
 	private static final String FILE_NAME = "items.json";
+
+	private AsyncHttpClient mClient;
 
 	private ArrayList<Item> mItemList;
 	private ArrayList<Item> mSerializedItemList;
@@ -24,13 +31,13 @@ public class ItemStock {
 
 	public ItemStock(Context appContext, String user) {
 		mAppContext = appContext;
+
 		mDAOItem = new DAOItem(mAppContext);
 
 		mSerializer = new CustomJSONSerializer(mAppContext, FILE_NAME);
-		mSerializedItemList = new ArrayList<Item>();
 
 		try {
-			// mSerializedItemList = mSerializer.loadItems();
+			mSerializedItemList = mSerializer.loadItems();
 		} catch (Exception e) {
 			mSerializedItemList = new ArrayList<Item>();
 			Log.e(TAG, "Error loading items: ", e);
