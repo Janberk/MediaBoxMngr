@@ -17,6 +17,7 @@ public class JSONHandler {
 
 	@SuppressWarnings("unused")
 	private Context mContext;
+	private ArrayList<Item> mRemoteList;
 
 	public JSONHandler(Context context) {
 		mContext = context;
@@ -60,6 +61,14 @@ public class JSONHandler {
 			}
 		}
 		return itemList;
+	}
+	
+	public ArrayList<Item> getRemoteList() {
+		return mRemoteList;
+	}
+
+	public void setRemoteList(ArrayList<Item> remoteList) {
+		mRemoteList = remoteList;
 	}
 
 }

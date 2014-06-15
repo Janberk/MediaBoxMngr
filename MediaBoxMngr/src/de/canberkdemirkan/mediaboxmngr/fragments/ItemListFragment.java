@@ -82,31 +82,14 @@ public class ItemListFragment extends Fragment implements
 		mEditMode = false;
 		getActivity().setTitle(R.string.itemList_header);
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		mItemList = itemStock.getItemList();
+		// mItemList = itemStock.getItemList();
 
-		getRemoteItemList(getActivity());
-
-	}
-
-	static class ListProvider {
-
-		private ArrayList<Item> mRemoteList;
-
-		public ListProvider() {
-		}
-
-		public ArrayList<Item> getRemoteList() {
-			return mRemoteList;
-		}
-
-		public void setRemoteList(ArrayList<Item> remoteList) {
-			mRemoteList = remoteList;
-		}
+		mItemList = getRemoteItemList(getActivity());
 
 	}
 
 	private ArrayList<Item> getRemoteItemList(Context context) {
-		final ListProvider listProvider = new ListProvider();
+		ArrayList<Item> resultList;
 		final JSONHandler handler = new JSONHandler(context);
 		AsyncHttpClient client = new AsyncHttpClient();
 		client.post(ItemStock.URL, new AsyncHttpResponseHandler() {
@@ -120,7 +103,7 @@ public class ItemListFragment extends Fragment implements
 			public void onSuccess(String response) {
 				System.out.println(response);
 				try {
-					listProvider.setRemoteList(handler
+					handler.setRemoteList(handler
 							.loadItemsFromJSONArray(response));
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -140,7 +123,13 @@ public class ItemListFragment extends Fragment implements
 			}
 
 		});
-		return listProvider.getRemoteList();
+		resultList = handler.getRemoteList();
+
+		if (resultList != null) {
+			return resultList;
+		} else {
+			return new ArrayList<Item>();
+		}
 
 	}
 
