@@ -82,9 +82,9 @@ public class ItemListFragment extends Fragment implements
 		mEditMode = false;
 		getActivity().setTitle(R.string.itemList_header);
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		// mItemList = itemStock.getItemList();
-
-		mItemList = getRemoteItemList(getActivity());
+		//mItemList = itemStock.getItemList();
+		mItemList = new ArrayList<Item>();
+		// mItemList = getRemoteItemList(getActivity());
 
 	}
 
@@ -165,6 +165,42 @@ public class ItemListFragment extends Fragment implements
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG)
 						.show();
+				final JSONHandler handler = new JSONHandler(getActivity());
+				AsyncHttpClient client = new AsyncHttpClient();
+				client.post(ItemStock.URL, new AsyncHttpResponseHandler() {
+
+					@Override
+					public void onStart() {
+						System.out.println("onStart()");
+					}
+
+					@Override
+					public void onSuccess(String response) {
+						System.out.println(response);
+						try {
+							handler.setRemoteList(handler
+									.loadItemsFromJSONArray(response));
+							mItemList = handler.getRemoteList();
+							System.out.println(mItemList.toString());
+							mItemAdapter.refresh(mItemList);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onFinish() {
+						System.out.println("onFinish()");
+						// mItemList = remoteList;
+					}
+
+					@Override
+					public void onFailure(int statusCode, Throwable error,
+							String content) {
+						System.out.println("onFailure(): " + content);
+					}
+
+				});
 				// fragmentTransaction.replace(containerId, selectList);
 				// fragmentTransaction.commit();
 			}
@@ -340,7 +376,7 @@ public class ItemListFragment extends Fragment implements
 	}
 
 	@Override
-	public void onPause() {//
+	public void onPause() {
 		super.onPause();
 	}
 
