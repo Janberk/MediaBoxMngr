@@ -38,6 +38,7 @@ import com.loopj.android.http.RequestParams;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
+import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
@@ -80,7 +81,67 @@ public class ItemListFragment extends Fragment implements
 		mUser = "w@w.de";
 		mEditMode = false;
 		getActivity().setTitle(R.string.itemList_header);
-		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
+		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+		mItemList = itemStock.getItemList();
+
+		getRemoteItemList(getActivity());
+
+	}
+
+	static class ListProvider {
+
+		private ArrayList<Item> mRemoteList;
+
+		public ListProvider() {
+		}
+
+		public ArrayList<Item> getRemoteList() {
+			return mRemoteList;
+		}
+
+		public void setRemoteList(ArrayList<Item> remoteList) {
+			mRemoteList = remoteList;
+		}
+
+	}
+
+	private ArrayList<Item> getRemoteItemList(Context context) {
+		final ListProvider listProvider = new ListProvider();
+		final JSONHandler handler = new JSONHandler(context);
+		AsyncHttpClient client = new AsyncHttpClient();
+		client.post(ItemStock.URL, new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onStart() {
+				System.out.println("onStart()");
+			}
+
+			@Override
+			public void onSuccess(String response) {
+				System.out.println(response);
+				try {
+					listProvider.setRemoteList(handler
+							.loadItemsFromJSONArray(response));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFinish() {
+				System.out.println("onFinish()");
+				// mItemList = remoteList;
+			}
+
+			@Override
+			public void onFailure(int statusCode, Throwable error,
+					String content) {
+				System.out.println("onFailure(): " + content);
+			}
+
+		});
+		return listProvider.getRemoteList();
+
 	}
 
 	private void initViews(View view) {

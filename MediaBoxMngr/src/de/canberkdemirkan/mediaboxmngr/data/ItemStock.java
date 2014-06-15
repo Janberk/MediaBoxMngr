@@ -5,9 +5,6 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.util.Log;
-
-import com.loopj.android.http.AsyncHttpClient;
-
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.CustomJSONSerializer;
 
@@ -17,8 +14,6 @@ public class ItemStock {
 
 	private static final String TAG = "ItemStock";
 	private static final String FILE_NAME = "items.json";
-
-	private AsyncHttpClient mClient;
 
 	private ArrayList<Item> mItemList;
 	private ArrayList<Item> mSerializedItemList;
@@ -44,6 +39,7 @@ public class ItemStock {
 		}
 
 		mItemList = mDAOItem.getAllItems(user);
+
 	}
 
 	public static ItemStock get(Context context, String user) {
