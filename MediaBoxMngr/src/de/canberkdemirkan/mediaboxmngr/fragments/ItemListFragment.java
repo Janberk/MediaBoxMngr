@@ -84,13 +84,17 @@ public class ItemListFragment extends Fragment implements
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
 		// mItemList = itemStock.getItemList();
 		mItemList = new ArrayList<Item>();
-		// mItemList = getRemoteItemList(getActivity());
+		ArrayList<Item> list = getRemoteItemList();
+		for (int i = 0; i < list.size(); i++) {
+			Item item = list.get(i);
+
+			mItemList.add(i, item);
+		}
 
 	}
 
-	private ArrayList<Item> getRemoteItemList(Context context) {
-		ArrayList<Item> resultList;
-		final JSONHandler handler = new JSONHandler(context);
+	private ArrayList<Item> getRemoteItemList() {
+		final JSONHandler handler = new JSONHandler(getActivity());
 		AsyncHttpClient client = new AsyncHttpClient();
 		client.post(ItemStock.URL, new AsyncHttpResponseHandler() {
 
@@ -101,10 +105,11 @@ public class ItemListFragment extends Fragment implements
 
 			@Override
 			public void onSuccess(String response) {
-				System.out.println(response);
+				System.out.println("onSuccess()\n" + response);
 				try {
-					handler.setRemoteList(handler
-							.loadItemsFromJSONArray(response));
+					ArrayList<Item> itemListFromRemoteDb = handler
+							.loadItemsFromJSONArray(response);
+					handler.setRemoteList(itemListFromRemoteDb);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -113,7 +118,6 @@ public class ItemListFragment extends Fragment implements
 			@Override
 			public void onFinish() {
 				System.out.println("onFinish()");
-				// mItemList = remoteList;
 			}
 
 			@Override
@@ -123,14 +127,7 @@ public class ItemListFragment extends Fragment implements
 			}
 
 		});
-		resultList = handler.getRemoteList();
-
-		if (resultList != null) {
-			return resultList;
-		} else {
-			return new ArrayList<Item>();
-		}
-
+		return handler.getRemoteList();
 	}
 
 	private void initViews(View view) {
