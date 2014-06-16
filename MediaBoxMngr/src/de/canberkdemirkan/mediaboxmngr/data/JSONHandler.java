@@ -25,7 +25,7 @@ public class JSONHandler {
 
 	public ArrayList<Item> loadItemsFromJSONArray(String response)
 			throws JSONException {
-		System.out.println("loadItemsFromJSONArray");
+		System.out.println("loadItemsFromJSONArray()");
 		ArrayList<Item> itemList = new ArrayList<Item>();
 
 		JSONObject json = new JSONObject(response);
@@ -38,21 +38,30 @@ public class JSONHandler {
 
 			if (item.has(ProjectConstants.SQLITE_ID)
 					|| item.has(ProjectConstants.USER)
+					|| item.has(ProjectConstants.TITLE)
 					|| item.has(ProjectConstants.TYPE)) {
 				long id = item.getLong(ProjectConstants.SQLITE_ID);
 				String user = item.getString(ProjectConstants.USER);
+				String title = item.getString(ProjectConstants.TITLE);
 				ItemType type = ItemType.valueOf(item
 						.getString(ProjectConstants.TYPE));
 
+				Item newItem = null;
 				switch (type) {
 				case Album:
-					itemList.add(0, new MusicAlbum(id, user));
+					newItem = new MusicAlbum(id, user);
+					newItem.setTitle(title);
+					itemList.add(0, newItem);
 					break;
 				case Book:
-					itemList.add(0, new Book(id, user));
+					newItem = new Book(id, user);
+					newItem.setTitle(title);
+					itemList.add(0, newItem);
 					break;
 				case Movie:
-					itemList.add(0, new Movie(id, user));
+					newItem = new Movie(id, user);
+					newItem.setTitle(title);
+					itemList.add(0, newItem);
 					break;
 
 				default:
@@ -62,7 +71,7 @@ public class JSONHandler {
 		}
 		return itemList;
 	}
-	
+
 	public ArrayList<Item> getRemoteList() {
 		return mRemoteList;
 	}

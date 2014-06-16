@@ -82,7 +82,7 @@ public class ItemListFragment extends Fragment implements
 		mEditMode = false;
 		getActivity().setTitle(R.string.itemList_header);
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		//mItemList = itemStock.getItemList();
+		// mItemList = itemStock.getItemList();
 		mItemList = new ArrayList<Item>();
 		// mItemList = getRemoteItemList(getActivity());
 
@@ -176,13 +176,11 @@ public class ItemListFragment extends Fragment implements
 
 					@Override
 					public void onSuccess(String response) {
-						System.out.println(response);
+						System.out.println("onSuccess()\n" + response);
 						try {
-							handler.setRemoteList(handler
-									.loadItemsFromJSONArray(response));
-							mItemList = handler.getRemoteList();
-							System.out.println(mItemList.toString());
-							mItemAdapter.refresh(mItemList);
+							ArrayList<Item> createdList = handler
+									.loadItemsFromJSONArray(response);
+							handler.setRemoteList(createdList);
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
@@ -191,7 +189,13 @@ public class ItemListFragment extends Fragment implements
 					@Override
 					public void onFinish() {
 						System.out.println("onFinish()");
-						// mItemList = remoteList;
+						mItemList.clear();
+						for (int i = 0; i < handler.getRemoteList().size(); i++) {
+							Item item = handler.getRemoteList().get(i);
+
+							mItemList.add(i, item);
+						}
+						mItemAdapter.refresh(mItemList);
 					}
 
 					@Override
