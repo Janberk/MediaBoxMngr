@@ -23,7 +23,9 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 public class DAOItem {
 
 	public static int colId;
+	public static int colSQLiteId;
 	public static int colUser;
+	public static int colSynced;
 	public static int colTitle;
 	public static int colType;
 	public static int colCover;
@@ -64,12 +66,12 @@ public class DAOItem {
 		mDBHelper = DatabaseHelper.getInstance(mAppContext);
 		open();
 	}
-	
+
 	// open writable database
 	public void open() throws SQLiteException {
 		mSQLiteDB = mDBHelper.getWritableDatabase();
 	}
-	
+
 	// close database
 	public void close() {
 		mSQLiteDB.close();
@@ -222,14 +224,15 @@ public class DAOItem {
 	// System.out.println(jsonArray.toString(2));
 	// return jsonArray.toString();
 	// }
-	
+
 	// build JSONString from SQLite database values
 	public String buildJSONfromSQLite(String user) {
 		open();
 		ArrayList<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
 		Cursor cursor = null;
 		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
-				+ " WHERE " + ProjectConstants.USER + "=" + '"' + user + '"';
+				+ " WHERE " + ProjectConstants.USER + " = " + '"' + user + '"'
+				+ " AND " + ProjectConstants.SYNCED + " = " + 0;
 		Gson gson = new GsonBuilder().create();
 
 		try {
@@ -242,8 +245,12 @@ public class DAOItem {
 						.moveToNext()) {
 					HashMap<String, String> map = new LinkedHashMap<String, String>();
 
-					map.put(ProjectConstants.SQLITE_ID, cursor.getString(colId));
+					map.put(ProjectConstants.ID, cursor.getString(colId));
+					map.put(ProjectConstants.SQLITE_ID,
+							cursor.getString(colSQLiteId));
 					map.put(ProjectConstants.USER, cursor.getString(colUser));
+					// map.put(ProjectConstants.SYNCED,
+					// cursor.getString(colSynced));
 					map.put(ProjectConstants.TITLE, cursor.getString(colTitle));
 					map.put(ProjectConstants.TYPE, cursor.getString(colType));
 					map.put(ProjectConstants.COVER, cursor.getString(colCover));
@@ -309,7 +316,7 @@ public class DAOItem {
 
 		return gson.toJson(values);
 	}
-	
+
 	// create items from SQLite table values
 	public Item createItemFromTableValues(Cursor cursor) {
 		Item item = null;
@@ -322,7 +329,7 @@ public class DAOItem {
 				.getString(colInPossession)));
 		int deletedAsInt = (Integer.parseInt(cursor.getString(colDeleted)));
 
-		int id = Integer.parseInt(cursor.getString(colId));
+		int id = Integer.parseInt(cursor.getString(colSQLiteId));
 		// byte[] bytes = cursor.getBlob(iCover);
 		// Bitmap cover = CoverUtil.getBitmap(bytes);
 		String creationDate = cursor.getString(colCreationDate);
@@ -354,11 +361,13 @@ public class DAOItem {
 		item.setDeleted(UtilMethods.isTrue(deletedAsInt));
 		return item;
 	}
-	
+
 	// put values to insert into SQLite database
 	public void putValues(Item item, ContentValues values) {
 		// byte[] bytes = CoverUtil.getByteArray(item.getCover());
 		// values.put(ProjectConstants.COVER, bytes);
+		values.put(ProjectConstants.SYNCED,
+				UtilMethods.isTrueAsInt(item.isSynced()));
 		values.put(ProjectConstants.USER, item.getUser());
 		values.put(ProjectConstants.TITLE, item.getTitle());
 		values.put(ProjectConstants.TYPE, item.getType().toString());
@@ -408,11 +417,12 @@ public class DAOItem {
 		}
 
 	}
-	
+
 	// return integer values of cursor query
 	public void getColumnIndices(Cursor cursor) {
-		colId = cursor.getColumnIndex(ProjectConstants.ID);
+		colSQLiteId = cursor.getColumnIndex(ProjectConstants.ID);
 		colUser = cursor.getColumnIndex(ProjectConstants.USER);
+		colSynced = cursor.getColumnIndex(ProjectConstants.SYNCED);
 		colTitle = cursor.getColumnIndex(ProjectConstants.TITLE);
 		colType = cursor.getColumnIndex(ProjectConstants.TYPE);
 		colCover = cursor.getColumnIndex(ProjectConstants.COVER);
@@ -445,6 +455,38 @@ public class DAOItem {
 				.getColumnIndex(ProjectConstants.PUBLISHING_HOUSE);
 		colAuthor = cursor.getColumnIndex(ProjectConstants.AUTHOR);
 		colIsbn = cursor.getColumnIndex(ProjectConstants.ISBN);
+	}
+
+	public int getCountOfSyncedItems() {
+		int count = 0;
+		Cursor cursor = null;
+		open();
+		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
+				+ " WHERE " + ProjectConstants.SYNCED + "=" + 0;
+		cursor = mSQLiteDB.rawQuery(selectQuery, null);
+		count = cursor.getCount();
+		close();
+		return count;
+	}
+
+	public void updateSyncStatus(long id, int status) {
+		open();
+		String updateQuery = "UPDATE " + ProjectConstants.TABLE_ITEMS + " SET "
+				+ ProjectConstants.SYNCED + " = " + status + " WHERE "
+				+ ProjectConstants.ID + " = " + id;
+		System.out.println(updateQuery);
+		mSQLiteDB.execSQL(updateQuery);
+		close();
+	}
+
+	public String getSyncStatus() {
+		String msg = null;
+		if (getCountOfSyncedItems() == 0) {
+			msg = "SQLite and Remote MySQL DBs are in Sync!";
+		} else {
+			msg = "DB Sync needed\n";
+		}
+		return msg;
 	}
 
 }

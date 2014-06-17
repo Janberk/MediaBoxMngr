@@ -33,6 +33,7 @@ public class ProjectConstants {
 	// common
 	public static final String ID = "_id";
 	public static final String SQLITE_ID = "sqlite_id";
+	public static final String SYNCED = "synced";
 	public static final String TITLE = "title";
 	public static final String USER = "created_by";
 	public static final String TYPE = "type";
@@ -79,6 +80,7 @@ public class ProjectConstants {
 			+ TABLE_ITEMS + "("
 			+ ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ USER + " TEXT, "
+			+ SYNCED + " INTEGER, "
 			+ TITLE + " TEXT, "
 			+ TYPE + " TEXT, "
 			+ COVER + " BLOB, "

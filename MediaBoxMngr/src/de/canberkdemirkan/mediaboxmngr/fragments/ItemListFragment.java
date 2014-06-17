@@ -82,14 +82,14 @@ public class ItemListFragment extends Fragment implements
 		mEditMode = false;
 		getActivity().setTitle(R.string.itemList_header);
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		// mItemList = itemStock.getItemList();
-		mItemList = new ArrayList<Item>();
-		ArrayList<Item> list = getRemoteItemList();
-		for (int i = 0; i < list.size(); i++) {
-			Item item = list.get(i);
-
-			mItemList.add(i, item);
-		}
+		mItemList = itemStock.getItemList();
+		// mItemList = new ArrayList<Item>();
+		// ArrayList<Item> list = getRemoteItemList();
+		// for (int i = 0; i < list.size(); i++) {
+		// Item item = list.get(i);
+		//
+		// mItemList.add(i, item);
+		// }
 
 	}
 
@@ -315,7 +315,7 @@ public class ItemListFragment extends Fragment implements
 	}
 
 	private void syncWithRemoteDb() throws JSONException, IOException {
-		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+		final ItemStock itemStock = ItemStock.get(getActivity(), mUser);
 		json = itemStock.getSQLiteAsJSON(mUser);
 
 		AsyncHttpClient client = new AsyncHttpClient();
@@ -336,8 +336,24 @@ public class ItemListFragment extends Fragment implements
 							for (int i = 0; i < jsonArray.length(); i++) {
 								JSONObject jsonObject = (JSONObject) jsonArray
 										.get(i);
-								System.out.println(jsonObject.get("sqlite_id"));
-								System.out.println(jsonObject.get("title"));
+								System.out.println("ID: "
+										+ jsonObject.get("_id"));
+								System.out.println("SQLITE_ID: "
+										+ jsonObject.get("sqlite_id"));
+								System.out.println("SYNCED: "
+										+ jsonObject.get("synced"));
+								System.out.println("TITLE: "
+										+ jsonObject.get("title"));
+
+								String jsonId = jsonObject.getString("_id");
+								String jsonSynced = jsonObject
+										.getString("synced");
+
+								long id = Long.valueOf(jsonId).longValue();
+								int synced = Integer.valueOf(jsonSynced)
+										.intValue();
+								itemStock.getDAOItem().updateSyncStatus(id,
+										synced);
 							}
 							Toast.makeText(getActivity(), "DB Sync completed!",
 									Toast.LENGTH_LONG).show();

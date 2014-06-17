@@ -8,10 +8,12 @@ import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 import de.canberkdemirkan.mediaboxmngr.util.ItemType;
+import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public abstract class Item {
 
 	protected static final String JSON_UID = "uid";
+	protected static final String JSON_SYNCED = "synced";
 	protected static final String JSON_ID = "id";
 	protected static final String JSON_COVER = "cover";
 	protected static final String JSON_CREATION_DATE = "creation_date";
@@ -32,6 +34,7 @@ public abstract class Item {
 
 	private UUID mUniqueId;
 	private long mId = -1;
+	private boolean mSynced;
 	private Bitmap mCover;// = CoverUtil.createDefaultCover();
 	private Date mCreationDate;
 	private String mUser;
@@ -53,12 +56,14 @@ public abstract class Item {
 	public Item() {
 		mUniqueId = UUID.randomUUID();
 		mCreationDate = new Date();
+		setSynced(false);
 	}
 
 	public Item(long id, String user) {
 		mUniqueId = UUID.randomUUID();
 		setId(id);
 		setUser(user);
+		setSynced(false);
 		mCreationDate = new Date();
 	}
 
@@ -69,13 +74,16 @@ public abstract class Item {
 		if (json.has(JSON_ID)) {
 			mId = json.getLong(JSON_ID);
 		}
+		if (json.has(JSON_SYNCED)) {
+			mSynced = UtilMethods.isTrue(json.getInt(JSON_ID));
+		}
 		// TODO überprüfen
 		if (json.has(JSON_CREATION_DATE)) {
 			mCreationDate = new Date(json.getLong(JSON_CREATION_DATE));
 		}
-//		if (json.has(JSON_COVER)) {
-//			mCover = json.getBitmap(JSON_COVER);
-//		}
+		// if (json.has(JSON_COVER)) {
+		// mCover = json.getBitmap(JSON_COVER);
+		// }
 		if (json.has(JSON_USER)) {
 			mUser = json.getString(JSON_USER);
 		}
@@ -125,6 +133,14 @@ public abstract class Item {
 
 	public void setId(long id) {
 		mId = id;
+	}
+
+	public boolean isSynced() {
+		return mSynced;
+	}
+
+	public void setSynced(boolean synced) {
+		mSynced = synced;
 	}
 
 	public Bitmap getCover() {
@@ -255,20 +271,5 @@ public abstract class Item {
 
 	@Override
 	public abstract String toString();
-
-	// @Override
-	// public String toString() {
-	// StringBuffer sb = new StringBuffer();
-	//
-	// sb.append("ID: " + getId() + "\n");
-	// sb.append("UID: " + getUniqueId() + "\n");
-	// sb.append("Creation date: "
-	// + UtilMethods.dateToFormattedStringConverter(getCreationDate())
-	// + "\n");
-	// sb.append("Title: " + getTitle() + "\n");
-	// sb.append("Favorite?: " + isFavorite() + "\n");
-	//
-	// return sb.toString();
-	// }
 
 }
