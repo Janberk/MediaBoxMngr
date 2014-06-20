@@ -126,13 +126,55 @@ public class DAOItem {
 		return result;
 	}
 
+	// delete all rows of the table 'item'
+	public boolean deleteAllItems() {
+		open();
+		boolean result = mSQLiteDB.delete(ProjectConstants.TABLE_ITEMS, null,
+				null) > 0;
+		close();
+		return result;
+	}
+
+	public void dropAndRecreateTable(String tableName, String sql) {
+		open();
+		mSQLiteDB.execSQL("DROP TABLE IF EXISTS " + tableName);
+		mSQLiteDB.execSQL(sql);
+		close();
+	}
+
+	// update table with new item list
+	public boolean updateTableWithNewList(ArrayList<Item> itemList) {
+		dropAndRecreateTable(ProjectConstants.TABLE_ITEMS,
+				ProjectConstants.CREATE_TABLE_ITEMS);
+		open();
+		ContentValues values = new ContentValues();
+		boolean result = false;
+		for (int i = itemList.size() - 1; i >= 0; i--) {
+			Item item = itemList.get(i);
+			putValues(item, values);
+			values.put(ProjectConstants.CREATION_DATE, UtilMethods
+					.dateToFormattedStringConverter(item.getCreationDate()));
+			result = mSQLiteDB.insert(ProjectConstants.TABLE_ITEMS, null,
+					values) > 0;
+		}
+		// for (Item item : itemList) {
+		// putValues(item, values);
+		// values.put(ProjectConstants.CREATION_DATE, UtilMethods
+		// .dateToFormattedStringConverter(item.getCreationDate()));
+		// result = mSQLiteDB.insert(ProjectConstants.TABLE_ITEMS, null,
+		// values) > 0;
+		// }
+		close();
+		return result;
+	}
+
 	// get all items as a list
 	public ArrayList<Item> getAllItems(String user) {
 		open();
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		Cursor cursor = null;
 		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
-				+ " WHERE " + ProjectConstants.USER + "=" + '"' + user + '"';
+				+ " WHERE " + ProjectConstants.USER + " = " + '"' + user + '"';
 
 		try {
 			cursor = mSQLiteDB.rawQuery(selectQuery, null);

@@ -9,6 +9,7 @@
     <dimen name="custom_value_4dp">4dp</dimen>
     <dimen name="custom_value_8dp">8dp</dimen>
     <dimen name="custom_value_12dp">12dp</dimen>
+    <dimen name="custom_value_20dp">20dp</dimen>
     <dimen name="custom_value_24dp">24dp</dimen>
     <dimen name="custom_value_32dp">32dp</dimen>
     <dimen name="custom_value_48dp">48dp</dimen>

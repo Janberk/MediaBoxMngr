@@ -6,18 +6,33 @@
     <string name="all_lists">All Lists</string>
     <string name="itemList_header">Items</string>
     <string name="datePicker_header">Creation date:</string>
+    <string name="firstname_hint">First name</string>
+    <string name="lastname_hint">Last name</string>
+    <string name="username_hint">User name</string>
+    <string name="email_hint">E-mail</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm password</string>
     <string name="item_title_hint">Enter a title.</string>
     <string name="item_content_hint">Enter item content.</string>
     <string name="item_title_label">Title</string>
+    <string name="item_cover_label">Cover</string>
+    <string name="item_genre_label">Genre</string>
     <string name="item_creation_date_label">Creation Date</string>
     <string name="item_details_label">Details</string>
     <string name="item_favorite_label">Favorite?</string>
+    <string name="remember_me_label">Remember me</string>
+    <string name="forgot_password_label">Forgot password?</string>
     <string name="item_type_label">Select a type for your item.</string> 
+    <string name="login_in_link_label">Go back to Login-Screen!</string>
+    <string name="sign_up_link_label">You don\'t have an account? Sign up here!</string>
+    <string name="enter_data_label">Enter your personal data</string>
+    <string name="enter_Login_label">Enter your E-mail and password</string>
     <string name="new_item">New Item</string>
     <string name="delete_item">Delete</string>
     <string name="login">Log in</string>
     <string name="logout">Log out</string>
     <string name="save">Save</string>
+    <string name="signup">Sign up</string>
     
     <string-array name="item_types">
         <item>Album</item>

@@ -55,16 +55,16 @@ public abstract class Item {
 	// constructors
 	public Item() {
 		mUniqueId = UUID.randomUUID();
-		mCreationDate = new Date();
+		setCreationDate(new Date());
 		setSynced(false);
 	}
 
 	public Item(long id, String user) {
 		mUniqueId = UUID.randomUUID();
+		setCreationDate(new Date());
+		setSynced(false);
 		setId(id);
 		setUser(user);
-		setSynced(false);
-		mCreationDate = new Date();
 	}
 
 	public Item(JSONObject json) throws JSONException {

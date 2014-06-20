@@ -1,37 +1,86 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_margin="@dimen/custom_value_8dp"
+    android:background="@drawable/list_item_shape"
+    android:orientation="vertical"
+    android:padding="@dimen/custom_value_8dp" >
 
     <CheckBox
         android:id="@+id/cb_listItem_itemFavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:button="@drawable/custom_checkbox"
         android:enabled="false"
         android:focusable="false"
-        android:gravity="center"
-        android:padding="@dimen/custom_value_4dp" />
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/tv_listItem_itemTitle"
-        android:layout_width="match_parent"
+        style="@style/textViewList"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/cb_listItem_itemFavorite"
-        android:paddingLeft="@dimen/custom_value_4dp"
-        android:paddingRight="@dimen/custom_value_4dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/iv_listItem_itemIcon"
         android:text="@string/item_title_label" />
+
+    <ImageView
+        android:id="@+id/iv_listItem_itemIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/cb_listItem_itemDelete"
+        android:contentDescription="@string/item_cover_label"
+        android:src="@drawable/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/iv_listItem_itemDeleteSingle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="@dimen/custom_value_4dp"
+        android:contentDescription="@string/delete_item"
+        android:src="@drawable/ic_menu_cross" />
+
+    <CheckBox
+        android:id="@+id/cb_listItem_itemDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="@dimen/custom_value_4dp"
+        android:button="@drawable/custom_checkbox"
+        android:enabled="true"
+        android:focusable="false"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tv_listItem_itemGenre"
+        style="@style/textViewList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_listItem_itemIcon"
+        android:layout_alignLeft="@+id/tv_listItem_itemTitle"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="@string/item_genre_label"
+        android:textSize="12sp"
+        android:textStyle="normal" />
 
     <TextView
         android:id="@+id/tv_listItem_itemCreationDate"
-        android:layout_width="match_parent"
+        style="@style/textViewList"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_listItem_itemTitle"
-        android:layout_toLeftOf="@id/cb_listItem_itemFavorite"
-        android:paddingLeft="@dimen/custom_value_4dp"
-        android:paddingRight="@dimen/custom_value_4dp"
-        android:paddingTop="@dimen/custom_value_4dp"
-        android:text="@string/item_creation_date_label" />
+        android:layout_alignBaseline="@+id/tv_listItem_itemGenre"
+        android:layout_alignBottom="@+id/tv_listItem_itemGenre"
+        android:layout_toLeftOf="@+id/cb_listItem_itemFavorite"
+        android:text="@string/item_creation_date_label"
+        android:textSize="12sp"
+        android:textStyle="normal" />
 
 </RelativeLayout>

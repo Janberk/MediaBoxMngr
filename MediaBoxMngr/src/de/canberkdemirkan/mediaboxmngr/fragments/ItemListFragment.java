@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import com.loopj.android.http.RequestParams;
 
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
+import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
@@ -76,21 +78,11 @@ public class ItemListFragment extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		// TODO user aus login fragment holen
-		// mUser = getUser();
-		mUser = "w@w.de";
+		mUser = getUser();
 		mEditMode = false;
-		getActivity().setTitle(R.string.itemList_header);
+		getActivity().setTitle(mUser);
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
 		mItemList = itemStock.getItemList();
-		// mItemList = new ArrayList<Item>();
-		// ArrayList<Item> list = getRemoteItemList();
-		// for (int i = 0; i < list.size(); i++) {
-		// Item item = list.get(i);
-		//
-		// mItemList.add(i, item);
-		// }
-
 	}
 
 	private ArrayList<Item> getRemoteItemList() {
@@ -181,11 +173,6 @@ public class ItemListFragment extends Fragment implements
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
-					}
-
-					@Override
-					public void onFinish() {
-						System.out.println("onFinish()");
 						mItemList.clear();
 						for (int i = 0; i < handler.getRemoteList().size(); i++) {
 							Item item = handler.getRemoteList().get(i);
@@ -193,6 +180,15 @@ public class ItemListFragment extends Fragment implements
 							mItemList.add(i, item);
 						}
 						mItemAdapter.refresh(mItemList);
+						ItemStock itemStock = ItemStock.get(getActivity(),
+								mUser);
+						itemStock.getDAOItem()
+								.updateTableWithNewList(mItemList);
+					}
+
+					@Override
+					public void onFinish() {
+						System.out.println("onFinish()");
 					}
 
 					@Override
@@ -233,6 +229,8 @@ public class ItemListFragment extends Fragment implements
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG)
 						.show();
+				ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+				itemStock.getDAOItem().deleteAllItems();
 
 				// editMode = UtilMethods.modeSwitcher(editMode);
 				//
@@ -268,7 +266,7 @@ public class ItemListFragment extends Fragment implements
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "Logout", Toast.LENGTH_LONG)
 						.show();
-				// logout();
+				logout();
 			}
 		});
 
@@ -337,13 +335,21 @@ public class ItemListFragment extends Fragment implements
 								JSONObject jsonObject = (JSONObject) jsonArray
 										.get(i);
 								System.out.println("ID: "
-										+ jsonObject.get("_id"));
+										+ jsonObject.get(ProjectConstants.ID));
 								System.out.println("SQLITE_ID: "
-										+ jsonObject.get("sqlite_id"));
+										+ jsonObject
+												.get(ProjectConstants.SQLITE_ID));
 								System.out.println("SYNCED: "
-										+ jsonObject.get("synced"));
+										+ jsonObject
+												.get(ProjectConstants.SYNCED));
 								System.out.println("TITLE: "
-										+ jsonObject.get("title"));
+										+ jsonObject
+												.get(ProjectConstants.TITLE));
+								System.out.println("USER: "
+										+ jsonObject.get(ProjectConstants.USER));
+								System.out.println("CREATION_DATE: "
+										+ jsonObject
+												.get(ProjectConstants.CREATION_DATE));
 
 								String jsonId = jsonObject.getString("_id");
 								String jsonSynced = jsonObject
@@ -451,8 +457,7 @@ public class ItemListFragment extends Fragment implements
 		SharedPreferences sharedPreferences = getActivity()
 				.getSharedPreferences(ProjectConstants.KEY_MY_PREFERENCES,
 						Context.MODE_PRIVATE);
-		// String user = sharedPreferences.getString(LoginFragment.EMAIL, "");
-		String user = sharedPreferences.getString("w@w.de", "");
+		String user = sharedPreferences.getString(LoginFragment.KEY_EMAIL, "");
 		return user;
 	}
 
@@ -475,6 +480,20 @@ public class ItemListFragment extends Fragment implements
 		alpha.setDuration(0); // Make animation instant
 		alpha.setFillAfter(true); // Tell it to persist after the animation ends
 		view.startAnimation(alpha);
+	}
+
+	public void logout() {
+		SharedPreferences sharedPreferences = getActivity()
+				.getSharedPreferences(ProjectConstants.KEY_MY_PREFERENCES,
+						Context.MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit();
+		editor.clear();
+		editor.commit();
+		getActivity().moveTaskToBack(true);
+		getActivity().finish();
+		Intent intent = new Intent(getActivity().getApplicationContext(),
+				LoginActivity.class);
+		startActivity(intent);
 	}
 
 }
