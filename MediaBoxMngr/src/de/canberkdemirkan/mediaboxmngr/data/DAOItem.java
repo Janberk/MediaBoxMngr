@@ -127,9 +127,10 @@ public class DAOItem {
 	}
 
 	// delete all rows of the table 'item'
-	public boolean deleteAllItems() {
+	public boolean deleteAllItems(String user) {
+		String where = ProjectConstants.USER + " = " + '"' + user + '"';
 		open();
-		boolean result = mSQLiteDB.delete(ProjectConstants.TABLE_ITEMS, null,
+		boolean result = mSQLiteDB.delete(ProjectConstants.TABLE_ITEMS, where,
 				null) > 0;
 		close();
 		return result;

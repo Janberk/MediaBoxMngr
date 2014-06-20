@@ -85,43 +85,6 @@ public class ItemListFragment extends Fragment implements
 		mItemList = itemStock.getItemList();
 	}
 
-	private ArrayList<Item> getRemoteItemList() {
-		final JSONHandler handler = new JSONHandler(getActivity());
-		AsyncHttpClient client = new AsyncHttpClient();
-		client.post(ItemStock.URL, new AsyncHttpResponseHandler() {
-
-			@Override
-			public void onStart() {
-				System.out.println("onStart()");
-			}
-
-			@Override
-			public void onSuccess(String response) {
-				System.out.println("onSuccess()\n" + response);
-				try {
-					ArrayList<Item> itemListFromRemoteDb = handler
-							.loadItemsFromJSONArray(response);
-					handler.setRemoteList(itemListFromRemoteDb);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void onFinish() {
-				System.out.println("onFinish()");
-			}
-
-			@Override
-			public void onFailure(int statusCode, Throwable error,
-					String content) {
-				System.out.println("onFailure(): " + content);
-			}
-
-		});
-		return handler.getRemoteList();
-	}
-
 	private void initViews(View view) {
 		mListView = (ListView) view
 				.findViewById(R.id.listView_fragmentItemList);
@@ -230,7 +193,7 @@ public class ItemListFragment extends Fragment implements
 				Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG)
 						.show();
 				ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-				itemStock.getDAOItem().deleteAllItems();
+				itemStock.getDAOItem().deleteAllItems(mUser);
 
 				// editMode = UtilMethods.modeSwitcher(editMode);
 				//
