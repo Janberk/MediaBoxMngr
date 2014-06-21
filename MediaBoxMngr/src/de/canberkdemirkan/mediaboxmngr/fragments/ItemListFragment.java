@@ -465,6 +465,9 @@ public class ItemListFragment extends Fragment implements
 	}
 
 	public void logout() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - logout()");
+		}
 		SharedPreferences sharedPreferences = getActivity()
 				.getSharedPreferences(ProjectConstants.KEY_MY_PREFERENCES,
 						Context.MODE_PRIVATE);

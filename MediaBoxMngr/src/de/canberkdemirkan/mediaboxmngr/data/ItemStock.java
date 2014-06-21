@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.util.Log;
+import de.canberkdemirkan.mediaboxmngr.BuildConfig;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.CustomJSONSerializer;
 
@@ -15,16 +17,19 @@ public class ItemStock {
 	private static final String TAG = "ItemStock";
 	private static final String FILE_NAME = "items.json";
 
-	private ArrayList<Item> mItemList;
+	private static ArrayList<Item> mItemList;
 	private ArrayList<Item> mSerializedItemList;
 	private CustomJSONSerializer mSerializer;
 
 	private static ItemStock sItemStock;
 	private Context mAppContext;
 
-	private DAOItem mDAOItem;
+	private static DAOItem mDAOItem;
 
 	public ItemStock(Context appContext, String user) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemStock - ItemStock()");
+		}
 		mAppContext = appContext;
 
 		mDAOItem = new DAOItem(mAppContext);
@@ -43,9 +48,13 @@ public class ItemStock {
 	}
 
 	public static ItemStock get(Context context, String user) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemStock - get()");
+		}
 		if (sItemStock == null) {
 			sItemStock = new ItemStock(context.getApplicationContext(), user);
 		}
+		mItemList = getDAOItem().getAllItems(user);
 		return sItemStock;
 	}
 
@@ -88,7 +97,7 @@ public class ItemStock {
 		return mItemList;
 	}
 
-	public DAOItem getDAOItem() {
+	public static DAOItem getDAOItem() {
 		return mDAOItem;
 	}
 

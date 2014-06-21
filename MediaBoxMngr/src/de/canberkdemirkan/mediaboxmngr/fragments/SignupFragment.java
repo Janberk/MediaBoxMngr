@@ -34,6 +34,30 @@ public class SignupFragment extends Fragment {
 	private Button mButtonSignup;
 	private TextView mTextLoginLink;
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onCreate()");
+		}
+	}
+
+	@Override
+	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onPause()");
+		}
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onResume()");
+		}
+		super.onResume();
+	}
+
 	public void initElements(View view) {
 		mEditFirstname = (EditText) view
 				.findViewById(R.id.et_fragmentSignup_firstname);

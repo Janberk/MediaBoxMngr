@@ -48,6 +48,43 @@ public class LoginFragment extends Fragment {
 	private Button mButtonLogin;
 	private TextView mTextSignupLink;
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onCreate()");
+		}
+	}
+
+	@Override
+	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onPause()");
+		}
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onResume()");
+		}
+		mSharedPreferences = getActivity().getSharedPreferences(
+				ProjectConstants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
+		if (mSharedPreferences.contains(KEY_EMAIL)) {
+			if (mSharedPreferences.contains(KEY_PASSWORD)) {
+				Intent intent = new Intent(getActivity(),
+						ItemListActivity.class);
+				startActivity(intent);
+			}
+		} else {
+			this.onCreate(null);
+			mEditEmail.setText("");
+			mEditPassword.setText("");
+		}
+		super.onResume();
+	}
+
 	private void initElements(View view) {
 		mEditEmail = (EditText) view.findViewById(R.id.et_fragmentLogin_email);
 		mEditPassword = (EditText) view
@@ -215,29 +252,6 @@ public class LoginFragment extends Fragment {
 		editor.commit();
 		Intent intent = new Intent(getActivity(), ItemListActivity.class);
 		startActivity(intent);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	public void onResume() {
-		mSharedPreferences = getActivity().getSharedPreferences(
-				ProjectConstants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
-		if (mSharedPreferences.contains(KEY_EMAIL)) {
-			if (mSharedPreferences.contains(KEY_PASSWORD)) {
-				Intent intent = new Intent(getActivity(),
-						ItemListActivity.class);
-				startActivity(intent);
-			}
-		} else {
-			this.onCreate(null);
-			mEditEmail.setText("");
-			mEditPassword.setText("");
-		}
-		super.onResume();
 	}
 
 }
