@@ -54,8 +54,13 @@ public class ItemStock {
 		if (sItemStock == null) {
 			sItemStock = new ItemStock(context.getApplicationContext(), user);
 		}
-		mItemList = getDAOItem().getAllItems(user);
+		refreshItemList(user);
 		return sItemStock;
+	}
+
+	private static void refreshItemList(String user) {
+		mItemList = mDAOItem.getAllItems(user);
+
 	}
 
 	public boolean saveSerializedItems() {
@@ -97,7 +102,7 @@ public class ItemStock {
 		return mItemList;
 	}
 
-	public static DAOItem getDAOItem() {
+	public DAOItem getDAOItem() {
 		return mDAOItem;
 	}
 

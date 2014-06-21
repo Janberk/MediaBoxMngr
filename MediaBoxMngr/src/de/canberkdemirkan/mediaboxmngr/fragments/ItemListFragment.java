@@ -80,11 +80,11 @@ public class ItemListFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate()");
-		}
 		setHasOptionsMenu(true);
 		mUser = getUser();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate(): " + mUser);
+		}
 		mEditMode = false;
 		getActivity().setTitle(mUser);
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
