@@ -14,6 +14,8 @@ public class ItemStock {
 
 	public static final String URL = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/build_json.php";
 
+	public static String USER = null;
+
 	private static final String TAG = "ItemStock";
 	private static final String FILE_NAME = "items.json";
 
@@ -30,6 +32,7 @@ public class ItemStock {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemStock - ItemStock()");
 		}
+		USER = user;
 		mAppContext = appContext;
 
 		mDAOItem = new DAOItem(mAppContext);
@@ -51,7 +54,7 @@ public class ItemStock {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemStock - get()");
 		}
-		if (sItemStock == null) {
+		if (sItemStock == null || !user.equals(USER)) {
 			sItemStock = new ItemStock(context.getApplicationContext(), user);
 		}
 		return sItemStock;
