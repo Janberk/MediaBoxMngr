@@ -55,6 +55,8 @@ import de.canberkdemirkan.mediaboxmngr.util.ItemType;
 public class ItemListFragment extends Fragment implements
 		OnItemSelectedListener {
 
+	private SharedPreferences mSharedPreferences;
+
 	private String mUser;
 	private boolean mEditMode;
 	private String mTypeAsString;
@@ -81,14 +83,15 @@ public class ItemListFragment extends Fragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		mSharedPreferences = getActivity().getSharedPreferences(
+				ProjectConstants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUser();
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate(): " + mUser);
 		}
 		mEditMode = false;
 		getActivity().setTitle(mUser);
-		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		mItemList = itemStock.getItemList();
+		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
 	}
 
 	private void initViews(View view) {
@@ -155,11 +158,6 @@ public class ItemListFragment extends Fragment implements
 
 							mItemList.add(i, item);
 						}
-						mItemAdapter.refresh(mItemList);
-						ItemStock itemStock = ItemStock.get(getActivity(),
-								mUser);
-						itemStock.getDAOItem()
-								.updateTableWithNewList(mItemList);
 					}
 
 					@Override
@@ -168,6 +166,9 @@ public class ItemListFragment extends Fragment implements
 							Log.d(Constants.LOG_TAG,
 									"ItemListFragment - initViews() - onFinish()");
 						}
+						ItemStock.get(getActivity(), mUser).getDAOItem()
+								.updateTableWithNewList(mItemList);
+						mItemAdapter.refresh(mItemList);
 					}
 
 					@Override
@@ -212,8 +213,8 @@ public class ItemListFragment extends Fragment implements
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG)
 						.show();
-				ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-				itemStock.getDAOItem().deleteAllItems(mUser);
+				ItemStock.get(getActivity(), mUser).getDAOItem()
+						.deleteAllItems(mUser);
 
 				// editMode = UtilMethods.modeSwitcher(editMode);
 				//
@@ -285,8 +286,10 @@ public class ItemListFragment extends Fragment implements
 			public void onClick(View v) {
 				ItemType type = ItemType.valueOf(mTypeAsString);
 				Item newItem = createItem(type);
-				ItemStock.get(getActivity(), mUser).addItem(newItem);
-				mItemAdapter.refresh(mItemList);
+				ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+				itemStock.addItem(newItem);
+				ArrayList<Item> list = itemStock.getItemList();
+				mItemAdapter.refresh(list);
 				mEditEditTitle.setText("");
 				switchMode();
 			}
@@ -374,6 +377,11 @@ public class ItemListFragment extends Fragment implements
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onResume()");
 		}
+		// String user = getUser();
+		//
+		// mItemList = ItemStock.get(getActivity(), user).getDAOItem()
+		// .getAllItems(user);
+
 		mItemAdapter.refresh(mItemList);
 	}
 
@@ -468,13 +476,10 @@ public class ItemListFragment extends Fragment implements
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - logout()");
 		}
-		SharedPreferences sharedPreferences = getActivity()
-				.getSharedPreferences(ProjectConstants.KEY_MY_PREFERENCES,
-						Context.MODE_PRIVATE);
-		Editor editor = sharedPreferences.edit();
-		editor.clear();
+		Editor editor = mSharedPreferences.edit();
+		editor.remove(LoginFragment.KEY_EMAIL);
+		editor.remove(LoginFragment.KEY_PASSWORD);
 		editor.commit();
-		getActivity().moveTaskToBack(true);
 		getActivity().finish();
 		Intent intent = new Intent(getActivity().getApplicationContext(),
 				LoginActivity.class);

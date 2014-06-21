@@ -244,7 +244,14 @@ public class LoginFragment extends Fragment {
 	}
 
 	public void login() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - login()");
+		}
 		Editor editor = mSharedPreferences.edit();
+		if (mSharedPreferences.contains(KEY_EMAIL)) {
+			editor.remove(KEY_EMAIL);
+			editor.remove(KEY_PASSWORD);
+		}
 		String email = mEditEmail.getText().toString();
 		String password = mEditPassword.getText().toString();
 		editor.putString(KEY_EMAIL, email);

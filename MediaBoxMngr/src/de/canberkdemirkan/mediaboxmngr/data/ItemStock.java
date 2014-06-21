@@ -17,14 +17,14 @@ public class ItemStock {
 	private static final String TAG = "ItemStock";
 	private static final String FILE_NAME = "items.json";
 
-	private static ArrayList<Item> mItemList;
+	private ArrayList<Item> mItemList;
 	private ArrayList<Item> mSerializedItemList;
 	private CustomJSONSerializer mSerializer;
 
 	private static ItemStock sItemStock;
 	private Context mAppContext;
 
-	private static DAOItem mDAOItem;
+	private DAOItem mDAOItem;
 
 	public ItemStock(Context appContext, String user) {
 		if (BuildConfig.DEBUG) {
@@ -54,13 +54,7 @@ public class ItemStock {
 		if (sItemStock == null) {
 			sItemStock = new ItemStock(context.getApplicationContext(), user);
 		}
-		refreshItemList(user);
 		return sItemStock;
-	}
-
-	private static void refreshItemList(String user) {
-		mItemList = mDAOItem.getAllItems(user);
-
 	}
 
 	public boolean saveSerializedItems() {

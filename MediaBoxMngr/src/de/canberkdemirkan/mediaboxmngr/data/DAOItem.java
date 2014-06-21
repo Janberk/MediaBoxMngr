@@ -395,6 +395,7 @@ public class DAOItem {
 
 		ItemType type = ItemType.valueOf(cursor.getString(colType));
 
+		int synced = (Integer.parseInt(cursor.getString(colSynced)));
 		int favoriteAsInt = (Integer.parseInt(cursor.getString(colFavorite)));
 		int inPossessionAsInt = (Integer.parseInt(cursor
 				.getString(colInPossession)));
@@ -422,6 +423,7 @@ public class DAOItem {
 			break;
 		}
 		// item.setCover(cover);
+		item.setSynced(UtilMethods.isTrue(synced));
 		item.setTitle(title);
 		item.setType(type);
 		item.setGenre(genre);
@@ -431,9 +433,7 @@ public class DAOItem {
 		item.setInPossession(UtilMethods.isTrue(inPossessionAsInt));
 		item.setDeleted(UtilMethods.isTrue(deletedAsInt));
 		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG,
-					"DAOItem - createItemFromTableValues(): \n"
-							+ item.toString());
+			Log.d(Constants.LOG_TAG, "DAOItem - createItemFromTableValues()");
 		}
 		return item;
 	}

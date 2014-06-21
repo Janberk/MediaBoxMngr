@@ -29,13 +29,9 @@ public class JSONHandler {
 
 	public ArrayList<Item> loadItemsFromJSONArray(String response)
 			throws JSONException {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "JSONHandler - loadItemsFromJSONArray()");
-		}
 		ArrayList<Item> itemList = new ArrayList<Item>();
 
 		JSONObject json = new JSONObject(response);
-		// JSONArray array = (JSONArray) new JSONTokener(json).nextValue();
 		JSONArray array = json.getJSONArray("items");
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG,
