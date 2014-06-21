@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,10 +20,12 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.SignupActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class LoginFragment extends Fragment {
 
@@ -55,11 +58,6 @@ public class LoginFragment extends Fragment {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -83,14 +81,18 @@ public class LoginFragment extends Fragment {
 
 					@Override
 					public void onStart() {
-						System.out.println("LoginRequestHandler - onStart()");
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"LoginFragment - onStart()");
+						}
 					}
 
 					@Override
 					public void onSuccess(String response) {
-						System.out
-								.println("LoginRequestHandler - onSuccess()\n"
-										+ response);
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"LoginFragment - onSuccess()\n" + response);
+						}
 						if (response != null && response.matches("-?\\d+")) {
 							int key = Integer.valueOf(response);
 							checkHttpRequestResult(key);
@@ -99,15 +101,19 @@ public class LoginFragment extends Fragment {
 
 					@Override
 					public void onFinish() {
-						System.out.println("LoginRequestHandler - onFinish()");
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"LoginFragment - onFinish()");
+						}
 					}
 
 					@Override
 					public void onFailure(int statusCode, Throwable error,
 							String content) {
-						System.out
-								.println("LoginRequestHandler - onFailure(): "
-										+ content);
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"LoginFragment - onFailure(): " + content);
+						}
 					}
 
 				});
@@ -147,24 +153,49 @@ public class LoginFragment extends Fragment {
 	private void checkHttpRequestResult(int key) {
 		switch (key) {
 		case RESPONSE_CODE_SUCCESS:
+			if (BuildConfig.DEBUG) {
+				Log.d(Constants.LOG_TAG,
+						"LoginFragment - checkHttpRequestResult(): " + key
+								+ ": SUCCESS");
+			}
 			login();
 			break;
 		case RESPONSE_CODE_EMPTY_FIELDS:
+			if (BuildConfig.DEBUG) {
+				Log.d(Constants.LOG_TAG,
+						"LoginFragment - checkHttpRequestResult(): " + key
+								+ ": EMPTY FIELDS");
+			}
 			Toast.makeText(getActivity().getApplicationContext(),
 					"Please fill in all required fields.", Toast.LENGTH_LONG)
 					.show();
 			break;
 		case RESPONSE_CODE_INVALID_EMAIL:
+			if (BuildConfig.DEBUG) {
+				Log.d(Constants.LOG_TAG,
+						"LoginFragment - checkHttpRequestResult(): " + key
+								+ ": INVALID EMAIL");
+			}
 			Toast.makeText(getActivity().getApplicationContext(),
 					"The E-mail address you entered is not valid.",
 					Toast.LENGTH_LONG).show();
 			break;
 		case RESPONSE_CODE_INVALID_DATA:
+			if (BuildConfig.DEBUG) {
+				Log.d(Constants.LOG_TAG,
+						"LoginFragment - checkHttpRequestResult(): " + key
+								+ ": INVALID DATA");
+			}
 			Toast.makeText(getActivity().getApplicationContext(),
 					"You entered invalid user data.\nPlease try again.",
 					Toast.LENGTH_LONG).show();
 			break;
 		case RESPONSE_CODE_NO_POST:
+			if (BuildConfig.DEBUG) {
+				Log.d(Constants.LOG_TAG,
+						"LoginFragment - checkHttpRequestResult(): " + key
+								+ ": NO POST");
+			}
 			Toast.makeText(getActivity().getApplicationContext(),
 					"ERROR while trying to connect to server!",
 					Toast.LENGTH_LONG).show();

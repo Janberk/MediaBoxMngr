@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,12 +37,14 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
@@ -77,6 +80,9 @@ public class ItemListFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate()");
+		}
 		setHasOptionsMenu(true);
 		mUser = getUser();
 		mEditMode = false;
@@ -123,12 +129,19 @@ public class ItemListFragment extends Fragment implements
 
 					@Override
 					public void onStart() {
-						System.out.println("onStart()");
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - initViews() - onStart()");
+						}
 					}
 
 					@Override
 					public void onSuccess(String response) {
-						System.out.println("onSuccess()\n" + response);
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - initViews() - onSuccess()\n"
+											+ response);
+						}
 						try {
 							ArrayList<Item> createdList = handler
 									.loadItemsFromJSONArray(response);
@@ -151,13 +164,20 @@ public class ItemListFragment extends Fragment implements
 
 					@Override
 					public void onFinish() {
-						System.out.println("onFinish()");
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - initViews() - onFinish()");
+						}
 					}
 
 					@Override
 					public void onFailure(int statusCode, Throwable error,
 							String content) {
-						System.out.println("onFailure(): " + content);
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - initViews() - onFailure()\n"
+											+ content);
+						}
 					}
 
 				});
@@ -288,31 +308,19 @@ public class ItemListFragment extends Fragment implements
 				params, new AsyncHttpResponseHandler() {
 					@Override
 					public void onSuccess(String response) {
-						System.out.println("Response from Server: \n"
-								+ response);
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - syncWithRemoteDb() - onSuccess()\n"
+											+ response);
+						}
 						try {
 							JSONArray jsonArray = new JSONArray(response);
-							System.out.println("JSONArray.length: "
-									+ jsonArray.length());
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - syncWithRemoteDb() - onSuccess(): \n"
+											+ jsonArray.length());
 							for (int i = 0; i < jsonArray.length(); i++) {
 								JSONObject jsonObject = (JSONObject) jsonArray
 										.get(i);
-								System.out.println("ID: "
-										+ jsonObject.get(ProjectConstants.ID));
-								System.out.println("SQLITE_ID: "
-										+ jsonObject
-												.get(ProjectConstants.SQLITE_ID));
-								System.out.println("SYNCED: "
-										+ jsonObject
-												.get(ProjectConstants.SYNCED));
-								System.out.println("TITLE: "
-										+ jsonObject
-												.get(ProjectConstants.TITLE));
-								System.out.println("USER: "
-										+ jsonObject.get(ProjectConstants.USER));
-								System.out.println("CREATION_DATE: "
-										+ jsonObject
-												.get(ProjectConstants.CREATION_DATE));
 
 								String jsonId = jsonObject.getString("_id");
 								String jsonSynced = jsonObject
@@ -337,6 +345,11 @@ public class ItemListFragment extends Fragment implements
 					@Override
 					public void onFailure(int statusCode, Throwable error,
 							String content) {
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - syncWithRemoteDb() - onFailure()\n"
+											+ content);
+						}
 						if (statusCode == 404) {
 							Toast.makeText(getActivity(),
 									"404 - Resource not found.",
@@ -358,12 +371,18 @@ public class ItemListFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onResume()");
+		}
 		mItemAdapter.refresh(mItemList);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onPause()");
+		}
 	}
 
 	@Override

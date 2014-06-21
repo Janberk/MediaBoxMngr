@@ -7,6 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.util.Log;
+import de.canberkdemirkan.mediaboxmngr.BuildConfig;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
@@ -26,13 +29,18 @@ public class JSONHandler {
 
 	public ArrayList<Item> loadItemsFromJSONArray(String response)
 			throws JSONException {
-		System.out.println("loadItemsFromJSONArray()");
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "JSONHandler - loadItemsFromJSONArray()");
+		}
 		ArrayList<Item> itemList = new ArrayList<Item>();
 
 		JSONObject json = new JSONObject(response);
 		// JSONArray array = (JSONArray) new JSONTokener(json).nextValue();
 		JSONArray array = json.getJSONArray("items");
-		System.out.println(array);
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG,
+					"JSONHandler - loadItemsFromJSONArray(): \n" + array);
+		}
 
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject item = array.getJSONObject(i);

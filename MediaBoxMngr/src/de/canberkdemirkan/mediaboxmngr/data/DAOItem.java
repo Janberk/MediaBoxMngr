@@ -9,10 +9,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import de.canberkdemirkan.mediaboxmngr.BuildConfig;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
@@ -87,6 +90,10 @@ public class DAOItem {
 		long id = mSQLiteDB.insert(ProjectConstants.TABLE_ITEMS, null, values);
 		close();
 		item.setId(id);
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG,
+					"DAOItem - insertItem(): \n" + item.toString());
+		}
 		return item;
 	}
 
@@ -98,6 +105,9 @@ public class DAOItem {
 		boolean result = mSQLiteDB.update(ProjectConstants.TABLE_ITEMS, values,
 				ProjectConstants.ID + " = " + item.getId(), null) > 0;
 		close();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - updateItem(): " + result);
+		}
 		return result;
 	}
 
@@ -123,6 +133,9 @@ public class DAOItem {
 		boolean result = mSQLiteDB.delete(ProjectConstants.TABLE_ITEMS,
 				ProjectConstants.ID + " = " + item.getId(), null) > 0;
 		close();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - deleteItem(): " + result);
+		}
 		return result;
 	}
 
@@ -133,6 +146,9 @@ public class DAOItem {
 		boolean result = mSQLiteDB.delete(ProjectConstants.TABLE_ITEMS, where,
 				null) > 0;
 		close();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - deleteAllItems(): " + result);
+		}
 		return result;
 	}
 
@@ -166,6 +182,10 @@ public class DAOItem {
 		// values) > 0;
 		// }
 		close();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - updateTableWithNewList(): "
+					+ result);
+		}
 		return result;
 	}
 
@@ -176,6 +196,10 @@ public class DAOItem {
 		Cursor cursor = null;
 		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
 				+ " WHERE " + ProjectConstants.USER + " = " + '"' + user + '"';
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - getAllItems(): \n"
+					+ selectQuery);
+		}
 
 		try {
 			cursor = mSQLiteDB.rawQuery(selectQuery, null);
@@ -276,6 +300,10 @@ public class DAOItem {
 		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
 				+ " WHERE " + ProjectConstants.USER + " = " + '"' + user + '"'
 				+ " AND " + ProjectConstants.SYNCED + " = " + 0;
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - buildJSONfromSQLite(): \n"
+					+ selectQuery);
+		}
 		Gson gson = new GsonBuilder().create();
 
 		try {
@@ -402,6 +430,11 @@ public class DAOItem {
 				.setCreationDateFromString(creationDate));
 		item.setInPossession(UtilMethods.isTrue(inPossessionAsInt));
 		item.setDeleted(UtilMethods.isTrue(deletedAsInt));
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG,
+					"DAOItem - createItemFromTableValues(): \n"
+							+ item.toString());
+		}
 		return item;
 	}
 
@@ -509,6 +542,10 @@ public class DAOItem {
 		cursor = mSQLiteDB.rawQuery(selectQuery, null);
 		count = cursor.getCount();
 		close();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - getCountOfSyncedItems(): "
+					+ count);
+		}
 		return count;
 	}
 
@@ -517,7 +554,10 @@ public class DAOItem {
 		String updateQuery = "UPDATE " + ProjectConstants.TABLE_ITEMS + " SET "
 				+ ProjectConstants.SYNCED + " = " + status + " WHERE "
 				+ ProjectConstants.ID + " = " + id;
-		System.out.println(updateQuery);
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - updateSyncStatus(): \n"
+					+ updateQuery);
+		}
 		mSQLiteDB.execSQL(updateQuery);
 		close();
 	}
