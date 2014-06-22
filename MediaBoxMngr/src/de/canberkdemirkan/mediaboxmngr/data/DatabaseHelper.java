@@ -31,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(Constants.CREATE_TABLE_ITEMS);
 		db.execSQL(Constants.CREATE_TABLE_USERS);
+		db.execSQL(Constants.CREATE_TABLE_VERSION);
 	}
 
 	// upgrading database
@@ -38,6 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_ITEMS);
 		db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_USERS);
+		db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_VERSION);
 		onCreate(db);
 	}
 

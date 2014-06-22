@@ -31,6 +31,7 @@ public interface Constants {
 	// table names
 	String TABLE_USERS = "users";
 	String TABLE_ITEMS = "items";
+	String TABLE_VERSION = "version";
 
 	// item table column names
 	// common
@@ -77,6 +78,9 @@ public interface Constants {
 	String USER_NAME = "username";
 	String EMAIL = "email";
 	String PASSWORD = "password";
+	
+	// version table column name
+	String VERSION = "version";
 	
 	// SQL statement items table
 	String CREATE_TABLE_ITEMS = "CREATE TABLE "
@@ -127,6 +131,13 @@ public interface Constants {
 			+ USER_NAME + " TEXT,"
 			+ EMAIL + " TEXT UNIQUE,"
 			+ PASSWORD + " TEXT"
+			+ ")";
+	
+	// SQL statement table users
+	String CREATE_TABLE_VERSION = "CREATE TABLE "
+			+ TABLE_VERSION + "("
+			+ ID + " INTEGER PRIMARY KEY,"
+			+ VERSION + " INTEGER"
 			+ ")";
 
 }

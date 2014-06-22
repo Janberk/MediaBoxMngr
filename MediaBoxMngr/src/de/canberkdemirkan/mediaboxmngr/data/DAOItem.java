@@ -94,6 +94,7 @@ public class DAOItem {
 			Log.d(Constants.LOG_TAG,
 					"DAOItem - insertItem(): \n" + item.toString());
 		}
+		increaseTableVersion();
 		return item;
 	}
 
@@ -108,6 +109,7 @@ public class DAOItem {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - updateItem(): " + result);
 		}
+		increaseTableVersion();
 		return result;
 	}
 
@@ -136,6 +138,7 @@ public class DAOItem {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - deleteItem(): " + result);
 		}
+		increaseTableVersion();
 		return result;
 	}
 
@@ -148,6 +151,7 @@ public class DAOItem {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - deleteAllItems(): " + result);
 		}
+		increaseTableVersion();
 		return result;
 	}
 
@@ -184,6 +188,7 @@ public class DAOItem {
 			Log.d(Constants.LOG_TAG, "DAOItem - updateTableWithNewList(): "
 					+ result);
 		}
+		increaseTableVersion();
 		return result;
 	}
 
@@ -537,6 +542,7 @@ public class DAOItem {
 		}
 		mSQLiteDB.execSQL(updateQuery);
 		close();
+		increaseTableVersion();
 	}
 
 	public String getSyncStatus() {
@@ -547,6 +553,54 @@ public class DAOItem {
 			msg = "DB Sync needed\n";
 		}
 		return msg;
+	}
+
+	private static int TABLE_VERSION = 0;
+
+	public void increaseTableVersion() {
+		open();
+		ContentValues values = new ContentValues();
+		values.put(Constants.VERSION, ++TABLE_VERSION);
+
+		Cursor cursor = mSQLiteDB.query(Constants.VERSION,
+				new String[] { Constants.VERSION }, null, null, null, null,
+				null);
+
+		if (!cursor.moveToFirst()) {
+			mSQLiteDB.insert(Constants.TABLE_VERSION, null, values);
+		} else {
+			mSQLiteDB.update(Constants.TABLE_VERSION, values, null, null);
+		}
+		cursor.close();
+		close();
+	}
+
+	public int getTableVersion(String tableName) {
+		open();
+		int version = -1;
+		Cursor cursor = null;
+
+		try {
+			cursor = mSQLiteDB.query(tableName,
+					new String[] { Constants.VERSION }, null, null, null, null,
+					null);
+
+			if (cursor.moveToFirst() && cursor != null) {
+				version = cursor.getInt(cursor
+						.getColumnIndex(Constants.VERSION));
+				return version;
+			} else {
+				return version;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+			close();
+		}
+		return version;
 	}
 
 }
