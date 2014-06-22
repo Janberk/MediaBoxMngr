@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,9 +23,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
-import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemFragment extends Fragment {
@@ -41,9 +43,9 @@ public class ItemFragment extends Fragment {
 
 	public static ItemFragment newInstance(UUID itemId, String userTag) {
 		Bundle args = new Bundle();
-		
-		args.putSerializable(ProjectConstants.KEY_ITEM_ID, itemId);
-		args.putSerializable(ProjectConstants.KEY_USER_TAG, userTag);
+
+		args.putSerializable(Constants.KEY_ITEM_ID, itemId);
+		args.putSerializable(Constants.KEY_USER_TAG, userTag);
 
 		ItemFragment fragment = new ItemFragment();
 		fragment.setArguments(args);
@@ -54,12 +56,14 @@ public class ItemFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onCreate()");
+		}
 		setHasOptionsMenu(true);
 
 		UUID itemId = (UUID) getArguments().getSerializable(
-				ProjectConstants.KEY_ITEM_ID);
-		mUser = (String) getArguments().getSerializable(
-				ProjectConstants.KEY_USER_TAG);
+				Constants.KEY_ITEM_ID);
+		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
 
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
 		mItem = itemStock.getItem(itemId);
@@ -69,6 +73,9 @@ public class ItemFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onCreateView()");
+		}
 
 		View view = inflater.inflate(R.layout.fragment_item, container, false);
 
@@ -130,7 +137,7 @@ public class ItemFragment extends Fragment {
 				DatePickerFragment dialog = DatePickerFragment
 						.newInstance(mItem.getCreationDate());
 				dialog.setTargetFragment(ItemFragment.this,
-						ProjectConstants.REQUEST_CODE);
+						Constants.REQUEST_CODE);
 				dialog.show(fm, DIALOG_CREATION_DATE);
 			}
 		});
@@ -154,9 +161,9 @@ public class ItemFragment extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != Activity.RESULT_OK)
 			return;
-		if (requestCode == ProjectConstants.REQUEST_CODE) {
+		if (requestCode == Constants.REQUEST_CODE) {
 			Date creationDate = (Date) data
-					.getSerializableExtra(ProjectConstants.KEY_ITEM_CREATION_DATE);
+					.getSerializableExtra(Constants.KEY_ITEM_CREATION_DATE);
 			mItem.setCreationDate(creationDate);
 			updateCreationDate();
 		}
@@ -164,17 +171,6 @@ public class ItemFragment extends Fragment {
 
 	private void updateCreationDate() {
 		mButtonItemCreationDate.setText(mItem.getCreationDate().toString());
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public void onPause() {
-		ItemStock.get(getActivity(), mUser).saveSerializedItems();
-		super.onPause();
 	}
 
 	@Override
@@ -192,6 +188,84 @@ public class ItemFragment extends Fragment {
 
 	private void updateItem() {
 		ItemStock.get(getActivity(), mUser).updateItem(mItem);
+	}
+
+	/*
+	 * 
+	 * Logging callback methods for debug purposes
+	 */
+
+	@Override
+	public void onAttach(Activity activity) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onAttach()");
+		}
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onActivityCreated()");
+		}
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onStart() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onStart()");
+		}
+		super.onStart();
+	}
+
+	@Override
+	public void onResume() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onStart()");
+		}
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onStart()");
+		}
+		ItemStock.get(getActivity(), mUser).saveSerializedItems();
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onStop()");
+		}
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroyView() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onDestroyView()");
+		}
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onDestroy() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onDestroy()");
+		}
+		super.onDestroy();
+	}
+
+	@Override
+	public void onDetach() {//
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onDetach()");
+		}
+		super.onDetach();
 	}
 
 }

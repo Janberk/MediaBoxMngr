@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.content.Context;
-import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
@@ -52,9 +52,9 @@ public class CustomJSONSerializer {
 			for (int i = 0; i < array.length(); i++) {
 				JSONObject item = array.getJSONObject(i);
 
-				if (item.has(ProjectConstants.TYPE)) {
+				if (item.has(Constants.TYPE)) {
 					ItemType type = ItemType.valueOf(item
-							.getString(ProjectConstants.TYPE));
+							.getString(Constants.TYPE));
 					switch (type) {
 					case Album:
 						itemList.add(0, new MusicAlbum(array.getJSONObject(i)));

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,7 +44,6 @@ import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
-import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
@@ -84,7 +84,7 @@ public class ItemListFragment extends Fragment implements
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		mSharedPreferences = getActivity().getSharedPreferences(
-				ProjectConstants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
+				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUser();
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate(): " + mUser);
@@ -259,6 +259,10 @@ public class ItemListFragment extends Fragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreateView()");
+		}
+
 		View view = inflater.inflate(R.layout.fragment_item_list, null);
 
 		initViews(view);
@@ -275,7 +279,8 @@ public class ItemListFragment extends Fragment implements
 
 				Item item = (Item) mListView.getAdapter().getItem(position);
 				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(ProjectConstants.KEY_ITEM_ID, item.getUniqueId());
+				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
+				i.putExtra(Constants.KEY_USER_TAG, mUser);
 				startActivityForResult(i, 0);
 			}
 		});
@@ -372,28 +377,6 @@ public class ItemListFragment extends Fragment implements
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onResume()");
-		}
-		// String user = getUser();
-		//
-		// mItemList = ItemStock.get(getActivity(), user).getDAOItem()
-		// .getAllItems(user);
-
-		mItemAdapter.refresh(mItemList);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onPause()");
-		}
-	}
-
-	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.fragment_menu_list, menu);
@@ -445,7 +428,7 @@ public class ItemListFragment extends Fragment implements
 
 	public String getUser() {
 		SharedPreferences sharedPreferences = getActivity()
-				.getSharedPreferences(ProjectConstants.KEY_MY_PREFERENCES,
+				.getSharedPreferences(Constants.KEY_MY_PREFERENCES,
 						Context.MODE_PRIVATE);
 		String user = sharedPreferences.getString(LoginFragment.KEY_EMAIL, "");
 		return user;
@@ -484,6 +467,84 @@ public class ItemListFragment extends Fragment implements
 		Intent intent = new Intent(getActivity().getApplicationContext(),
 				LoginActivity.class);
 		startActivity(intent);
+	}
+
+	/*
+	 * 
+	 * Logging callback methods for debug purposes
+	 */
+
+	@Override
+	public void onAttach(Activity activity) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onAttach()");
+		}
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onActivityCreated()");
+		}
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onStart() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onStart()");
+		}
+		super.onStart();
+	}
+
+	@Override
+	public void onResume() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onResume()");
+		}
+		mItemAdapter.refresh(mItemList);
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onPause()");
+		}
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onStop()");
+		}
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroyView() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onDestroyView()");
+		}
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onDestroy() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onDestroy()");
+		}
+		super.onDestroy();
+	}
+
+	@Override
+	public void onDetach() {//
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onDetach()");
+		}
+		super.onDetach();
 	}
 
 }

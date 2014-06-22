@@ -11,8 +11,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
-import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemFragment;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemPagerActivity extends FragmentActivity {
@@ -25,9 +25,9 @@ public class ItemPagerActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		UUID itemId = (UUID) getIntent().getSerializableExtra(
-				ProjectConstants.KEY_ITEM_ID);
+				Constants.KEY_ITEM_ID);
 		final String userTag = (String) getIntent().getSerializableExtra(
-				ProjectConstants.KEY_USER_TAG);
+				Constants.KEY_USER_TAG);
 
 		mViewPager = new ViewPager(this);
 		mViewPager.setId(R.id.viewPager);

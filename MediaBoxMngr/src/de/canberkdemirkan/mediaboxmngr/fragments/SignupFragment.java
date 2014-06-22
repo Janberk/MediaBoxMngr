@@ -1,5 +1,6 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,22 +43,6 @@ public class SignupFragment extends Fragment {
 		}
 	}
 
-	@Override
-	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onPause()");
-		}
-		super.onPause();
-	}
-
-	@Override
-	public void onResume() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onResume()");
-		}
-		super.onResume();
-	}
-
 	public void initElements(View view) {
 		mEditFirstname = (EditText) view
 				.findViewById(R.id.et_fragmentSignup_firstname);
@@ -77,6 +62,9 @@ public class SignupFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onCreateView()");
+		}
 
 		View view = inflater.inflate(R.layout.fragment_signup, null);
 		initElements(view);
@@ -204,6 +192,83 @@ public class SignupFragment extends Fragment {
 			break;
 
 		}
+	}
+
+	/*
+	 * 
+	 * Logging callback methods for debug purposes
+	 */
+
+	@Override
+	public void onAttach(Activity activity) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onAttach()");
+		}
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onActivityCreated()");
+		}
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onStart() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onStart()");
+		}
+		super.onStart();
+	}
+
+	@Override
+	public void onResume() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onResume()");
+		}
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onPause()");
+		}
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onStop()");
+		}
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroyView() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onDestroyView()");
+		}
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onDestroy() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onDestroy()");
+		}
+		super.onDestroy();
+	}
+
+	@Override
+	public void onDetach() {//
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "SignupFragment - onDetach()");
+		}
+		super.onDetach();
 	}
 
 }

@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import de.canberkdemirkan.mediaboxmngr.R;
-import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class DatePickerFragment extends DialogFragment {
 
@@ -24,8 +24,7 @@ public class DatePickerFragment extends DialogFragment {
 	public static DatePickerFragment newInstance(Date creationDate) {
 		Bundle args = new Bundle();
 
-		args.putSerializable(ProjectConstants.KEY_ITEM_CREATION_DATE,
-				creationDate);
+		args.putSerializable(Constants.KEY_ITEM_CREATION_DATE, creationDate);
 
 		DatePickerFragment fragment = new DatePickerFragment();
 		fragment.setArguments(args);
@@ -36,7 +35,7 @@ public class DatePickerFragment extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 		mCreationDate = (Date) getArguments().getSerializable(
-				ProjectConstants.KEY_ITEM_CREATION_DATE);
+				Constants.KEY_ITEM_CREATION_DATE);
 		// Create a Calendar to get the year, month, and day
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(mCreationDate);
@@ -58,7 +57,7 @@ public class DatePickerFragment extends DialogFragment {
 						.getTime();
 				// Update argument to preserve selected value on rotation
 				getArguments().putSerializable(
-						ProjectConstants.KEY_ITEM_CREATION_DATE, mCreationDate);
+						Constants.KEY_ITEM_CREATION_DATE, mCreationDate);
 			}
 		});
 
@@ -78,7 +77,7 @@ public class DatePickerFragment extends DialogFragment {
 		if (getTargetFragment() == null)
 			return;
 		Intent i = new Intent();
-		i.putExtra(ProjectConstants.KEY_ITEM_CREATION_DATE, mCreationDate);
+		i.putExtra(Constants.KEY_ITEM_CREATION_DATE, mCreationDate);
 		getTargetFragment().onActivityResult(getTargetRequestCode(),
 				resultCode, i);
 	}

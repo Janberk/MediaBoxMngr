@@ -1,5 +1,6 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +25,6 @@ import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.SignupActivity;
-import de.canberkdemirkan.mediaboxmngr.data.ProjectConstants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class LoginFragment extends Fragment {
@@ -56,35 +56,6 @@ public class LoginFragment extends Fragment {
 		}
 	}
 
-	@Override
-	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onPause()");
-		}
-		super.onPause();
-	}
-
-	@Override
-	public void onResume() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onResume()");
-		}
-		mSharedPreferences = getActivity().getSharedPreferences(
-				ProjectConstants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
-		if (mSharedPreferences.contains(KEY_EMAIL)) {
-			if (mSharedPreferences.contains(KEY_PASSWORD)) {
-				Intent intent = new Intent(getActivity(),
-						ItemListActivity.class);
-				startActivity(intent);
-			}
-		} else {
-			this.onCreate(null);
-			mEditEmail.setText("");
-			mEditPassword.setText("");
-		}
-		super.onResume();
-	}
-
 	private void initElements(View view) {
 		mEditEmail = (EditText) view.findViewById(R.id.et_fragmentLogin_email);
 		mEditPassword = (EditText) view
@@ -97,6 +68,9 @@ public class LoginFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onCreateView()");
+		}
 
 		View view = inflater.inflate(R.layout.fragment_login, null);
 		initElements(view);
@@ -259,6 +233,96 @@ public class LoginFragment extends Fragment {
 		editor.commit();
 		Intent intent = new Intent(getActivity(), ItemListActivity.class);
 		startActivity(intent);
+	}
+
+	/*
+	 * 
+	 * Logging callback methods for debug purposes
+	 */
+
+	@Override
+	public void onAttach(Activity activity) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onAttach()");
+		}
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onActivityCreated()");
+		}
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onStart() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onStart()");
+		}
+		super.onStart();
+	}
+
+	@Override
+	public void onResume() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onResume()");
+		}
+		mSharedPreferences = getActivity().getSharedPreferences(
+				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
+		if (mSharedPreferences.contains(KEY_EMAIL)) {
+			if (mSharedPreferences.contains(KEY_PASSWORD)) {
+				Intent intent = new Intent(getActivity(),
+						ItemListActivity.class);
+				startActivity(intent);
+			}
+		} else {
+			this.onCreate(null);
+			mEditEmail.setText("");
+			mEditPassword.setText("");
+		}
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onPause()");
+		}
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onStop()");
+		}
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroyView() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onDestroyView()");
+		}
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onDestroy() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onDestroy()");
+		}
+		super.onDestroy();
+	}
+
+	@Override
+	public void onDetach() {//
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "LoginFragment - onDetach()");
+		}
+		super.onDetach();
 	}
 
 }

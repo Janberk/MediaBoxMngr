@@ -41,18 +41,15 @@ public class JSONHandler {
 		for (int i = 0; i < array.length(); i++) {
 			JSONObject item = array.getJSONObject(i);
 
-			if (item.has(ProjectConstants.SQLITE_ID)
-					|| item.has(ProjectConstants.USER)
-					|| item.has(ProjectConstants.TITLE)
-					|| item.has(ProjectConstants.TYPE)
-					|| item.has(ProjectConstants.CREATION_DATE)) {
-				long id = item.getLong(ProjectConstants.SQLITE_ID);
-				String user = item.getString(ProjectConstants.USER);
-				String title = item.getString(ProjectConstants.TITLE);
-				ItemType type = ItemType.valueOf(item
-						.getString(ProjectConstants.TYPE));
-				String creationDate = item
-						.getString(ProjectConstants.CREATION_DATE);
+			if (item.has(Constants.SQLITE_ID) || item.has(Constants.USER)
+					|| item.has(Constants.TITLE) || item.has(Constants.TYPE)
+					|| item.has(Constants.CREATION_DATE)) {
+				long id = item.getLong(Constants.SQLITE_ID);
+				String user = item.getString(Constants.USER);
+				String title = item.getString(Constants.TITLE);
+				ItemType type = ItemType
+						.valueOf(item.getString(Constants.TYPE));
+				String creationDate = item.getString(Constants.CREATION_DATE);
 
 				Item newItem = null;
 				switch (type) {

@@ -3,6 +3,7 @@ package de.canberkdemirkan.mediaboxmngr.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -28,15 +29,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// creating tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(ProjectConstants.CREATE_TABLE_ITEMS);
-		db.execSQL(ProjectConstants.CREATE_TABLE_USERS);
+		db.execSQL(Constants.CREATE_TABLE_ITEMS);
+		db.execSQL(Constants.CREATE_TABLE_USERS);
 	}
 
 	// upgrading database
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS " + ProjectConstants.TABLE_ITEMS);
-		db.execSQL("DROP TABLE IF EXISTS " + ProjectConstants.TABLE_USERS);
+		db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_ITEMS);
+		db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_USERS);
 		onCreate(db);
 	}
 

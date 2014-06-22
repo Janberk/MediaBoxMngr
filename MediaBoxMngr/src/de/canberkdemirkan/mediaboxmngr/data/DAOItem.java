@@ -85,9 +85,9 @@ public class DAOItem {
 		open();
 		ContentValues values = new ContentValues();
 		putValues(item, values);
-		values.put(ProjectConstants.CREATION_DATE, UtilMethods
+		values.put(Constants.CREATION_DATE, UtilMethods
 				.dateToFormattedStringConverter(item.getCreationDate()));
-		long id = mSQLiteDB.insert(ProjectConstants.TABLE_ITEMS, null, values);
+		long id = mSQLiteDB.insert(Constants.TABLE_ITEMS, null, values);
 		close();
 		item.setId(id);
 		if (BuildConfig.DEBUG) {
@@ -102,8 +102,8 @@ public class DAOItem {
 		open();
 		ContentValues values = new ContentValues();
 		putValues(item, values);
-		boolean result = mSQLiteDB.update(ProjectConstants.TABLE_ITEMS, values,
-				ProjectConstants.ID + " = " + item.getId(), null) > 0;
+		boolean result = mSQLiteDB.update(Constants.TABLE_ITEMS, values,
+				Constants.ID + " = " + item.getId(), null) > 0;
 		close();
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - updateItem(): " + result);
@@ -130,8 +130,8 @@ public class DAOItem {
 	// delete existing item
 	public boolean deleteItem(Item item) {
 		open();
-		boolean result = mSQLiteDB.delete(ProjectConstants.TABLE_ITEMS,
-				ProjectConstants.ID + " = " + item.getId(), null) > 0;
+		boolean result = mSQLiteDB.delete(Constants.TABLE_ITEMS, Constants.ID
+				+ " = " + item.getId(), null) > 0;
 		close();
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - deleteItem(): " + result);
@@ -141,10 +141,9 @@ public class DAOItem {
 
 	// delete all rows of the table 'item'
 	public boolean deleteAllItems(String user) {
-		String where = ProjectConstants.USER + " = " + '"' + user + '"';
+		String where = Constants.USER + " = " + '"' + user + '"';
 		open();
-		boolean result = mSQLiteDB.delete(ProjectConstants.TABLE_ITEMS, where,
-				null) > 0;
+		boolean result = mSQLiteDB.delete(Constants.TABLE_ITEMS, where, null) > 0;
 		close();
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - deleteAllItems(): " + result);
@@ -161,24 +160,23 @@ public class DAOItem {
 
 	// update table with new item list
 	public boolean updateTableWithNewList(ArrayList<Item> itemList) {
-		dropAndRecreateTable(ProjectConstants.TABLE_ITEMS,
-				ProjectConstants.CREATE_TABLE_ITEMS);
+		dropAndRecreateTable(Constants.TABLE_ITEMS,
+				Constants.CREATE_TABLE_ITEMS);
 		open();
 		ContentValues values = new ContentValues();
 		boolean result = false;
 		for (int i = itemList.size() - 1; i >= 0; i--) {
 			Item item = itemList.get(i);
 			putValues(item, values);
-			values.put(ProjectConstants.CREATION_DATE, UtilMethods
+			values.put(Constants.CREATION_DATE, UtilMethods
 					.dateToFormattedStringConverter(item.getCreationDate()));
-			result = mSQLiteDB.insert(ProjectConstants.TABLE_ITEMS, null,
-					values) > 0;
+			result = mSQLiteDB.insert(Constants.TABLE_ITEMS, null, values) > 0;
 		}
 		// for (Item item : itemList) {
 		// putValues(item, values);
-		// values.put(ProjectConstants.CREATION_DATE, UtilMethods
+		// values.put(Constants.CREATION_DATE, UtilMethods
 		// .dateToFormattedStringConverter(item.getCreationDate()));
-		// result = mSQLiteDB.insert(ProjectConstants.TABLE_ITEMS, null,
+		// result = mSQLiteDB.insert(Constants.TABLE_ITEMS, null,
 		// values) > 0;
 		// }
 		close();
@@ -194,8 +192,8 @@ public class DAOItem {
 		open();
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		Cursor cursor = null;
-		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
-				+ " WHERE " + ProjectConstants.USER + " = " + '"' + user + '"';
+		String selectQuery = "SELECT * FROM " + Constants.TABLE_ITEMS
+				+ " WHERE " + Constants.USER + " = " + '"' + user + '"';
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - getAllItems(): \n"
 					+ selectQuery);
@@ -229,51 +227,51 @@ public class DAOItem {
 	// JSONArray jsonArray = new JSONArray();
 	// for (Item item : itemListFromDb) {
 	// JSONObject json = new JSONObject();
-	// json.put(ProjectConstants.ID, item.getId());
-	// json.put(ProjectConstants.USER, item.getUser());
-	// json.put(ProjectConstants.TITLE, item.getTitle());
-	// json.put(ProjectConstants.TYPE, item.getType());
-	// json.put(ProjectConstants.COVER, item.getCover());
-	// json.put(ProjectConstants.GENRE, item.getGenre());
-	// json.put(ProjectConstants.FAVORITE, item.isFavorite());
-	// json.put(ProjectConstants.CREATION_DATE, item.getCreationDate());
-	// json.put(ProjectConstants.DELETED, item.isDeleted());
-	// json.put(ProjectConstants.DELETION_DATE, item.getDeletionDate());
-	// json.put(ProjectConstants.IN_POSSESSION, item.isInPossession());
-	// json.put(ProjectConstants.ORIGINAL_TITLE, item.getOriginalTitle());
-	// json.put(ProjectConstants.COUNTRY, item.getCountry());
-	// json.put(ProjectConstants.YEAR_PUBLISHED, item.getYearPublished());
-	// json.put(ProjectConstants.CONTENT, item.getContent());
-	// json.put(ProjectConstants.RATING, item.getRating());
+	// json.put(Constants.ID, item.getId());
+	// json.put(Constants.USER, item.getUser());
+	// json.put(Constants.TITLE, item.getTitle());
+	// json.put(Constants.TYPE, item.getType());
+	// json.put(Constants.COVER, item.getCover());
+	// json.put(Constants.GENRE, item.getGenre());
+	// json.put(Constants.FAVORITE, item.isFavorite());
+	// json.put(Constants.CREATION_DATE, item.getCreationDate());
+	// json.put(Constants.DELETED, item.isDeleted());
+	// json.put(Constants.DELETION_DATE, item.getDeletionDate());
+	// json.put(Constants.IN_POSSESSION, item.isInPossession());
+	// json.put(Constants.ORIGINAL_TITLE, item.getOriginalTitle());
+	// json.put(Constants.COUNTRY, item.getCountry());
+	// json.put(Constants.YEAR_PUBLISHED, item.getYearPublished());
+	// json.put(Constants.CONTENT, item.getContent());
+	// json.put(Constants.RATING, item.getRating());
 	// if (item instanceof Movie) {
 	//
-	// json.put(ProjectConstants.PRODUCER,
+	// json.put(Constants.PRODUCER,
 	// ((Movie) item).getProducer());
-	// json.put(ProjectConstants.DIRECTOR,
+	// json.put(Constants.DIRECTOR,
 	// ((Movie) item).getDirector());
-	// json.put(ProjectConstants.SCRIPT, ((Movie) item).getScript());
-	// json.put(ProjectConstants.ACTORS, ((Movie) item).getActors());
-	// json.put(ProjectConstants.MUSIC, ((Movie) item).getMusic());
-	// json.put(ProjectConstants.LENGTH, ((Movie) item).getLength());
+	// json.put(Constants.SCRIPT, ((Movie) item).getScript());
+	// json.put(Constants.ACTORS, ((Movie) item).getActors());
+	// json.put(Constants.MUSIC, ((Movie) item).getMusic());
+	// json.put(Constants.LENGTH, ((Movie) item).getLength());
 	// }
 	// if (item instanceof MusicAlbum) {
-	// json.put(ProjectConstants.LABEL, ((MusicAlbum) item).getLabel());
-	// json.put(ProjectConstants.STUDIO,
+	// json.put(Constants.LABEL, ((MusicAlbum) item).getLabel());
+	// json.put(Constants.STUDIO,
 	// ((MusicAlbum) item).getStudio());
-	// json.put(ProjectConstants.ARTIST,
+	// json.put(Constants.ARTIST,
 	// ((MusicAlbum) item).getArtist());
-	// json.put(ProjectConstants.FORMAT,
+	// json.put(Constants.FORMAT,
 	// ((MusicAlbum) item).getFormat());
-	// json.put(ProjectConstants.TITLE_COUNT,
+	// json.put(Constants.TITLE_COUNT,
 	// ((MusicAlbum) item).getTitleCount());
 	// }
 	// if (item instanceof Book) {
 	//
-	// json.put(ProjectConstants.EDITION, ((Book) item).getEdition());
-	// json.put(ProjectConstants.PUBLISHING_HOUSE,
+	// json.put(Constants.EDITION, ((Book) item).getEdition());
+	// json.put(Constants.PUBLISHING_HOUSE,
 	// ((Book) item).getPublishingHouse());
-	// json.put(ProjectConstants.AUTHOR, ((Book) item).getAuthor());
-	// json.put(ProjectConstants.ISBN, ((Book) item).getIsbn());
+	// json.put(Constants.AUTHOR, ((Book) item).getAuthor());
+	// json.put(Constants.ISBN, ((Book) item).getIsbn());
 	// }
 	// jsonArray.put(json);
 	// Writer writer = null;
@@ -297,9 +295,9 @@ public class DAOItem {
 		open();
 		ArrayList<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
 		Cursor cursor = null;
-		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
-				+ " WHERE " + ProjectConstants.USER + " = " + '"' + user + '"'
-				+ " AND " + ProjectConstants.SYNCED + " = " + 0;
+		String selectQuery = "SELECT * FROM " + Constants.TABLE_ITEMS
+				+ " WHERE " + Constants.USER + " = " + '"' + user + '"'
+				+ " AND " + Constants.SYNCED + " = " + 0;
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - buildJSONfromSQLite(): \n"
 					+ selectQuery);
@@ -316,63 +314,47 @@ public class DAOItem {
 						.moveToNext()) {
 					HashMap<String, String> map = new LinkedHashMap<String, String>();
 
-					map.put(ProjectConstants.ID, cursor.getString(colId));
-					map.put(ProjectConstants.SQLITE_ID,
-							cursor.getString(colSQLiteId));
-					map.put(ProjectConstants.USER, cursor.getString(colUser));
-					// map.put(ProjectConstants.SYNCED,
+					map.put(Constants.ID, cursor.getString(colId));
+					map.put(Constants.SQLITE_ID, cursor.getString(colSQLiteId));
+					map.put(Constants.USER, cursor.getString(colUser));
+					// map.put(Constants.SYNCED,
 					// cursor.getString(colSynced));
-					map.put(ProjectConstants.TITLE, cursor.getString(colTitle));
-					map.put(ProjectConstants.TYPE, cursor.getString(colType));
-					map.put(ProjectConstants.COVER, cursor.getString(colCover));
-					map.put(ProjectConstants.GENRE, cursor.getString(colGenre));
-					map.put(ProjectConstants.FAVORITE,
-							cursor.getString(colFavorite));
-					map.put(ProjectConstants.CREATION_DATE,
+					map.put(Constants.TITLE, cursor.getString(colTitle));
+					map.put(Constants.TYPE, cursor.getString(colType));
+					map.put(Constants.COVER, cursor.getString(colCover));
+					map.put(Constants.GENRE, cursor.getString(colGenre));
+					map.put(Constants.FAVORITE, cursor.getString(colFavorite));
+					map.put(Constants.CREATION_DATE,
 							cursor.getString(colCreationDate));
-					map.put(ProjectConstants.DELETED,
-							cursor.getString(colDeleted));
-					map.put(ProjectConstants.DELETION_DATE,
+					map.put(Constants.DELETED, cursor.getString(colDeleted));
+					map.put(Constants.DELETION_DATE,
 							cursor.getString(colDeletionDate));
-					map.put(ProjectConstants.IN_POSSESSION,
+					map.put(Constants.IN_POSSESSION,
 							cursor.getString(colInPossession));
-					map.put(ProjectConstants.ORIGINAL_TITLE,
+					map.put(Constants.ORIGINAL_TITLE,
 							cursor.getString(colOriginalTitle));
-					map.put(ProjectConstants.COUNTRY,
-							cursor.getString(colCountry));
-					map.put(ProjectConstants.YEAR_PUBLISHED,
+					map.put(Constants.COUNTRY, cursor.getString(colCountry));
+					map.put(Constants.YEAR_PUBLISHED,
 							cursor.getString(colYearPublished));
-					map.put(ProjectConstants.CONTENT,
-							cursor.getString(colContent));
-					map.put(ProjectConstants.RATING,
-							cursor.getString(colRating));
-					map.put(ProjectConstants.PRODUCER,
-							cursor.getString(colProducer));
-					map.put(ProjectConstants.DIRECTOR,
-							cursor.getString(colDirector));
-					map.put(ProjectConstants.SCRIPT,
-							cursor.getString(colScript));
-					map.put(ProjectConstants.ACTORS,
-							cursor.getString(colActors));
-					map.put(ProjectConstants.MUSIC, cursor.getString(colMusic));
-					map.put(ProjectConstants.LENGTH,
-							cursor.getString(colLength));
-					map.put(ProjectConstants.LABEL, cursor.getString(colLabel));
-					map.put(ProjectConstants.STUDIO,
-							cursor.getString(colStudio));
-					map.put(ProjectConstants.ARTIST,
-							cursor.getString(colArtist));
-					map.put(ProjectConstants.FORMAT,
-							cursor.getString(colFormat));
-					map.put(ProjectConstants.TITLE_COUNT,
+					map.put(Constants.CONTENT, cursor.getString(colContent));
+					map.put(Constants.RATING, cursor.getString(colRating));
+					map.put(Constants.PRODUCER, cursor.getString(colProducer));
+					map.put(Constants.DIRECTOR, cursor.getString(colDirector));
+					map.put(Constants.SCRIPT, cursor.getString(colScript));
+					map.put(Constants.ACTORS, cursor.getString(colActors));
+					map.put(Constants.MUSIC, cursor.getString(colMusic));
+					map.put(Constants.LENGTH, cursor.getString(colLength));
+					map.put(Constants.LABEL, cursor.getString(colLabel));
+					map.put(Constants.STUDIO, cursor.getString(colStudio));
+					map.put(Constants.ARTIST, cursor.getString(colArtist));
+					map.put(Constants.FORMAT, cursor.getString(colFormat));
+					map.put(Constants.TITLE_COUNT,
 							cursor.getString(colTitleCount));
-					map.put(ProjectConstants.EDITION,
-							cursor.getString(colEdition));
-					map.put(ProjectConstants.PUBLISHING_HOUSE,
+					map.put(Constants.EDITION, cursor.getString(colEdition));
+					map.put(Constants.PUBLISHING_HOUSE,
 							cursor.getString(colPublishingHouse));
-					map.put(ProjectConstants.AUTHOR,
-							cursor.getString(colAuthor));
-					map.put(ProjectConstants.ISBN, cursor.getString(colIsbn));
+					map.put(Constants.AUTHOR, cursor.getString(colAuthor));
+					map.put(Constants.ISBN, cursor.getString(colIsbn));
 					values.add(map);
 				}
 			}
@@ -441,104 +423,99 @@ public class DAOItem {
 	// put values to insert into SQLite database
 	public void putValues(Item item, ContentValues values) {
 		// byte[] bytes = CoverUtil.getByteArray(item.getCover());
-		// values.put(ProjectConstants.COVER, bytes);
-		values.put(ProjectConstants.SYNCED,
-				UtilMethods.isTrueAsInt(item.isSynced()));
-		values.put(ProjectConstants.USER, item.getUser());
-		values.put(ProjectConstants.TITLE, item.getTitle());
-		values.put(ProjectConstants.TYPE, item.getType().toString());
-		values.put(ProjectConstants.GENRE, item.getGenre());
-		values.put(ProjectConstants.IN_POSSESSION,
+		// values.put(Constants.COVER, bytes);
+		values.put(Constants.SYNCED, UtilMethods.isTrueAsInt(item.isSynced()));
+		values.put(Constants.USER, item.getUser());
+		values.put(Constants.TITLE, item.getTitle());
+		values.put(Constants.TYPE, item.getType().toString());
+		values.put(Constants.GENRE, item.getGenre());
+		values.put(Constants.IN_POSSESSION,
 				UtilMethods.isTrueAsInt(item.isInPossession()));
-		values.put(ProjectConstants.FAVORITE,
+		values.put(Constants.FAVORITE,
 				UtilMethods.isTrueAsInt(item.isFavorite()));
-		values.put(ProjectConstants.DELETED,
-				UtilMethods.isTrueAsInt(item.isDeleted()));
+		values.put(Constants.DELETED, UtilMethods.isTrueAsInt(item.isDeleted()));
 
 		if (item.getDeletionDate() != null) {
-			values.put(ProjectConstants.DELETION_DATE, UtilMethods
+			values.put(Constants.DELETION_DATE, UtilMethods
 					.dateToFormattedStringConverter(item.getDeletionDate()));
 		}
 
-		values.put(ProjectConstants.ORIGINAL_TITLE, item.getOriginalTitle());
-		values.put(ProjectConstants.COUNTRY, item.getCountry());
-		values.put(ProjectConstants.YEAR_PUBLISHED, item.getYearPublished());
-		values.put(ProjectConstants.CONTENT, item.getContent());
-		values.put(ProjectConstants.RATING, item.getRating());
+		values.put(Constants.ORIGINAL_TITLE, item.getOriginalTitle());
+		values.put(Constants.COUNTRY, item.getCountry());
+		values.put(Constants.YEAR_PUBLISHED, item.getYearPublished());
+		values.put(Constants.CONTENT, item.getContent());
+		values.put(Constants.RATING, item.getRating());
 
 		if (item instanceof Movie) {
-			values.put(ProjectConstants.PRODUCER, ((Movie) item).getProducer());
-			values.put(ProjectConstants.DIRECTOR, ((Movie) item).getDirector());
-			values.put(ProjectConstants.SCRIPT, ((Movie) item).getScript());
-			values.put(ProjectConstants.ACTORS, ((Movie) item).getActors());
-			values.put(ProjectConstants.MUSIC, ((Movie) item).getMusic());
-			values.put(ProjectConstants.LENGTH, ((Movie) item).getLength());
+			values.put(Constants.PRODUCER, ((Movie) item).getProducer());
+			values.put(Constants.DIRECTOR, ((Movie) item).getDirector());
+			values.put(Constants.SCRIPT, ((Movie) item).getScript());
+			values.put(Constants.ACTORS, ((Movie) item).getActors());
+			values.put(Constants.MUSIC, ((Movie) item).getMusic());
+			values.put(Constants.LENGTH, ((Movie) item).getLength());
 		}
 
 		if (item instanceof MusicAlbum) {
-			values.put(ProjectConstants.LABEL, ((MusicAlbum) item).getLabel());
-			values.put(ProjectConstants.STUDIO, ((MusicAlbum) item).getStudio());
-			values.put(ProjectConstants.ARTIST, ((MusicAlbum) item).getArtist());
-			values.put(ProjectConstants.FORMAT, ((MusicAlbum) item).getFormat());
-			values.put(ProjectConstants.TITLE_COUNT,
+			values.put(Constants.LABEL, ((MusicAlbum) item).getLabel());
+			values.put(Constants.STUDIO, ((MusicAlbum) item).getStudio());
+			values.put(Constants.ARTIST, ((MusicAlbum) item).getArtist());
+			values.put(Constants.FORMAT, ((MusicAlbum) item).getFormat());
+			values.put(Constants.TITLE_COUNT,
 					((MusicAlbum) item).getTitleCount());
 		}
 
 		if (item instanceof Book) {
-			values.put(ProjectConstants.EDITION, ((Book) item).getEdition());
-			values.put(ProjectConstants.PUBLISHING_HOUSE,
+			values.put(Constants.EDITION, ((Book) item).getEdition());
+			values.put(Constants.PUBLISHING_HOUSE,
 					((Book) item).getPublishingHouse());
-			values.put(ProjectConstants.AUTHOR, ((Book) item).getAuthor());
-			values.put(ProjectConstants.ISBN, ((Book) item).getIsbn());
+			values.put(Constants.AUTHOR, ((Book) item).getAuthor());
+			values.put(Constants.ISBN, ((Book) item).getIsbn());
 		}
 
 	}
 
 	// return integer values of cursor query
 	public void getColumnIndices(Cursor cursor) {
-		colSQLiteId = cursor.getColumnIndex(ProjectConstants.ID);
-		colUser = cursor.getColumnIndex(ProjectConstants.USER);
-		colSynced = cursor.getColumnIndex(ProjectConstants.SYNCED);
-		colTitle = cursor.getColumnIndex(ProjectConstants.TITLE);
-		colType = cursor.getColumnIndex(ProjectConstants.TYPE);
-		colCover = cursor.getColumnIndex(ProjectConstants.COVER);
-		colGenre = cursor.getColumnIndex(ProjectConstants.GENRE);
-		colFavorite = cursor.getColumnIndex(ProjectConstants.FAVORITE);
-		colCreationDate = cursor.getColumnIndex(ProjectConstants.CREATION_DATE);
-		colDeleted = cursor.getColumnIndex(ProjectConstants.DELETED);
-		colDeletionDate = cursor.getColumnIndex(ProjectConstants.DELETION_DATE);
-		colInPossession = cursor.getColumnIndex(ProjectConstants.IN_POSSESSION);
-		colOriginalTitle = cursor
-				.getColumnIndex(ProjectConstants.ORIGINAL_TITLE);
-		colCountry = cursor.getColumnIndex(ProjectConstants.COUNTRY);
-		colYearPublished = cursor
-				.getColumnIndex(ProjectConstants.YEAR_PUBLISHED);
-		colContent = cursor.getColumnIndex(ProjectConstants.CONTENT);
-		colRating = cursor.getColumnIndex(ProjectConstants.RATING);
-		colProducer = cursor.getColumnIndex(ProjectConstants.PRODUCER);
-		colDirector = cursor.getColumnIndex(ProjectConstants.DIRECTOR);
-		colScript = cursor.getColumnIndex(ProjectConstants.SCRIPT);
-		colActors = cursor.getColumnIndex(ProjectConstants.ACTORS);
-		colMusic = cursor.getColumnIndex(ProjectConstants.MUSIC);
-		colLength = cursor.getColumnIndex(ProjectConstants.LENGTH);
-		colLabel = cursor.getColumnIndex(ProjectConstants.LABEL);
-		colStudio = cursor.getColumnIndex(ProjectConstants.STUDIO);
-		colArtist = cursor.getColumnIndex(ProjectConstants.ARTIST);
-		colFormat = cursor.getColumnIndex(ProjectConstants.FORMAT);
-		colTitleCount = cursor.getColumnIndex(ProjectConstants.TITLE_COUNT);
-		colEdition = cursor.getColumnIndex(ProjectConstants.EDITION);
-		colPublishingHouse = cursor
-				.getColumnIndex(ProjectConstants.PUBLISHING_HOUSE);
-		colAuthor = cursor.getColumnIndex(ProjectConstants.AUTHOR);
-		colIsbn = cursor.getColumnIndex(ProjectConstants.ISBN);
+		colSQLiteId = cursor.getColumnIndex(Constants.ID);
+		colUser = cursor.getColumnIndex(Constants.USER);
+		colSynced = cursor.getColumnIndex(Constants.SYNCED);
+		colTitle = cursor.getColumnIndex(Constants.TITLE);
+		colType = cursor.getColumnIndex(Constants.TYPE);
+		colCover = cursor.getColumnIndex(Constants.COVER);
+		colGenre = cursor.getColumnIndex(Constants.GENRE);
+		colFavorite = cursor.getColumnIndex(Constants.FAVORITE);
+		colCreationDate = cursor.getColumnIndex(Constants.CREATION_DATE);
+		colDeleted = cursor.getColumnIndex(Constants.DELETED);
+		colDeletionDate = cursor.getColumnIndex(Constants.DELETION_DATE);
+		colInPossession = cursor.getColumnIndex(Constants.IN_POSSESSION);
+		colOriginalTitle = cursor.getColumnIndex(Constants.ORIGINAL_TITLE);
+		colCountry = cursor.getColumnIndex(Constants.COUNTRY);
+		colYearPublished = cursor.getColumnIndex(Constants.YEAR_PUBLISHED);
+		colContent = cursor.getColumnIndex(Constants.CONTENT);
+		colRating = cursor.getColumnIndex(Constants.RATING);
+		colProducer = cursor.getColumnIndex(Constants.PRODUCER);
+		colDirector = cursor.getColumnIndex(Constants.DIRECTOR);
+		colScript = cursor.getColumnIndex(Constants.SCRIPT);
+		colActors = cursor.getColumnIndex(Constants.ACTORS);
+		colMusic = cursor.getColumnIndex(Constants.MUSIC);
+		colLength = cursor.getColumnIndex(Constants.LENGTH);
+		colLabel = cursor.getColumnIndex(Constants.LABEL);
+		colStudio = cursor.getColumnIndex(Constants.STUDIO);
+		colArtist = cursor.getColumnIndex(Constants.ARTIST);
+		colFormat = cursor.getColumnIndex(Constants.FORMAT);
+		colTitleCount = cursor.getColumnIndex(Constants.TITLE_COUNT);
+		colEdition = cursor.getColumnIndex(Constants.EDITION);
+		colPublishingHouse = cursor.getColumnIndex(Constants.PUBLISHING_HOUSE);
+		colAuthor = cursor.getColumnIndex(Constants.AUTHOR);
+		colIsbn = cursor.getColumnIndex(Constants.ISBN);
 	}
 
 	public int getCountOfSyncedItems() {
 		int count = 0;
 		Cursor cursor = null;
 		open();
-		String selectQuery = "SELECT * FROM " + ProjectConstants.TABLE_ITEMS
-				+ " WHERE " + ProjectConstants.SYNCED + "=" + 0;
+		String selectQuery = "SELECT * FROM " + Constants.TABLE_ITEMS
+				+ " WHERE " + Constants.SYNCED + "=" + 0;
 		cursor = mSQLiteDB.rawQuery(selectQuery, null);
 		count = cursor.getCount();
 		close();
@@ -551,9 +528,9 @@ public class DAOItem {
 
 	public void updateSyncStatus(long id, int status) {
 		open();
-		String updateQuery = "UPDATE " + ProjectConstants.TABLE_ITEMS + " SET "
-				+ ProjectConstants.SYNCED + " = " + status + " WHERE "
-				+ ProjectConstants.ID + " = " + id;
+		String updateQuery = "UPDATE " + Constants.TABLE_ITEMS + " SET "
+				+ Constants.SYNCED + " = " + status + " WHERE " + Constants.ID
+				+ " = " + id;
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - updateSyncStatus(): \n"
 					+ updateQuery);

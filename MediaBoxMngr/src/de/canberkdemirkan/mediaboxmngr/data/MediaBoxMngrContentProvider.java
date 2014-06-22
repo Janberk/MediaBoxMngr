@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class MediaBoxMngrContentProvider extends ContentProvider {
 
@@ -58,13 +59,13 @@ public class MediaBoxMngrContentProvider extends ContentProvider {
 		switch (sURIMatcher.match(uri)) {
 		case SINGLE_ROW:
 			String rowID = uri.getPathSegments().get(1);
-			queryBuilder.appendWhere(ProjectConstants.ID + "=" + rowID);
+			queryBuilder.appendWhere(Constants.ID + "=" + rowID);
 		default:
 			break;
 		}
 		// Specify the table on which to perform the query. This can
 		// be a specific table or a join as required.
-		queryBuilder.setTables(ProjectConstants.TABLE_ITEMS);
+		queryBuilder.setTables(Constants.TABLE_ITEMS);
 		// Execute the query.
 		Cursor cursor = queryBuilder.query(db, projection, selection,
 				selectionArgs, groupBy, having, sortOrder);
@@ -98,8 +99,7 @@ public class MediaBoxMngrContentProvider extends ContentProvider {
 		String nullColumnHack = null;
 
 		// Insert the values into the table
-		long id = db.insert(ProjectConstants.TABLE_ITEMS, nullColumnHack,
-				values);
+		long id = db.insert(Constants.TABLE_ITEMS, nullColumnHack, values);
 
 		// Construct and return the URI of the newly inserted row.
 		if (id > -1) {
@@ -122,7 +122,7 @@ public class MediaBoxMngrContentProvider extends ContentProvider {
 		switch (sURIMatcher.match(uri)) {
 		case SINGLE_ROW:
 			String rowID = uri.getPathSegments().get(1);
-			selection = ProjectConstants.ID
+			selection = Constants.ID
 					+ "="
 					+ rowID
 					+ (!TextUtils.isEmpty(selection) ? " AND (" + selection
@@ -136,7 +136,7 @@ public class MediaBoxMngrContentProvider extends ContentProvider {
 		if (selection == null)
 			selection = "1";
 		// Perform the deletion.
-		int deleteCount = db.delete(ProjectConstants.TABLE_ITEMS, selection,
+		int deleteCount = db.delete(Constants.TABLE_ITEMS, selection,
 				selectionArgs);
 
 		// Notify any observers of the change in the data set.
@@ -157,7 +157,7 @@ public class MediaBoxMngrContentProvider extends ContentProvider {
 		switch (sURIMatcher.match(uri)) {
 		case SINGLE_ROW:
 			String rowID = uri.getPathSegments().get(1);
-			selection = ProjectConstants.ID
+			selection = Constants.ID
 					+ "="
 					+ rowID
 					+ (!TextUtils.isEmpty(selection) ? " AND (" + selection
@@ -166,8 +166,8 @@ public class MediaBoxMngrContentProvider extends ContentProvider {
 			break;
 		}
 		// Perform the update.
-		int updateCount = db.update(ProjectConstants.TABLE_ITEMS, values,
-				selection, selectionArgs);
+		int updateCount = db.update(Constants.TABLE_ITEMS, values, selection,
+				selectionArgs);
 
 		// Notify any observers of the change in the data set.
 		getContext().getContentResolver().notifyChange(uri, null);
