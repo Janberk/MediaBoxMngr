@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -79,6 +80,8 @@ public class ItemListFragment extends Fragment implements
 
 	private String json;
 
+	ProgressDialog progressDialog;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,6 +95,11 @@ public class ItemListFragment extends Fragment implements
 		mEditMode = false;
 		getActivity().setTitle(mUser);
 		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
+
+		progressDialog = new ProgressDialog(getActivity());
+		progressDialog
+				.setMessage("Synchronizing SQLite DB with Remote MySQL DB. Please wait...");
+		progressDialog.setCancelable(false);
 	}
 
 	private void initViews(View view) {
@@ -118,72 +126,9 @@ public class ItemListFragment extends Fragment implements
 				.findViewById(R.id.iv_fragmentMenuBar_allLists);
 		mImageAllLists.setOnClickListener(new View.OnClickListener() {
 
-			// FragmentManager fragmentManager = getFragmentManager();
-			// FragmentTransaction fragmentTransaction = fragmentManager
-			// .beginTransaction();
-
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG)
-						.show();
-				final JSONHandler handler = new JSONHandler(getActivity());
-				AsyncHttpClient client = new AsyncHttpClient();
-				client.post(ItemStock.URL, new AsyncHttpResponseHandler() {
-
-					@Override
-					public void onStart() {
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - initViews() - onStart()");
-						}
-					}
-
-					@Override
-					public void onSuccess(String response) {
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - initViews() - onSuccess()\n"
-											+ response);
-						}
-						try {
-							ArrayList<Item> createdList = handler
-									.loadItemsFromJSONArray(response);
-							handler.setRemoteList(createdList);
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-						mItemList.clear();
-						for (int i = 0; i < handler.getRemoteList().size(); i++) {
-							Item item = handler.getRemoteList().get(i);
-
-							mItemList.add(i, item);
-						}
-					}
-
-					@Override
-					public void onFinish() {
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - initViews() - onFinish()");
-						}
-						ItemStock.get(getActivity(), mUser).getDAOItem()
-								.updateTableWithNewList(mItemList);
-						mItemAdapter.refresh(mItemList);
-					}
-
-					@Override
-					public void onFailure(int statusCode, Throwable error,
-							String content) {
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - initViews() - onFailure()\n"
-											+ content);
-						}
-					}
-
-				});
-				// fragmentTransaction.replace(containerId, selectList);
-				// fragmentTransaction.commit();
+				loadItemsFromRemoteDb();
 			}
 		});
 
@@ -215,6 +160,8 @@ public class ItemListFragment extends Fragment implements
 						.show();
 				ItemStock.get(getActivity(), mUser).getDAOItem()
 						.deleteAllItems(mUser);
+				mItemList.clear();
+				mItemAdapter.refresh(mItemList);
 
 				// editMode = UtilMethods.modeSwitcher(editMode);
 				//
@@ -299,8 +246,76 @@ public class ItemListFragment extends Fragment implements
 				switchMode();
 			}
 		});
+		
+		loadItemsFromRemoteDb();
 
 		return view;
+	}
+
+	public void loadItemsFromRemoteDb() {
+		Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG).show();
+		final JSONHandler handler = new JSONHandler(getActivity());
+		RequestParams params = new RequestParams();
+		params.put("user", mUser);
+		AsyncHttpClient client = new AsyncHttpClient();
+		client.post(ItemStock.URL, params, new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onStart() {
+				progressDialog.show();
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - loadItemsFromRemoteDb() - onStart()");
+				}
+			}
+
+			@Override
+			public void onSuccess(String response) {
+				progressDialog.hide();
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - loadItemsFromRemoteDb() - onSuccess()\n"
+									+ response);
+				}
+				try {
+					ArrayList<Item> createdList = handler
+							.loadItemsFromJSONArray(response);
+					handler.setRemoteList(createdList);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				mItemList.clear();
+				for (int i = 0; i < handler.getRemoteList().size(); i++) {
+					Item item = handler.getRemoteList().get(i);
+
+					mItemList.add(i, item);
+				}
+			}
+
+			@Override
+			public void onFinish() {
+				progressDialog.hide();
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - loadItemsFromRemoteDb() - onFinish()");
+				}
+				ItemStock.get(getActivity(), mUser).getDAOItem()
+						.updateTableWithNewList(mItemList);
+				mItemAdapter.refresh(mItemList);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Throwable error,
+					String content) {
+				progressDialog.hide();
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - loadItemsFromRemoteDb() - onFailure()\n"
+									+ content);
+				}
+			}
+
+		});
 	}
 
 	private void syncWithRemoteDb() throws JSONException, IOException {

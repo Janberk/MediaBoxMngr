@@ -542,7 +542,7 @@ public class DAOItem {
 		}
 		mSQLiteDB.execSQL(updateQuery);
 		close();
-		increaseTableVersion();
+		//increaseTableVersion();
 	}
 
 	public String getSyncStatus() {

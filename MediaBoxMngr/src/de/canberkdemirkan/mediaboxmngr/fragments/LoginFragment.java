@@ -1,6 +1,7 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,12 +49,18 @@ public class LoginFragment extends Fragment {
 	private Button mButtonLogin;
 	private TextView mTextSignupLink;
 
+	private ProgressDialog progressDialog;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "LoginFragment - onCreate()");
 		}
+		progressDialog = new ProgressDialog(getActivity());
+		progressDialog
+				.setMessage("Requesting user access. Please wait...");
+		progressDialog.setCancelable(false);
 	}
 
 	private void initElements(View view) {
@@ -92,6 +99,7 @@ public class LoginFragment extends Fragment {
 
 					@Override
 					public void onStart() {
+						progressDialog.show();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onStart()");
@@ -100,6 +108,7 @@ public class LoginFragment extends Fragment {
 
 					@Override
 					public void onSuccess(String response) {
+						progressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onSuccess()\n" + response);
@@ -112,6 +121,7 @@ public class LoginFragment extends Fragment {
 
 					@Override
 					public void onFinish() {
+						progressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onFinish()");
@@ -121,6 +131,7 @@ public class LoginFragment extends Fragment {
 					@Override
 					public void onFailure(int statusCode, Throwable error,
 							String content) {
+						progressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onFailure(): " + content);
