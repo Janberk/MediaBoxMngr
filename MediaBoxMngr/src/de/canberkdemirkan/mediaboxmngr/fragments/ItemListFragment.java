@@ -66,6 +66,8 @@ public class ItemListFragment extends Fragment implements
 	private ArrayList<Item> mItemList;
 	private ItemAdapter mItemAdapter;
 
+	private ArrayAdapter<CharSequence> mArrayAdapter;
+
 	private RelativeLayout mEditor;
 	private LinearLayout mMenuBar;
 
@@ -85,15 +87,18 @@ public class ItemListFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setHasOptionsMenu(true);
+		mEditMode = false;
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUser();
+		getActivity().setTitle(mUser);
+
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate(): " + mUser);
 		}
-		mEditMode = false;
-		getActivity().setTitle(mUser);
+
 		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
 
 		progressDialog = new ProgressDialog(getActivity());
@@ -102,38 +107,80 @@ public class ItemListFragment extends Fragment implements
 		progressDialog.setCancelable(false);
 	}
 
-	private void initViews(View view) {
-		mListView = (ListView) view
-				.findViewById(R.id.listView_fragmentItemList);
-		mMenuBar = (LinearLayout) view
-				.findViewById(R.id.fragmentItemList_menuBar);
-		mEditor = (RelativeLayout) view
-				.findViewById(R.id.fragmentItemList_editTitle);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreateView()");
+		}
+
+		View view = inflater.inflate(R.layout.fragment_item_list, null);
+
+		initViews(view);
+
 		mEditor.setVisibility(View.GONE);
-		mEditEditTitle = (EditText) view
-				.findViewById(R.id.et_fragmentEditTitle_editTitle);
-		mSpinnerItemType = (Spinner) view
-				.findViewById(R.id.sp_fragmentEditTitle_itemType);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-				this.getActivity(), R.array.item_types,
-				android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mSpinnerItemType.setAdapter(adapter);
+		mArrayAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mSpinnerItemType.setAdapter(mArrayAdapter);
 		mSpinnerItemType.setOnItemSelectedListener(this);
-		mButtonSaveItem = (Button) view
-				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
-		mImageAllLists = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_allLists);
+
+		int localDbVersion = ItemStock.get(getActivity(), getUser())
+				.getDAOItem().getTableVersion(Constants.VERSION);
+		int remoteDbVersion = 0;
+
+		if (localDbVersion < remoteDbVersion) {
+			loadItemsFromRemoteDb();
+		} else if (localDbVersion > remoteDbVersion) {
+			try {
+				syncWithRemoteDb();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		mItemAdapter = new ItemAdapter(this.getActivity(), mItemList);
+		mItemAdapter.setNotifyOnChange(true);
+
+		mListView.setAdapter(mItemAdapter);
+		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View view,
+					int position, long id) {
+
+				Item item = (Item) mListView.getAdapter().getItem(position);
+				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
+				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
+				i.putExtra(Constants.KEY_USER_TAG, mUser);
+				startActivityForResult(i, 0);
+			}
+		});
+
+		mButtonSaveItem.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ItemType type = ItemType.valueOf(mTypeAsString);
+				Item newItem = createItem(type);
+				ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+				itemStock.addItem(newItem);
+				ArrayList<Item> list = itemStock.getItemList();
+				mItemAdapter.refresh(list);
+				mEditEditTitle.setText("");
+				switchMode();
+			}
+		});
+
 		mImageAllLists.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				loadItemsFromRemoteDb();
+				// loadItemsFromRemoteDb();
 			}
 		});
 
-		mImageSettings = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_settings);
 		mImageSettings.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -150,8 +197,6 @@ public class ItemListFragment extends Fragment implements
 			}
 		});
 
-		mImageDelete = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_delete);
 		mImageDelete.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -189,8 +234,6 @@ public class ItemListFragment extends Fragment implements
 			}
 		});
 
-		mImageLogout = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_logout);
 		mImageLogout.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -201,195 +244,39 @@ public class ItemListFragment extends Fragment implements
 			}
 		});
 
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreateView()");
-		}
-
-		View view = inflater.inflate(R.layout.fragment_item_list, null);
-
-		initViews(view);
-
-		mItemAdapter = new ItemAdapter(this.getActivity(), mItemList);
-		mItemAdapter.setNotifyOnChange(true);
-
-		mListView.setAdapter(mItemAdapter);
-		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View view,
-					int position, long id) {
-
-				Item item = (Item) mListView.getAdapter().getItem(position);
-				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
-				i.putExtra(Constants.KEY_USER_TAG, mUser);
-				startActivityForResult(i, 0);
-			}
-		});
-
-		mButtonSaveItem.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ItemType type = ItemType.valueOf(mTypeAsString);
-				Item newItem = createItem(type);
-				ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-				itemStock.addItem(newItem);
-				ArrayList<Item> list = itemStock.getItemList();
-				mItemAdapter.refresh(list);
-				mEditEditTitle.setText("");
-				switchMode();
-			}
-		});
-		
-		loadItemsFromRemoteDb();
-
 		return view;
 	}
 
-	public void loadItemsFromRemoteDb() {
-		Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG).show();
-		final JSONHandler handler = new JSONHandler(getActivity());
-		RequestParams params = new RequestParams();
-		params.put("user", mUser);
-		AsyncHttpClient client = new AsyncHttpClient();
-		client.post(ItemStock.URL, params, new AsyncHttpResponseHandler() {
+	private void initViews(View view) {
+		mListView = (ListView) view
+				.findViewById(R.id.listView_fragmentItemList);
+		mMenuBar = (LinearLayout) view
+				.findViewById(R.id.fragmentItemList_menuBar);
+		mEditor = (RelativeLayout) view
+				.findViewById(R.id.fragmentItemList_editTitle);
 
-			@Override
-			public void onStart() {
-				progressDialog.show();
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - loadItemsFromRemoteDb() - onStart()");
-				}
-			}
-
-			@Override
-			public void onSuccess(String response) {
-				progressDialog.hide();
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - loadItemsFromRemoteDb() - onSuccess()\n"
-									+ response);
-				}
-				try {
-					ArrayList<Item> createdList = handler
-							.loadItemsFromJSONArray(response);
-					handler.setRemoteList(createdList);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				mItemList.clear();
-				for (int i = 0; i < handler.getRemoteList().size(); i++) {
-					Item item = handler.getRemoteList().get(i);
-
-					mItemList.add(i, item);
-				}
-			}
-
-			@Override
-			public void onFinish() {
-				progressDialog.hide();
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - loadItemsFromRemoteDb() - onFinish()");
-				}
-				ItemStock.get(getActivity(), mUser).getDAOItem()
-						.updateTableWithNewList(mItemList);
-				mItemAdapter.refresh(mItemList);
-			}
-
-			@Override
-			public void onFailure(int statusCode, Throwable error,
-					String content) {
-				progressDialog.hide();
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - loadItemsFromRemoteDb() - onFailure()\n"
-									+ content);
-				}
-			}
-
-		});
+		mEditEditTitle = (EditText) view
+				.findViewById(R.id.et_fragmentEditTitle_editTitle);
+		mSpinnerItemType = (Spinner) view
+				.findViewById(R.id.sp_fragmentEditTitle_itemType);
+		mArrayAdapter = ArrayAdapter.createFromResource(this.getActivity(),
+				R.array.item_types, android.R.layout.simple_spinner_item);
+		mButtonSaveItem = (Button) view
+				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
+		mImageAllLists = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_allLists);
+		mImageSettings = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_settings);
+		mImageDelete = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_delete);
+		mImageLogout = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
 
-	private void syncWithRemoteDb() throws JSONException, IOException {
-		final ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		json = itemStock.getSQLiteAsJSON(mUser);
-
-		AsyncHttpClient client = new AsyncHttpClient();
-		RequestParams params = new RequestParams();
-
-		params.put("items", json);
-		client.post(
-				"http://10.0.2.2:80/development/mediaboxmngr_backend/items/insert_items.php",
-				params, new AsyncHttpResponseHandler() {
-					@Override
-					public void onSuccess(String response) {
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - syncWithRemoteDb() - onSuccess()\n"
-											+ response);
-						}
-						try {
-							JSONArray jsonArray = new JSONArray(response);
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - syncWithRemoteDb() - onSuccess(): \n"
-											+ jsonArray.length());
-							for (int i = 0; i < jsonArray.length(); i++) {
-								JSONObject jsonObject = (JSONObject) jsonArray
-										.get(i);
-
-								String jsonId = jsonObject.getString("_id");
-								String jsonSynced = jsonObject
-										.getString("synced");
-
-								long id = Long.valueOf(jsonId).longValue();
-								int synced = Integer.valueOf(jsonSynced)
-										.intValue();
-								itemStock.getDAOItem().updateSyncStatus(id,
-										synced);
-							}
-							Toast.makeText(getActivity(), "DB Sync completed!",
-									Toast.LENGTH_LONG).show();
-						} catch (JSONException e) {
-							Toast.makeText(getActivity(),
-									"Error! JSON response might be invalid!",
-									Toast.LENGTH_LONG).show();
-							e.printStackTrace();
-						}
-					}
-
-					@Override
-					public void onFailure(int statusCode, Throwable error,
-							String content) {
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - syncWithRemoteDb() - onFailure()\n"
-											+ content);
-						}
-						if (statusCode == 404) {
-							Toast.makeText(getActivity(),
-									"404 - Resource not found.",
-									Toast.LENGTH_LONG).show();
-						} else if (statusCode == 500) {
-							Toast.makeText(getActivity(),
-									"505 - Server Error.", Toast.LENGTH_LONG)
-									.show();
-						} else {
-							Toast.makeText(
-									getActivity(),
-									"Unexpected Error! Please check your network connection.",
-									Toast.LENGTH_LONG).show();
-						}
-					}
-				});
-	}
+	/*
+	 * 
+	 * Options Menu
+	 */
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -417,6 +304,11 @@ public class ItemListFragment extends Fragment implements
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
 	}
+
+	/*
+	 * 
+	 * End Options Menu
+	 */
 
 	public Item createItem(ItemType type) {
 		Item item = null;
@@ -560,6 +452,150 @@ public class ItemListFragment extends Fragment implements
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onDetach()");
 		}
 		super.onDetach();
+	}
+
+	/*
+	 * 
+	 * End Logging callback methods for debug purposes
+	 */
+
+	public void loadItemsFromRemoteDb() {
+		Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG).show();
+		final JSONHandler handler = new JSONHandler(getActivity());
+		RequestParams params = new RequestParams();
+		params.put("user", mUser);
+		AsyncHttpClient client = new AsyncHttpClient();
+		client.post(ItemStock.URL, params, new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onStart() {
+				progressDialog.show();
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - loadItemsFromRemoteDb() - onStart()");
+				}
+			}
+
+			@Override
+			public void onSuccess(String response) {
+				progressDialog.hide();
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - loadItemsFromRemoteDb() - onSuccess()\n"
+									+ response);
+				}
+				try {
+					ArrayList<Item> createdList = handler
+							.loadItemsFromJSONArray(response);
+					handler.setRemoteList(createdList);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				mItemList.clear();
+				for (int i = 0; i < handler.getRemoteList().size(); i++) {
+					Item item = handler.getRemoteList().get(i);
+
+					mItemList.add(i, item);
+				}
+				ItemStock.get(getActivity(), mUser).getDAOItem()
+						.updateTableWithNewList(mItemList);
+			}
+
+			@Override
+			public void onFinish() {
+				progressDialog.hide();
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - loadItemsFromRemoteDb() - onFinish()");
+				}
+				mItemAdapter.refresh(mItemList);
+			}
+
+			@Override
+			public void onFailure(int statusCode, Throwable error,
+					String content) {
+				progressDialog.hide();
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - loadItemsFromRemoteDb() - onFailure()\n"
+									+ content);
+				}
+			}
+
+		});
+	}
+
+	private void syncWithRemoteDb() throws JSONException, IOException {
+		final ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+		json = itemStock.getSQLiteAsJSON(mUser);
+
+		AsyncHttpClient client = new AsyncHttpClient();
+		RequestParams params = new RequestParams();
+
+		params.put("items", json);
+		client.post(
+				"http://10.0.2.2:80/development/mediaboxmngr_backend/items/insert_items.php",
+				params, new AsyncHttpResponseHandler() {
+					@Override
+					public void onSuccess(String response) {
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - syncWithRemoteDb() - onSuccess()\n"
+											+ response);
+						}
+						try {
+							JSONArray jsonArray = new JSONArray(response);
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - syncWithRemoteDb() - onSuccess(): \n"
+											+ jsonArray.length());
+							for (int i = 0; i < jsonArray.length(); i++) {
+								JSONObject jsonObject = (JSONObject) jsonArray
+										.get(i);
+
+								String jsonId = jsonObject.getString("_id");
+								String jsonSynced = jsonObject
+										.getString("synced");
+
+								long id = Long.valueOf(jsonId).longValue();
+								int synced = Integer.valueOf(jsonSynced)
+										.intValue();
+								itemStock.getDAOItem().updateSyncStatus(id,
+										synced);
+							}
+							Toast.makeText(getActivity(), "DB Sync completed!",
+									Toast.LENGTH_LONG).show();
+						} catch (JSONException e) {
+							Toast.makeText(getActivity(),
+									"Error! JSON response might be invalid!",
+									Toast.LENGTH_LONG).show();
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onFailure(int statusCode, Throwable error,
+							String content) {
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - syncWithRemoteDb() - onFailure()\n"
+											+ content);
+						}
+						if (statusCode == 404) {
+							Toast.makeText(getActivity(),
+									"404 - Resource not found.",
+									Toast.LENGTH_LONG).show();
+						} else if (statusCode == 500) {
+							Toast.makeText(getActivity(),
+									"505 - Server Error.", Toast.LENGTH_LONG)
+									.show();
+						} else {
+							Toast.makeText(
+									getActivity(),
+									"Unexpected Error! Please check your network connection.",
+									Toast.LENGTH_LONG).show();
+						}
+					}
+				});
 	}
 
 }
