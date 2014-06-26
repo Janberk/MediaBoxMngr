@@ -16,6 +16,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -33,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -45,6 +48,7 @@ import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
+import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
@@ -55,6 +59,9 @@ import de.canberkdemirkan.mediaboxmngr.util.ItemType;
 
 public class ItemListFragment extends Fragment implements
 		OnItemSelectedListener {
+
+	// public static int LOKAL_DB_VERSION = 0;
+	// public static int REMOTE_DB_VERSION = 0;
 
 	private SharedPreferences mSharedPreferences;
 
@@ -119,26 +126,28 @@ public class ItemListFragment extends Fragment implements
 		initViews(view);
 
 		mEditor.setVisibility(View.GONE);
+
 		mArrayAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSpinnerItemType.setAdapter(mArrayAdapter);
 		mSpinnerItemType.setOnItemSelectedListener(this);
 
-		int localDbVersion = ItemStock.get(getActivity(), getUser())
-				.getDAOItem().getTableVersion(Constants.VERSION);
-		int remoteDbVersion = 0;
-
-		if (localDbVersion < remoteDbVersion) {
-			loadItemsFromRemoteDb();
-		} else if (localDbVersion > remoteDbVersion) {
-			try {
-				syncWithRemoteDb();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		// LOKAL_DB_VERSION = ItemStock.get(getActivity(),
+		// getUser()).getDAOItem()
+		// .getTableVersion(Constants.VERSION);
+		// REMOTE_DB_VERSION = getRemoteDbVersion();
+		//
+		// if (LOKAL_DB_VERSION < REMOTE_DB_VERSION) {
+		// loadItemsFromRemoteDb();
+		// } else if (LOKAL_DB_VERSION > REMOTE_DB_VERSION) {
+		// try {
+		// syncWithRemoteDb();
+		// } catch (JSONException e) {
+		// e.printStackTrace();
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
+		// }
 
 		mItemAdapter = new ItemAdapter(this.getActivity(), mItemList);
 		mItemAdapter.setNotifyOnChange(true);
@@ -178,6 +187,8 @@ public class ItemListFragment extends Fragment implements
 			@Override
 			public void onClick(View v) {
 				// loadItemsFromRemoteDb();
+				Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG)
+						.show();
 			}
 		});
 
@@ -187,13 +198,13 @@ public class ItemListFragment extends Fragment implements
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG)
 						.show();
-				try {
-					syncWithRemoteDb();
-				} catch (JSONException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				// try {
+				// syncWithRemoteDb();
+				// } catch (JSONException e) {
+				// e.printStackTrace();
+				// } catch (IOException e) {
+				// e.printStackTrace();
+				// }
 			}
 		});
 
@@ -299,6 +310,9 @@ public class ItemListFragment extends Fragment implements
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
 		mTypeAsString = (String) parent.getItemAtPosition(position);
+		((TextView) parent.getChildAt(0)).setTextAppearance(getActivity(),
+				R.style.spinnerTextStyle);
+		((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
 	}
 
 	@Override
@@ -347,6 +361,10 @@ public class ItemListFragment extends Fragment implements
 			mEditor.setVisibility(View.VISIBLE);
 			changeAlphaOfView(mListView, 1.0F, 0.2F);
 			mMenuBar.setVisibility(View.GONE);
+			mEditEditTitle.requestFocus();
+			InputMethodManager imm = (InputMethodManager) getActivity()
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.showSoftInput(mEditEditTitle, InputMethodManager.SHOW_IMPLICIT);
 		} else if (mEditMode) {
 			mEditor.setVisibility(View.GONE);
 			changeAlphaOfView(mListView, 0.2F, 1.0F);
@@ -465,64 +483,65 @@ public class ItemListFragment extends Fragment implements
 		RequestParams params = new RequestParams();
 		params.put("user", mUser);
 		AsyncHttpClient client = new AsyncHttpClient();
-		client.post(ItemStock.URL, params, new AsyncHttpResponseHandler() {
+		client.post(Constants.BUILD_JSON_REQUEST, params,
+				new AsyncHttpResponseHandler() {
 
-			@Override
-			public void onStart() {
-				progressDialog.show();
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - loadItemsFromRemoteDb() - onStart()");
-				}
-			}
+					@Override
+					public void onStart() {
+						progressDialog.show();
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - loadItemsFromRemoteDb() - onStart()");
+						}
+					}
 
-			@Override
-			public void onSuccess(String response) {
-				progressDialog.hide();
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - loadItemsFromRemoteDb() - onSuccess()\n"
-									+ response);
-				}
-				try {
-					ArrayList<Item> createdList = handler
-							.loadItemsFromJSONArray(response);
-					handler.setRemoteList(createdList);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				mItemList.clear();
-				for (int i = 0; i < handler.getRemoteList().size(); i++) {
-					Item item = handler.getRemoteList().get(i);
+					@Override
+					public void onSuccess(String response) {
+						progressDialog.hide();
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - loadItemsFromRemoteDb() - onSuccess()\n"
+											+ response);
+						}
+						try {
+							ArrayList<Item> createdList = handler
+									.loadItemsFromJSONArray(response);
+							handler.setRemoteList(createdList);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+						mItemList.clear();
+						for (int i = 0; i < handler.getRemoteList().size(); i++) {
+							Item item = handler.getRemoteList().get(i);
 
-					mItemList.add(i, item);
-				}
-				ItemStock.get(getActivity(), mUser).getDAOItem()
-						.updateTableWithNewList(mItemList);
-			}
+							mItemList.add(i, item);
+						}
+						ItemStock.get(getActivity(), mUser).getDAOItem()
+								.updateTableWithNewList(mItemList);
+					}
 
-			@Override
-			public void onFinish() {
-				progressDialog.hide();
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - loadItemsFromRemoteDb() - onFinish()");
-				}
-				mItemAdapter.refresh(mItemList);
-			}
+					@Override
+					public void onFinish() {
+						progressDialog.hide();
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - loadItemsFromRemoteDb() - onFinish()");
+						}
+						mItemAdapter.refresh(mItemList);
+					}
 
-			@Override
-			public void onFailure(int statusCode, Throwable error,
-					String content) {
-				progressDialog.hide();
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - loadItemsFromRemoteDb() - onFailure()\n"
-									+ content);
-				}
-			}
+					@Override
+					public void onFailure(int statusCode, Throwable error,
+							String content) {
+						progressDialog.hide();
+						if (BuildConfig.DEBUG) {
+							Log.d(Constants.LOG_TAG,
+									"ItemListFragment - loadItemsFromRemoteDb() - onFailure()\n"
+											+ content);
+						}
+					}
 
-		});
+				});
 	}
 
 	private void syncWithRemoteDb() throws JSONException, IOException {
@@ -533,9 +552,8 @@ public class ItemListFragment extends Fragment implements
 		RequestParams params = new RequestParams();
 
 		params.put("items", json);
-		client.post(
-				"http://10.0.2.2:80/development/mediaboxmngr_backend/items/insert_items.php",
-				params, new AsyncHttpResponseHandler() {
+		client.post(Constants.INSERT_ITEMS_REQUEST, params,
+				new AsyncHttpResponseHandler() {
 					@Override
 					public void onSuccess(String response) {
 						if (BuildConfig.DEBUG) {
@@ -596,6 +614,11 @@ public class ItemListFragment extends Fragment implements
 						}
 					}
 				});
+	}
+
+	private static int getRemoteDbVersion() {
+		RemoteDbVersionProvider provider = new RemoteDbVersionProvider();
+		return provider.getVersion();
 	}
 
 }

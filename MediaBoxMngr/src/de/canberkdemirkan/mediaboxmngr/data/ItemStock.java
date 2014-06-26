@@ -12,8 +12,6 @@ import de.canberkdemirkan.mediaboxmngr.util.CustomJSONSerializer;
 
 public class ItemStock {
 
-	public static final String URL = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/build_json.php";
-
 	public static String USER = null;
 
 	private static final String TAG = "ItemStock";

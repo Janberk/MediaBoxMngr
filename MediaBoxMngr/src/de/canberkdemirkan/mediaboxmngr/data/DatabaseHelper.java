@@ -32,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(Constants.CREATE_TABLE_ITEMS);
 		db.execSQL(Constants.CREATE_TABLE_USERS);
 		db.execSQL(Constants.CREATE_TABLE_VERSION);
+		db.execSQL(Constants.INSERT_VERSION_0);
 	}
 
 	// upgrading database

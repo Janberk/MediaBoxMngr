@@ -16,11 +16,11 @@
         <item name="android:textColorHint">#6d6e71</item>
         <item name="android:paddingLeft">@dimen/custom_value_8dp</item>
     </style>
-    
+
     <style name="editTextForm.textStyle.input">
         <item name="android:background">@drawable/input_shape</item>
     </style>
-    
+
     <style name="textViewForm">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
@@ -28,7 +28,7 @@
         <item name="android:layout_marginTop">@dimen/custom_value_8dp</item>
         <item name="android:layout_marginBottom">@dimen/custom_value_8dp</item>
     </style>
-    
+
     <style name="textViewList">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
@@ -36,7 +36,7 @@
         <item name="android:layout_marginTop">@dimen/custom_value_8dp</item>
         <item name="android:layout_marginBottom">@dimen/custom_value_8dp</item>
     </style>
-    
+
     <style name="textViewSelectList">
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>
@@ -44,7 +44,7 @@
         <item name="android:layout_marginTop">@dimen/custom_value_8dp</item>
         <item name="android:layout_marginBottom">@dimen/custom_value_8dp</item>
     </style>
-    
+
     <style name="buttonForm">
         <item name="android:layout_height">38dp</item>
         <item name="android:layout_width">256dp</item>
@@ -52,7 +52,7 @@
         <item name="android:layout_marginBottom">@dimen/custom_value_8dp</item>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
-    
+
     <style name="buttonAdd">
         <item name="android:layout_height">38dp</item>
         <item name="android:layout_width">64dp</item>
@@ -69,15 +69,21 @@
     <style name="buttonForm.textStyle.big">
         <item name="android:background">@drawable/btn_shape</item>
     </style>
-    
+
     <style name="buttonAdd.textStyle">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#e0ffff</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="buttonAdd.textStyle.small">
         <item name="android:background">@drawable/btn_small_shape</item>
+    </style>
+
+    <style name="spinnerTextStyle">
+        <item name="android:textColor">#33b5e5</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

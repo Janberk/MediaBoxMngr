@@ -4,6 +4,11 @@ import de.canberkdemirkan.mediaboxmngr.util.ItemType;
 
 public interface Constants {
 	
+	// request URLs for MySQL Database
+	String BUILD_JSON_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/build_json.php";
+	String INSERT_ITEMS_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/insert_items.php";
+	String RETURN_DB_VERSION_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/return_db_version.php";
+	
 	// log tag used for debugging purposes
 	String LOG_TAG = "de.canberkdemirkan.mediaboxmngr";
 	
@@ -133,11 +138,13 @@ public interface Constants {
 			+ PASSWORD + " TEXT"
 			+ ")";
 	
-	// SQL statement table users
+	// SQL statement table version
 	String CREATE_TABLE_VERSION = "CREATE TABLE "
 			+ TABLE_VERSION + "("
 			+ ID + " INTEGER PRIMARY KEY,"
 			+ VERSION + " INTEGER"
 			+ ")";
+	
+	String INSERT_VERSION_0 = "INSERT INTO " + TABLE_VERSION + " (" + VERSION + ") " + "VALUES (0);";
 
 }

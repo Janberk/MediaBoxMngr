@@ -577,7 +577,7 @@ public class DAOItem {
 
 	public int getTableVersion(String tableName) {
 		open();
-		int version = -1;
+		int version = 0;
 		Cursor cursor = null;
 
 		try {
