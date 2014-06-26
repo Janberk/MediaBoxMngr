@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,8 @@ public class LoginFragment extends Fragment {
 
 	public static final String KEY_EMAIL = "emailKey";
 	public static final String KEY_PASSWORD = "passwordKey";
+	public static final String KEY_REMEMBER_USER_EMAIL = "rememberEmailKey";
+	public static final String KEY_REMEMBER_USER_PASSWORD = "rememberPasswordKey";
 
 	public static final int RESPONSE_CODE_SUCCESS = 0;
 	public static final int RESPONSE_CODE_EMPTY_FIELDS = 1;
@@ -42,10 +47,13 @@ public class LoginFragment extends Fragment {
 	public static final int RESPONSE_CODE_INVALID_EMAIL = 3;
 	public static final int RESPONSE_CODE_NO_POST = 4;
 
+	public static boolean REMEMBER_ME = false;
+
 	private SharedPreferences mSharedPreferences;
 
 	private EditText mEditEmail;
 	private EditText mEditPassword;
+	private CheckBox mCheckBoxRememberMe;
 	private Button mButtonLogin;
 	private TextView mTextSignupLink;
 
@@ -58,8 +66,7 @@ public class LoginFragment extends Fragment {
 			Log.d(Constants.LOG_TAG, "LoginFragment - onCreate()");
 		}
 		progressDialog = new ProgressDialog(getActivity());
-		progressDialog
-				.setMessage("Requesting user access. Please wait...");
+		progressDialog.setMessage("Requesting user access. Please wait...");
 		progressDialog.setCancelable(false);
 	}
 
@@ -67,6 +74,8 @@ public class LoginFragment extends Fragment {
 		mEditEmail = (EditText) view.findViewById(R.id.et_fragmentLogin_email);
 		mEditPassword = (EditText) view
 				.findViewById(R.id.et_fragmentLogin_password);
+		mCheckBoxRememberMe = (CheckBox) view
+				.findViewById(R.id.cb_fragmentLogin_rememberMe);
 		mButtonLogin = (Button) view.findViewById(R.id.btn_fragmentLogin_login);
 		mTextSignupLink = (TextView) view
 				.findViewById(R.id.tv_fragmentLogin_signup_link);
@@ -82,12 +91,20 @@ public class LoginFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_login, null);
 		initElements(view);
 
+		rememberUser();
+
 		mButtonLogin.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				String email = mEditEmail.getText().toString();
 				String password = mEditPassword.getText().toString();
+
+				if (REMEMBER_ME) {
+					saveUserToPrefs(email, password);
+				} else {
+					clearUser();
+				}
 
 				RequestParams params = new RequestParams();
 				params.put("email", email);
@@ -140,6 +157,7 @@ public class LoginFragment extends Fragment {
 
 				});
 			}
+
 		});
 
 		mTextSignupLink.setOnClickListener(new OnClickListener() {
@@ -150,6 +168,19 @@ public class LoginFragment extends Fragment {
 				startActivity(intent);
 			}
 		});
+
+		mCheckBoxRememberMe.setChecked(false);
+		mCheckBoxRememberMe
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (isChecked) {
+							REMEMBER_ME = true;
+						} else {
+							REMEMBER_ME = false;
+						}
+					}
+				});
 
 		return view;
 	}
@@ -236,6 +267,7 @@ public class LoginFragment extends Fragment {
 		if (mSharedPreferences.contains(KEY_EMAIL)) {
 			editor.remove(KEY_EMAIL);
 			editor.remove(KEY_PASSWORD);
+			editor.commit();
 		}
 		String email = mEditEmail.getText().toString();
 		String password = mEditPassword.getText().toString();
@@ -293,7 +325,47 @@ public class LoginFragment extends Fragment {
 			mEditEmail.setText("");
 			mEditPassword.setText("");
 		}
+		rememberUser();
 		super.onResume();
+	}
+
+	private void saveUserToPrefs(String email, String password) {
+		Editor editor = mSharedPreferences.edit();
+		editor.putString(KEY_REMEMBER_USER_EMAIL, email);
+		editor.putString(KEY_REMEMBER_USER_PASSWORD, password);
+		editor.commit();
+	}
+	
+	private void clearUser() {
+		mSharedPreferences = getActivity().getSharedPreferences(
+				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
+		if (mSharedPreferences.contains(KEY_REMEMBER_USER_EMAIL)) {
+			if (mSharedPreferences.contains(KEY_REMEMBER_USER_PASSWORD)) {
+				Editor editor = mSharedPreferences.edit();
+				editor.remove(KEY_REMEMBER_USER_EMAIL);
+				editor.remove(KEY_REMEMBER_USER_PASSWORD);
+				editor.commit();
+			}
+		}
+	}
+
+	private void rememberUser() {
+		mSharedPreferences = getActivity().getSharedPreferences(
+				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
+		if (mSharedPreferences.contains(KEY_REMEMBER_USER_EMAIL)) {
+			if (mSharedPreferences.contains(KEY_REMEMBER_USER_PASSWORD)) {
+				String email = mSharedPreferences.getString(
+						KEY_REMEMBER_USER_EMAIL, null);
+				String password = mSharedPreferences.getString(
+						KEY_REMEMBER_USER_PASSWORD, null);
+				mEditEmail.setText(email);
+				mEditPassword.setText(password);
+				mCheckBoxRememberMe.setChecked(true);
+			}
+		} else {
+			mEditEmail.setText("");
+			mEditPassword.setText("");
+		}
 	}
 
 	@Override
