@@ -10,6 +10,11 @@
     tools:context=".ItemFragment" >
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Movie" />
+
+    <TextView
         style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,10 +36,10 @@
         android:id="@+id/et_fragmentItem_itemContent"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:ems="16"
         android:hint="@string/item_content_hint"
-        android:inputType="textMultiLine"
-        android:textSize="13sp" >
+        android:ems="16"
+        android:textSize="13sp"
+        android:inputType="textMultiLine" >
 
         <requestFocus />
     </EditText>

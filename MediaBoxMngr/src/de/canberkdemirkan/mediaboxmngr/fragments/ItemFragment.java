@@ -28,10 +28,13 @@ import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
+import de.canberkdemirkan.mediaboxmngr.util.ItemType;
 
 public class ItemFragment extends Fragment {
 
 	private static final String DIALOG_CREATION_DATE = "creation_date";
+
+	public static String ITEM_TYPE;
 
 	private String mUser;
 	private Item mItem;
@@ -67,6 +70,7 @@ public class ItemFragment extends Fragment {
 
 		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
 		mItem = itemStock.getItem(itemId);
+		ITEM_TYPE = mItem.getType().toString();
 	}
 
 	@TargetApi(11)
@@ -77,7 +81,21 @@ public class ItemFragment extends Fragment {
 			Log.d(Constants.LOG_TAG, "ItemFragment - onCreateView()");
 		}
 
-		View view = inflater.inflate(R.layout.fragment_item, container, false);
+		View view = null;
+		switch (ItemType.valueOf(ITEM_TYPE)) {
+		case Album:
+			view = inflater.inflate(R.layout.test1, container, false);
+			break;
+		case Book:
+			view = inflater.inflate(R.layout.test2, container, false);
+			break;
+		case Movie:
+			view = inflater.inflate(R.layout.test3, container, false);
+			break;
+
+		default:
+			break;
+		}
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (NavUtils.getParentActivityName(getActivity()) != null) {

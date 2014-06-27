@@ -163,6 +163,7 @@ public class ItemListFragment extends Fragment implements
 				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
 				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
 				i.putExtra(Constants.KEY_USER_TAG, mUser);
+				i.putExtra(Constants.KEY_TYPE, item.getType().toString());
 				startActivityForResult(i, 0);
 			}
 		});

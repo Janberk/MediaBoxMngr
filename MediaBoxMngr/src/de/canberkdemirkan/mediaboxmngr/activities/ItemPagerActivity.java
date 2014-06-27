@@ -26,7 +26,7 @@ public class ItemPagerActivity extends FragmentActivity {
 
 		UUID itemId = (UUID) getIntent().getSerializableExtra(
 				Constants.KEY_ITEM_ID);
-		final String userTag = (String) getIntent().getSerializableExtra(
+		String userTag = (String) getIntent().getSerializableExtra(
 				Constants.KEY_USER_TAG);
 
 		mViewPager = new ViewPager(this);
@@ -36,19 +36,7 @@ public class ItemPagerActivity extends FragmentActivity {
 		mItemList = ItemStock.get(this, userTag).getItemList();
 
 		FragmentManager fm = getSupportFragmentManager();
-		mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
-
-			@Override
-			public int getCount() {
-				return mItemList.size();
-			}
-
-			@Override
-			public Fragment getItem(int pos) {
-				Item item = mItemList.get(pos);
-				return ItemFragment.newInstance(item.getUniqueId(), userTag);
-			}
-		});
+		mViewPager.setAdapter(new ScreenSlidePagerAdapter(fm, userTag));
 
 		for (int i = 0; i < mItemList.size(); i++) {
 			if (mItemList.get(i).getUniqueId().equals(itemId)) {
@@ -64,6 +52,8 @@ public class ItemPagerActivity extends FragmentActivity {
 
 					public void onPageScrolled(int pos, float posOffset,
 							int posOffsetPixels) {
+						Item item = mItemList.get(pos);
+						ItemFragment.ITEM_TYPE = item.getType().toString();
 					}
 
 					public void onPageSelected(int pos) {
@@ -73,6 +63,26 @@ public class ItemPagerActivity extends FragmentActivity {
 						}
 					}
 				});
+	}
+
+	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+		private String mUser;
+
+		public ScreenSlidePagerAdapter(FragmentManager fm, String userTag) {
+			super(fm);
+			mUser = userTag;
+		}
+
+		@Override
+		public int getCount() {
+			return mItemList.size();
+		}
+
+		@Override
+		public Fragment getItem(int pos) {
+			Item item = mItemList.get(pos);
+			return ItemFragment.newInstance(item.getUniqueId(), mUser);
+		}
 	}
 
 }
