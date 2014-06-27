@@ -1,15 +1,12 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
-import java.util.Date;
 import java.util.UUID;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,21 +15,20 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.Spinner;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
-import de.canberkdemirkan.mediaboxmngr.util.ItemType;
+import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter;
 
 public class ItemFragment extends Fragment {
-
-	private static final String DIALOG_CREATION_DATE = "creation_date";
 
 	public static String ITEM_TYPE;
 
@@ -40,9 +36,14 @@ public class ItemFragment extends Fragment {
 	private Item mItem;
 
 	private EditText mEditItemTitle;
+	private EditText mEditItemOriginalTitle;
 	private EditText mEditItemContent;
-	private Button mButtonItemCreationDate;
 	private CheckBox mCheckBoxItemFavorite;
+	private CheckBox mCheckBoxGotIt;
+	private CheckBox mCheckBoxWishList;
+	private Spinner mSpinnerItemGenre;
+	private Spinner mSpinnerItemCountry;
+	private Spinner mSpinnerItemYear;
 
 	public static ItemFragment newInstance(UUID itemId, String userTag) {
 		Bundle args = new Bundle();
@@ -73,6 +74,27 @@ public class ItemFragment extends Fragment {
 		ITEM_TYPE = mItem.getType().toString();
 	}
 
+	private void initViews(View view) {
+		mEditItemTitle = (EditText) view
+				.findViewById(R.id.et_fragmentBasics_itemTitle);
+		mEditItemOriginalTitle = (EditText) view
+				.findViewById(R.id.et_fragmentBasics_itemOriginalTitle);
+		mEditItemContent = (EditText) view
+				.findViewById(R.id.et_fragmentBasics_itemContent);
+		mCheckBoxItemFavorite = (CheckBox) view
+				.findViewById(R.id.cb_fragmentBasics_itemFavorite);
+		mCheckBoxGotIt = (CheckBox) view
+				.findViewById(R.id.cb_fragmentBasics_gotIt);
+		mCheckBoxWishList = (CheckBox) view
+				.findViewById(R.id.cb_fragmentBasics_wishList);
+		mSpinnerItemGenre = (Spinner) view
+				.findViewById(R.id.sp_fragmentBasics_itemGenre);
+		mSpinnerItemCountry = (Spinner) view
+				.findViewById(R.id.sp_fragmentBasics_itemCountry);
+		mSpinnerItemYear = (Spinner) view
+				.findViewById(R.id.sp_fragmentBasics_itemYear);
+	}
+
 	@TargetApi(11)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,18 +106,20 @@ public class ItemFragment extends Fragment {
 		View view = null;
 		switch (ItemType.valueOf(ITEM_TYPE)) {
 		case Album:
-			view = inflater.inflate(R.layout.test1, container, false);
+			view = inflater.inflate(R.layout.fragment_item, container, false);
 			break;
 		case Book:
-			view = inflater.inflate(R.layout.test2, container, false);
+			view = inflater.inflate(R.layout.fragment_item, container, false);
 			break;
 		case Movie:
-			view = inflater.inflate(R.layout.test3, container, false);
+			view = inflater.inflate(R.layout.fragment_item, container, false);
 			break;
 
 		default:
 			break;
 		}
+
+		initViews(view);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (NavUtils.getParentActivityName(getActivity()) != null) {
@@ -103,8 +127,6 @@ public class ItemFragment extends Fragment {
 			}
 		}
 
-		mEditItemTitle = (EditText) view
-				.findViewById(R.id.et_fragmentItem_itemTitle);
 		mEditItemTitle.setText(mItem.getTitle());
 		mEditItemTitle.addTextChangedListener(new TextWatcher() {
 
@@ -125,8 +147,6 @@ public class ItemFragment extends Fragment {
 			}
 		});
 
-		mEditItemContent = (EditText) view
-				.findViewById(R.id.et_fragmentItem_itemContent);
 		mEditItemContent.setText(mItem.toString());
 		mEditItemContent.addTextChangedListener(new TextWatcher() {
 
@@ -138,30 +158,15 @@ public class ItemFragment extends Fragment {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
+				mItem.setContent(s.toString());
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				ItemStock.get(getActivity(), mUser).updateItem(mItem);
+				updateItem();
 			}
 		});
 
-		mButtonItemCreationDate = (Button) view
-				.findViewById(R.id.btn_fragmentItem_itemCreationDate);
-		updateCreationDate();
-		mButtonItemCreationDate.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				FragmentManager fm = getActivity().getSupportFragmentManager();
-				DatePickerFragment dialog = DatePickerFragment
-						.newInstance(mItem.getCreationDate());
-				dialog.setTargetFragment(ItemFragment.this,
-						Constants.REQUEST_CODE);
-				dialog.show(fm, DIALOG_CREATION_DATE);
-			}
-		});
-
-		mCheckBoxItemFavorite = (CheckBox) view
-				.findViewById(R.id.cb_fragmentItem_itemFavorite);
 		mCheckBoxItemFavorite.setChecked(mItem.isFavorite());
 		mCheckBoxItemFavorite
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -172,23 +177,21 @@ public class ItemFragment extends Fragment {
 					}
 				});
 
+		mCheckBoxGotIt.setChecked(mItem.isInPossession());
+		mCheckBoxGotIt
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						mItem.setInPossession(isChecked);
+						updateItem();
+					}
+				});
+
+		mSpinnerItemGenre.setAdapter(new CustomSpinnerAdapter(getActivity(),
+				R.layout.custom_spinner, R.id.tv_customSpinner_label,
+				CustomSpinnerAdapter.getContent()));
+
 		return view;
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != Activity.RESULT_OK)
-			return;
-		if (requestCode == Constants.REQUEST_CODE) {
-			Date creationDate = (Date) data
-					.getSerializableExtra(Constants.KEY_ITEM_CREATION_DATE);
-			mItem.setCreationDate(creationDate);
-			updateCreationDate();
-		}
-	}
-
-	private void updateCreationDate() {
-		mButtonItemCreationDate.setText(mItem.getCreationDate().toString());
 	}
 
 	@Override

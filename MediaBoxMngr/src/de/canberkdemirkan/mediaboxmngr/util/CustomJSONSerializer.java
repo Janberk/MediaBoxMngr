@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.content.Context;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;

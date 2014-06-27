@@ -17,6 +17,7 @@
     <string name="item_title_label">Title</string>
     <string name="item_cover_label">Cover</string>
     <string name="item_genre_label">Genre</string>
+    <string name="item_icon_label">Icon</string>
     <string name="item_creation_date_label">Creation Date</string>
     <string name="item_details_label">Details</string>
     <string name="item_favorite_label">Favorite?</string>
@@ -39,5 +40,8 @@
         <item>Book</item>
         <item>Movie</item>
     </string-array>
+        <string name="item_got_it_label">Got it!</string>
+        <string name="item_wish_list_label">Wish list</string>
+        <string name="item_original_title_hint">Enter original title.</string>
 
 </resources>

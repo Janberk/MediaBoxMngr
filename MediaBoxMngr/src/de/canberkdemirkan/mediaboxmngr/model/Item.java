@@ -7,7 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.Bitmap;
-import de.canberkdemirkan.mediaboxmngr.util.ItemType;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public abstract class Item {

@@ -1,6 +1,6 @@
 package de.canberkdemirkan.mediaboxmngr.interfaces;
 
-import de.canberkdemirkan.mediaboxmngr.util.ItemType;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 
 public interface Constants {
 	

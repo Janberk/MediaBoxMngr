@@ -1,57 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ItemFragment" >
-
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
+    android:orientation="vertical" >
+    
+    <include
+        android:id="@+id/fragment_basics"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/item_title_label" />
-
-    <EditText
-        android:id="@+id/et_fragmentItem_itemTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/item_title_hint" />
-
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/item_details_label" />
-
-    <EditText
-        android:id="@+id/et_fragmentItem_itemContent"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:ems="16"
-        android:hint="@string/item_content_hint"
-        android:inputType="textMultiLine"
-        android:textSize="13sp" >
-
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/btn_fragmentItem_itemCreationDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin" />
-
-    <CheckBox
-        android:id="@+id/cb_fragmentItem_itemFavorite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:text="@string/item_favorite_label" />
+        layout="@layout/fragment_basics" >
+    </include>
 
 </LinearLayout>

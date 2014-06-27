@@ -15,12 +15,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
 import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
-import de.canberkdemirkan.mediaboxmngr.util.ItemType;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class DAOItem {

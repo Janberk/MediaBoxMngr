@@ -12,7 +12,7 @@ import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
-public class ItemAdapter extends ArrayAdapter<Item> {
+public class CustomItemAdapter extends ArrayAdapter<Item> {
 
 	// TODO ViewHolder Pattern damit Liste beim Scrollen nicht durcheinander kommt
 	static class ViewHolder {
@@ -25,7 +25,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 	@SuppressWarnings("unused")
 	private ArrayList<Item> mItemList;
 
-	public ItemAdapter(Context context, ArrayList<Item> itemList) {
+	public CustomItemAdapter(Context context, ArrayList<Item> itemList) {
 		super(context, android.R.layout.simple_list_item_1, itemList);
 		this.mContext = context;
 		this.mItemList = itemList;

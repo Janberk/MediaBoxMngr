@@ -1,4 +1,4 @@
-package de.canberkdemirkan.mediaboxmngr.util;
+package de.canberkdemirkan.mediaboxmngr.content;
 
 public enum ItemType {
 

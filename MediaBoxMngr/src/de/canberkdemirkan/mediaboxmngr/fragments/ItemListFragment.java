@@ -46,6 +46,7 @@ import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
@@ -54,8 +55,7 @@ import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
 import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
-import de.canberkdemirkan.mediaboxmngr.util.ItemAdapter;
-import de.canberkdemirkan.mediaboxmngr.util.ItemType;
+import de.canberkdemirkan.mediaboxmngr.util.CustomItemAdapter;
 
 public class ItemListFragment extends Fragment implements
 		OnItemSelectedListener {
@@ -71,7 +71,7 @@ public class ItemListFragment extends Fragment implements
 
 	private ListView mListView;
 	private ArrayList<Item> mItemList;
-	private ItemAdapter mItemAdapter;
+	private CustomItemAdapter mItemAdapter;
 
 	private ArrayAdapter<CharSequence> mArrayAdapter;
 
@@ -149,7 +149,7 @@ public class ItemListFragment extends Fragment implements
 		// }
 		// }
 
-		mItemAdapter = new ItemAdapter(this.getActivity(), mItemList);
+		mItemAdapter = new CustomItemAdapter(this.getActivity(), mItemList);
 		mItemAdapter.setNotifyOnChange(true);
 
 		mListView.setAdapter(mItemAdapter);
