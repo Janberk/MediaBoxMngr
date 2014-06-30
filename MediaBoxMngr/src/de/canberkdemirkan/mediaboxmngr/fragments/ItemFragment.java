@@ -20,13 +20,13 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
-import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter;
 
 public class ItemFragment extends Fragment {
 
@@ -36,9 +36,13 @@ public class ItemFragment extends Fragment {
 	private Item mItem;
 
 	private EditText mEditItemTitle;
-	private EditText mEditItemOriginalTitle;
+	private TextView mTextItemGenre;
+	private TextView mTextItemOriginalTitle;
+	private TextView mTextItemCountry;
+	private TextView mTextItemYear;
 	private EditText mEditItemContent;
 	private CheckBox mCheckBoxItemFavorite;
+
 	private CheckBox mCheckBoxGotIt;
 	private CheckBox mCheckBoxWishList;
 	private Spinner mSpinnerItemGenre;
@@ -76,23 +80,29 @@ public class ItemFragment extends Fragment {
 
 	private void initViews(View view) {
 		mEditItemTitle = (EditText) view
-				.findViewById(R.id.et_fragmentBasics_itemTitle);
-		mEditItemOriginalTitle = (EditText) view
-				.findViewById(R.id.et_fragmentBasics_itemOriginalTitle);
+				.findViewById(R.id.et_fragmentDetails_itemTitle);
+		mTextItemGenre = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemGenre);
+		mTextItemOriginalTitle = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemOriginalTitle);
+		mTextItemCountry = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemCountry);
+		mTextItemYear = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
 		mEditItemContent = (EditText) view
-				.findViewById(R.id.et_fragmentBasics_itemContent);
+				.findViewById(R.id.et_fragmentDetails_itemContent);
 		mCheckBoxItemFavorite = (CheckBox) view
-				.findViewById(R.id.cb_fragmentBasics_itemFavorite);
-		mCheckBoxGotIt = (CheckBox) view
-				.findViewById(R.id.cb_fragmentBasics_gotIt);
-		mCheckBoxWishList = (CheckBox) view
-				.findViewById(R.id.cb_fragmentBasics_wishList);
-		mSpinnerItemGenre = (Spinner) view
-				.findViewById(R.id.sp_fragmentBasics_itemGenre);
-		mSpinnerItemCountry = (Spinner) view
-				.findViewById(R.id.sp_fragmentBasics_itemCountry);
-		mSpinnerItemYear = (Spinner) view
-				.findViewById(R.id.sp_fragmentBasics_itemYear);
+				.findViewById(R.id.cb_fragmentDetails_itemFavorite);
+		// mCheckBoxGotIt = (CheckBox) view
+		// .findViewById(R.id.cb_fragmentBasics_gotIt);
+		// mCheckBoxWishList = (CheckBox) view
+		// .findViewById(R.id.cb_fragmentBasics_wishList);
+		// mSpinnerItemGenre = (Spinner) view
+		// .findViewById(R.id.sp_fragmentBasics_itemGenre);
+		// mSpinnerItemCountry = (Spinner) view
+		// .findViewById(R.id.sp_fragmentBasics_itemCountry);
+		// mSpinnerItemYear = (Spinner) view
+		// .findViewById(R.id.sp_fragmentBasics_itemYear);
 	}
 
 	@TargetApi(11)
@@ -106,13 +116,16 @@ public class ItemFragment extends Fragment {
 		View view = null;
 		switch (ItemType.valueOf(ITEM_TYPE)) {
 		case Album:
-			view = inflater.inflate(R.layout.fragment_item, container, false);
+			view = inflater
+					.inflate(R.layout.fragment_details, container, false);
 			break;
 		case Book:
-			view = inflater.inflate(R.layout.fragment_item, container, false);
+			view = inflater
+					.inflate(R.layout.fragment_details, container, false);
 			break;
 		case Movie:
-			view = inflater.inflate(R.layout.fragment_item, container, false);
+			view = inflater
+					.inflate(R.layout.fragment_details, container, false);
 			break;
 
 		default:
@@ -147,7 +160,7 @@ public class ItemFragment extends Fragment {
 			}
 		});
 
-		mEditItemContent.setText(mItem.toString());
+		mEditItemContent.setText(mItem.getContent());
 		mEditItemContent.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -177,20 +190,37 @@ public class ItemFragment extends Fragment {
 					}
 				});
 
-		mCheckBoxGotIt.setChecked(mItem.isInPossession());
-		mCheckBoxGotIt
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						mItem.setInPossession(isChecked);
-						updateItem();
-					}
-				});
+		// mCheckBoxGotIt.setChecked(mItem.isInPossession());
+		// mCheckBoxGotIt
+		// .setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		// public void onCheckedChanged(CompoundButton buttonView,
+		// boolean isChecked) {
+		// mItem.setInPossession(isChecked);
+		// updateItem();
+		// }
+		// });
+		//
+		// mSpinnerItemGenre.setAdapter(new CustomSpinnerAdapter(getActivity(),
+		// R.layout.custom_spinner, R.id.tv_customSpinner_label,
+		// CustomSpinnerAdapter.getContent()));
 
-		mSpinnerItemGenre.setAdapter(new CustomSpinnerAdapter(getActivity(),
-				R.layout.custom_spinner, R.id.tv_customSpinner_label,
-				CustomSpinnerAdapter.getContent()));
+		String itemGenre = mItem.getGenre();
+		String itemOriginalTitle = mItem.getOriginalTitle();
+		String itemCountry = mItem.getCountry();
+		String itemYear = mItem.getYearPublished();
 
+		if (itemGenre != null && itemOriginalTitle != null
+				&& itemCountry != null && itemYear != null) {
+			mTextItemGenre.setText(itemGenre);
+			mTextItemOriginalTitle.setText(itemOriginalTitle);
+			mTextItemCountry.setText(itemCountry);
+			mTextItemYear.setText(itemYear);
+		} else {
+			mTextItemGenre.setText("");
+			mTextItemOriginalTitle.setText("");
+			mTextItemCountry.setText("");
+			mTextItemYear.setText("");
+		}
 		return view;
 	}
 

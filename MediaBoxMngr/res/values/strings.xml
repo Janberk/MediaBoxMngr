@@ -15,6 +15,7 @@
     <string name="item_title_hint">Enter a title.</string>
     <string name="item_content_hint">Enter item content.</string>
     <string name="item_title_label">Title</string>
+    <string name="item_content_label">Content</string>
     <string name="item_cover_label">Cover</string>
     <string name="item_genre_label">Genre</string>
     <string name="item_icon_label">Icon</string>
@@ -34,6 +35,12 @@
     <string name="logout">Log out</string>
     <string name="save">Save</string>
     <string name="signup">Sign up</string>
+    
+    <string name="details_title">Title:</string>
+    <string name="details_genre">Genre:</string>
+    <string name="details_original_title">Orig. title:</string>
+    <string name="details_country">Country:</string>    
+    <string name="details_year">Year:</string>
     
     <string-array name="item_types">
         <item>Album</item>

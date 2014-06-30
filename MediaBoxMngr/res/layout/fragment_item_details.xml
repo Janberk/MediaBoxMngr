@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <FrameLayout
+        android:id="@+id/frameLayoutCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_value_8dp" >
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="top|center_horizontal"
+            android:contentDescription="@string/item_cover_label"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_launcher" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutDetails1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/custom_value_8dp"
+        android:layout_toRightOf="@+id/frameLayoutCover"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/et_detailsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/custom_value_4dp"
+            android:hint="@string/item_title_label" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/et_detailsGenre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/custom_value_4dp"
+            android:hint="@string/item_genre_label" >
+        </EditText>
+
+        <Spinner
+            android:id="@+id/spinner_itemType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/custom_value_4dp" />
+
+        <CheckBox
+            android:id="@+id/cb_detailsFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/custom_value_4dp"
+            android:text="@string/item_favorite_label" />
+
+        <TextView
+            android:id="@+id/tv_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/custom_value_4dp"
+            android:text="" />
+    </LinearLayout>
+
+</RelativeLayout>

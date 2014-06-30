@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="@drawable/list_item_shape"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/et_fragmentDetails_itemTitle"
+        style="@style/editTextForm.textStyle.inputDetails"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:hint="@string/item_title_hint" />
+
+    <CheckBox
+        android:id="@+id/cb_fragmentDetails_itemFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/custom_value_12dp"
+        android:button="@drawable/custom_checkbox"
+        android:gravity="center" />
+
+</RelativeLayout>

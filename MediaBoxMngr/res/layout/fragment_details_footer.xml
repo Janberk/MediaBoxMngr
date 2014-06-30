@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#000022"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/textViewDetails"
+        android:text="@string/item_content_label" />
+
+    <EditText
+        android:id="@+id/et_fragmentDetails_itemContent"
+        style="@style/inputDetails"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:hint="@string/item_content_hint"
+        android:inputType="textMultiLine" />
+
+</LinearLayout>

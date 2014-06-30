@@ -21,12 +21,47 @@
         <item name="android:background">@drawable/input_shape</item>
     </style>
 
+    <style name="editTextForm.textStyle.inputDetails">
+        <item name="android:background">@drawable/input_shape_details</item>
+    </style>
+    
+    <style name="inputDetails">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#000022</item>
+        <item name="android:textColorHint">#6d6e71</item>
+        <item name="android:paddingLeft">@dimen/custom_value_8dp</item>
+        <item name="android:background">@drawable/input_shape_details</item>
+    </style>
+
     <style name="textViewForm">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#33b5e5</item>
         <item name="android:layout_marginTop">@dimen/custom_value_8dp</item>
         <item name="android:layout_marginBottom">@dimen/custom_value_8dp</item>
+    </style>
+
+    <style name="textViewDetails">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#33b5e5</item>
+        <item name="android:layout_marginTop">@dimen/custom_value_4dp</item>
+        <item name="android:layout_marginBottom">@dimen/custom_value_4dp</item>
+    </style>
+
+    <style name="editTextDetails">
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#000022</item>
+        <item name="android:textColorHint">#6d6e71</item>
+        <item name="android:layout_margin">@dimen/custom_value_2dp</item>
+        <item name="android:background">@drawable/input_shape</item>
     </style>
 
     <style name="textViewList">
