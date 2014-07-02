@@ -12,8 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemGenre;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 
 public class CustomSpinnerAdapter extends ArrayAdapter<String> {
+
+	public enum SpinnerTag {
+
+		TypeSpinner, GenreSpinner;
+
+	}
+
+	private static ArrayList<String> sContent = null;
 
 	public CustomSpinnerAdapter(Context context, int resource,
 			int textViewResourceId, List<String> objects) {
@@ -37,7 +46,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
 		View row = inflater.inflate(R.layout.custom_spinner, parent, false);
 		TextView label = (TextView) row
 				.findViewById(R.id.tv_customSpinner_label);
-		label.setText(getContent().get(position));
+		label.setText(sContent.get(position));
 
 		ImageView icon = (ImageView) row
 				.findViewById(R.id.iv_customSpinner_icon);
@@ -46,12 +55,26 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
 		return row;
 	}
 
-	public static ArrayList<String> getContent() {
+	public static ArrayList<String> getContent(SpinnerTag tag) {
 		ArrayList<String> content = new ArrayList<>();
-		ItemGenre[] allValues = ItemGenre.values();
-		for (ItemGenre value : allValues) {
-			content.add(value.toString());
+		switch (tag) {
+		case TypeSpinner:
+			ItemType[] typeValues = ItemType.values();
+			for (ItemType value : typeValues) {
+				content.add(value.toString());
+			}
+			break;
+		case GenreSpinner:
+			ItemGenre[] genreValues = ItemGenre.values();
+			for (ItemGenre value : genreValues) {
+				content.add(value.toString());
+			}
+			break;
+
+		default:
+			break;
 		}
+		sContent = content;
 		return content;
 	}
 

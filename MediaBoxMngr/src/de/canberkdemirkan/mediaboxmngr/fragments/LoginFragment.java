@@ -57,7 +57,7 @@ public class LoginFragment extends Fragment {
 	private Button mButtonLogin;
 	private TextView mTextSignupLink;
 
-	private ProgressDialog progressDialog;
+	private ProgressDialog mProgressDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,9 +65,9 @@ public class LoginFragment extends Fragment {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "LoginFragment - onCreate()");
 		}
-		progressDialog = new ProgressDialog(getActivity());
-		progressDialog.setMessage("Requesting user access. Please wait...");
-		progressDialog.setCancelable(false);
+		mProgressDialog = new ProgressDialog(getActivity());
+		mProgressDialog.setMessage("Requesting user access. Please wait...");
+		mProgressDialog.setCancelable(false);
 	}
 
 	private void initElements(View view) {
@@ -116,7 +116,7 @@ public class LoginFragment extends Fragment {
 
 					@Override
 					public void onStart() {
-						progressDialog.show();
+						mProgressDialog.show();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onStart()");
@@ -125,7 +125,7 @@ public class LoginFragment extends Fragment {
 
 					@Override
 					public void onSuccess(String response) {
-						progressDialog.hide();
+						mProgressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onSuccess()\n" + response);
@@ -138,7 +138,7 @@ public class LoginFragment extends Fragment {
 
 					@Override
 					public void onFinish() {
-						progressDialog.hide();
+						mProgressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onFinish()");
@@ -148,7 +148,7 @@ public class LoginFragment extends Fragment {
 					@Override
 					public void onFailure(int statusCode, Throwable error,
 							String content) {
-						progressDialog.hide();
+						mProgressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onFailure(): " + content);
@@ -335,7 +335,7 @@ public class LoginFragment extends Fragment {
 		editor.putString(KEY_REMEMBER_USER_PASSWORD, password);
 		editor.commit();
 	}
-	
+
 	private void clearUser() {
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);

@@ -26,6 +26,7 @@ import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemFragment extends Fragment {
@@ -48,6 +49,15 @@ public class ItemFragment extends Fragment {
 	private Spinner mSpinnerItemGenre;
 	private Spinner mSpinnerItemCountry;
 	private Spinner mSpinnerItemYear;
+
+	private EditText mEditItemGenre;
+	private EditText mEditItemOriginalTitle;
+	private EditText mEditItemCountry;
+	private EditText mEditItemYear;
+	private EditText mEditItemAuthor;
+	private EditText mEditItemPublishingHouse;
+	private EditText mEditItemEdition;
+	private EditText mEditItemIsbn;
 
 	public static ItemFragment newInstance(UUID itemId, String userTag) {
 		Bundle args = new Bundle();
@@ -103,6 +113,22 @@ public class ItemFragment extends Fragment {
 		// .findViewById(R.id.sp_fragmentBasics_itemCountry);
 		// mSpinnerItemYear = (Spinner) view
 		// .findViewById(R.id.sp_fragmentBasics_itemYear);
+		mEditItemGenre = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_genre);
+		mEditItemOriginalTitle = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_original);
+		mEditItemCountry = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_country);
+		mEditItemYear = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_year);
+		mEditItemAuthor = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_author);
+		mEditItemPublishingHouse = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_publisher);
+		mEditItemEdition = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_edition);
+		mEditItemIsbn = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_isbn);
 	}
 
 	@TargetApi(11)
@@ -159,6 +185,179 @@ public class ItemFragment extends Fragment {
 				updateItem();
 			}
 		});
+
+		mEditItemGenre.setText(mItem.getGenre());
+		mEditItemGenre.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				mItem.setGenre(s.toString());
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				updateItem();
+			}
+		});
+
+		mEditItemOriginalTitle.setText(mItem.getOriginalTitle());
+		mEditItemOriginalTitle.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				mItem.setOriginalTitle(s.toString());
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				updateItem();
+			}
+		});
+
+		mEditItemCountry.setText(mItem.getCountry());
+		mEditItemCountry.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				mItem.setCountry(s.toString());
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				updateItem();
+			}
+		});
+
+		mEditItemYear.setText(mItem.getYearPublished());
+		mEditItemYear.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				mItem.setYearPublished(s.toString());
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				updateItem();
+			}
+		});
+
+		if (mItem instanceof Book) {
+			mEditItemAuthor.setText(((Book) mItem).getAuthor());
+
+			mEditItemAuthor.addTextChangedListener(new TextWatcher() {
+
+				@Override
+				public void beforeTextChanged(CharSequence s, int start,
+						int count, int after) {
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start,
+						int before, int count) {
+					((Book) mItem).setAuthor(s.toString());
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					updateItem();
+				}
+			});
+		}
+
+		if (mItem instanceof Book) {
+			mEditItemPublishingHouse.setText(((Book) mItem)
+					.getPublishingHouse());
+
+			mEditItemPublishingHouse.addTextChangedListener(new TextWatcher() {
+
+				@Override
+				public void beforeTextChanged(CharSequence s, int start,
+						int count, int after) {
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start,
+						int before, int count) {
+					((Book) mItem).setPublishingHouse(s.toString());
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					updateItem();
+				}
+			});
+		}
+
+		if (mItem instanceof Book) {
+			mEditItemEdition.setText(((Book) mItem).getEdition());
+
+			mEditItemEdition.addTextChangedListener(new TextWatcher() {
+
+				@Override
+				public void beforeTextChanged(CharSequence s, int start,
+						int count, int after) {
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start,
+						int before, int count) {
+					((Book) mItem).setEdition(s.toString());
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					updateItem();
+				}
+			});
+		}
+
+		if (mItem instanceof Book) {
+			mEditItemIsbn.setText(((Book) mItem).getIsbn());
+
+			mEditItemIsbn.addTextChangedListener(new TextWatcher() {
+
+				@Override
+				public void beforeTextChanged(CharSequence s, int start,
+						int count, int after) {
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start,
+						int before, int count) {
+					((Book) mItem).setIsbn(s.toString());
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					updateItem();
+				}
+			});
+		}
 
 		mEditItemContent.setText(mItem.getContent());
 		mEditItemContent.addTextChangedListener(new TextWatcher() {

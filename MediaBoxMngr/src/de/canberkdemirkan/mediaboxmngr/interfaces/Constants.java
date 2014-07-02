@@ -28,7 +28,7 @@ public interface Constants {
 	String KEY_CREATE_NEW_ITEM = "de.canberkdemirkan.mediaboxmngr.new_item";
 	String KEY_USER_TAG = "de.canberkdemirkan.mediaboxmngr.user_tag";
 	String KEY_LIST_TAG = "de.canberkdemirkan.mediaboxmngr.list_tag";
-	String TAG_ALL = ItemType.All.name();
+	//String TAG_ALL = ItemType.All.name();
 	String TAG_ALBUM = ItemType.Album.name();
 	String TAG_BOOK = ItemType.Book.name();
 	String TAG_MOVIE = ItemType.Movie.name();

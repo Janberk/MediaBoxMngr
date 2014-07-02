@@ -27,7 +27,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +55,8 @@ import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
 import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
 import de.canberkdemirkan.mediaboxmngr.util.CustomItemAdapter;
+import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter;
+import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter.SpinnerTag;
 
 public class ItemListFragment extends Fragment implements
 		OnItemSelectedListener {
@@ -64,16 +65,15 @@ public class ItemListFragment extends Fragment implements
 	// public static int REMOTE_DB_VERSION = 0;
 
 	private SharedPreferences mSharedPreferences;
-
+	private ProgressDialog mProgressDialog;
 	private String mUser;
-	private boolean mEditMode;
+	private String mJson;
 	private String mTypeAsString;
+	private boolean mEditMode;
 
 	private ListView mListView;
 	private ArrayList<Item> mItemList;
 	private CustomItemAdapter mItemAdapter;
-
-	private ArrayAdapter<CharSequence> mArrayAdapter;
 
 	private RelativeLayout mEditor;
 	private LinearLayout mMenuBar;
@@ -87,9 +87,7 @@ public class ItemListFragment extends Fragment implements
 	private ImageView mImageDelete;
 	private ImageView mImageLogout;
 
-	private String json;
-
-	ProgressDialog progressDialog;
+	private SpinnerTag mTypeSpinner = SpinnerTag.TypeSpinner;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -108,10 +106,10 @@ public class ItemListFragment extends Fragment implements
 
 		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
 
-		progressDialog = new ProgressDialog(getActivity());
-		progressDialog
+		mProgressDialog = new ProgressDialog(getActivity());
+		mProgressDialog
 				.setMessage("Synchronizing SQLite DB with Remote MySQL DB. Please wait...");
-		progressDialog.setCancelable(false);
+		mProgressDialog.setCancelable(false);
 	}
 
 	@Override
@@ -127,9 +125,9 @@ public class ItemListFragment extends Fragment implements
 
 		mEditor.setVisibility(View.GONE);
 
-		mArrayAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mSpinnerItemType.setAdapter(mArrayAdapter);
+		mSpinnerItemType.setAdapter(new CustomSpinnerAdapter(getActivity(),
+				R.layout.custom_spinner, R.id.tv_customSpinner_label,
+				CustomSpinnerAdapter.getContent(mTypeSpinner)));
 		mSpinnerItemType.setOnItemSelectedListener(this);
 
 		// LOKAL_DB_VERSION = ItemStock.get(getActivity(),
@@ -271,8 +269,6 @@ public class ItemListFragment extends Fragment implements
 				.findViewById(R.id.et_fragmentEditTitle_editTitle);
 		mSpinnerItemType = (Spinner) view
 				.findViewById(R.id.sp_fragmentEditTitle_itemType);
-		mArrayAdapter = ArrayAdapter.createFromResource(this.getActivity(),
-				R.array.item_types, android.R.layout.simple_spinner_item);
 		mButtonSaveItem = (Button) view
 				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
 		mImageAllLists = (ImageView) view
@@ -311,9 +307,10 @@ public class ItemListFragment extends Fragment implements
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
 		mTypeAsString = (String) parent.getItemAtPosition(position);
-		((TextView) parent.getChildAt(0)).setTextAppearance(getActivity(),
+		RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
+		((TextView) layout.getChildAt(0)).setTextAppearance(getActivity(),
 				R.style.spinnerTextStyle);
-		((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+		((TextView) layout.getChildAt(0)).setGravity(Gravity.CENTER);
 	}
 
 	@Override
@@ -358,6 +355,7 @@ public class ItemListFragment extends Fragment implements
 
 	private void switchMode() {
 		if (!mEditMode) {
+			mSpinnerItemType.setSelection(0);
 			mEditMode = true;
 			mEditor.setVisibility(View.VISIBLE);
 			changeAlphaOfView(mListView, 1.0F, 0.2F);
@@ -489,7 +487,7 @@ public class ItemListFragment extends Fragment implements
 
 					@Override
 					public void onStart() {
-						progressDialog.show();
+						mProgressDialog.show();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"ItemListFragment - loadItemsFromRemoteDb() - onStart()");
@@ -498,7 +496,7 @@ public class ItemListFragment extends Fragment implements
 
 					@Override
 					public void onSuccess(String response) {
-						progressDialog.hide();
+						mProgressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"ItemListFragment - loadItemsFromRemoteDb() - onSuccess()\n"
@@ -523,7 +521,7 @@ public class ItemListFragment extends Fragment implements
 
 					@Override
 					public void onFinish() {
-						progressDialog.hide();
+						mProgressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"ItemListFragment - loadItemsFromRemoteDb() - onFinish()");
@@ -534,7 +532,7 @@ public class ItemListFragment extends Fragment implements
 					@Override
 					public void onFailure(int statusCode, Throwable error,
 							String content) {
-						progressDialog.hide();
+						mProgressDialog.hide();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"ItemListFragment - loadItemsFromRemoteDb() - onFailure()\n"
@@ -547,12 +545,12 @@ public class ItemListFragment extends Fragment implements
 
 	private void syncWithRemoteDb() throws JSONException, IOException {
 		final ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		json = itemStock.getSQLiteAsJSON(mUser);
+		mJson = itemStock.getSQLiteAsJSON(mUser);
 
 		AsyncHttpClient client = new AsyncHttpClient();
 		RequestParams params = new RequestParams();
 
-		params.put("items", json);
+		params.put("items", mJson);
 		client.post(Constants.INSERT_ITEMS_REQUEST, params,
 				new AsyncHttpResponseHandler() {
 					@Override
