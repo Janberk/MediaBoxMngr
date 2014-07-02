@@ -3,23 +3,25 @@
     android:layout_height="wrap_content"
     android:background="#000022" >
 
-    <TextView
-        android:id="@+id/tv_customSpinner_label"
-        style="@style/textViewForm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/iv_customSpinner_icon"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/iv_customSpinner_icon" />
-
     <ImageView
         android:id="@+id/iv_customSpinner_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/custom_value_12dp"
         android:contentDescription="@string/item_icon_label"
         android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tv_customSpinner_label"
+        style="@style/spinnerTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_value_12dp"
+        android:layout_alignBottom="@+id/iv_customSpinner_icon"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/iv_customSpinner_icon"
+        android:layout_toRightOf="@+id/iv_customSpinner_icon" />
 
 </RelativeLayout>

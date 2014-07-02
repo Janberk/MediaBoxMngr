@@ -8,14 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class CustomItemAdapter extends ArrayAdapter<Item> {
 
-	// TODO ViewHolder Pattern damit Liste beim Scrollen nicht durcheinander kommt
+	// TODO ViewHolder Pattern damit Liste beim Scrollen nicht durcheinander
+	// kommt
 	static class ViewHolder {
+		ImageView mImageItemIcon;
 		TextView mTextItemTitle;
 		TextView mTextItemCreationDate;
 		CheckBox mCheckBoxItemFavorite;
@@ -42,6 +46,8 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.list_item, parent, false);
 			holder = new ViewHolder();
+			holder.mImageItemIcon = (ImageView) convertView
+					.findViewById(R.id.iv_listItem_itemIcon);
 			holder.mTextItemTitle = (TextView) convertView
 					.findViewById(R.id.tv_listItem_itemTitle);
 			holder.mTextItemCreationDate = (TextView) convertView
@@ -55,9 +61,13 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 
 		// Configure the view for this Item
 		Item item = getItem(position);
+		ItemType type = (ItemType) mItemList.get(position).getType();
+
 		holder.mTextItemTitle.setText(item.getTitle());
 		holder.mTextItemCreationDate.setText(item.getCreationDate().toString());
 		holder.mCheckBoxItemFavorite.setChecked(item.isFavorite());
+		holder.mImageItemIcon.setFadingEdgeLength(2);
+		UtilMethods.setCustomIconToTypeOfMedia(holder.mImageItemIcon, type);
 
 		return convertView;
 	}

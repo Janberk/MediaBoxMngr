@@ -50,7 +50,20 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
 
 		ImageView icon = (ImageView) row
 				.findViewById(R.id.iv_customSpinner_icon);
-		icon.setImageResource(R.drawable.ic_launcher);
+		switch (position) {
+		case 0:
+			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Album);
+			break;
+		case 1:
+			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Book);
+			break;
+		case 2:
+			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Movie);
+			break;
+
+		default:
+			break;
+		}
 
 		return row;
 	}

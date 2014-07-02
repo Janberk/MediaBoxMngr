@@ -24,7 +24,7 @@
     <string name="item_favorite_label">Favorite?</string>
     <string name="remember_me_label">Remember me</string>
     <string name="forgot_password_label">Forgot password?</string>
-    <string name="item_type_label">Select a type for your item.</string>
+    <string name="item_type_label">Select a type.</string>
     <string name="login_in_link_label">Go back to Login-Screen!</string>
     <string name="sign_up_link_label">You don\'t have an account? Sign up here!</string>
     <string name="enter_data_label">Enter your personal data</string>

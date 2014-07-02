@@ -308,9 +308,8 @@ public class ItemListFragment extends Fragment implements
 			long id) {
 		mTypeAsString = (String) parent.getItemAtPosition(position);
 		RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
-		((TextView) layout.getChildAt(0)).setTextAppearance(getActivity(),
+		((TextView) layout.getChildAt(1)).setTextAppearance(getActivity(),
 				R.style.spinnerTextStyle);
-		((TextView) layout.getChildAt(0)).setGravity(Gravity.CENTER);
 	}
 
 	@Override

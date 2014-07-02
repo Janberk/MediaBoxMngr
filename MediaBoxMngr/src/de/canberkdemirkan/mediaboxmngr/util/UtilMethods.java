@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import android.widget.ImageView;
+import de.canberkdemirkan.mediaboxmngr.R;
+import de.canberkdemirkan.mediaboxmngr.content.ItemType;
+
 public class UtilMethods {
 
 	public static String dateToFormattedStringConverter(Date date) {
@@ -80,26 +84,26 @@ public class UtilMethods {
 		}
 	}
 
-	// public static void setCustomIconToTypeOfMedia(ImageView itemIcon,
-	// ItemType type) {
-	//
-	// switch (type) {
-	//
-	// case Album:
-	// itemIcon.setImageResource(R.drawable.icon_music);
-	// break;
-	// case Book:
-	// itemIcon.setImageResource(R.drawable.icon_book);
-	// break;
-	// case Movie:
-	// itemIcon.setImageResource(R.drawable.icon_movie);
-	// break;
-	//
-	// default:
-	// itemIcon.setImageResource(R.drawable.ic_launcher);
-	// break;
-	// }
-	//
-	// }
+	public static void setCustomIconToTypeOfMedia(ImageView itemIcon,
+			ItemType type) {
+
+		switch (type) {
+
+		case Album:
+			itemIcon.setImageResource(R.drawable.icon_music);
+			break;
+		case Book:
+			itemIcon.setImageResource(R.drawable.icon_book);
+			break;
+		case Movie:
+			itemIcon.setImageResource(R.drawable.icon_movie);
+			break;
+
+		default:
+			itemIcon.setImageResource(R.drawable.ic_launcher);
+			break;
+		}
+
+	}
 
 }

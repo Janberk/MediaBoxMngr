@@ -4,9 +4,20 @@
     android:background="#000022"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/tv_fragmentEditTitle_itemTitle"
+        style="@style/textViewForm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/custom_value_16dp"
+        android:text="@string/item_title_label" />
+
     <EditText
         android:id="@+id/et_fragmentEditTitle_editTitle"
         style="@style/editTextForm.textStyle.input"
+        android:layout_below="@+id/tv_fragmentEditTitle_itemTitle"
         android:hint="@string/item_title_hint"
         android:inputType="text" >
 
@@ -16,6 +27,7 @@
     <TextView
         android:id="@+id/tv_fragmentEditTitle_itemType"
         style="@style/textViewForm"
+        android:textColor="@color/pastel_red"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_fragmentEditTitle_editTitle"
@@ -24,16 +36,20 @@
 
     <Spinner
         android:id="@+id/sp_fragmentEditTitle_itemType"
-        android:layout_width="match_parent"
+        android:layout_width="256dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tv_fragmentEditTitle_itemType" />
+        android:layout_alignLeft="@+id/btn_fragmentEditTitle_saveItem"
+        android:layout_alignRight="@+id/btn_fragmentEditTitle_saveItem"
+        android:layout_below="@+id/tv_fragmentEditTitle_itemType"
+        android:layout_marginBottom="@dimen/custom_value_8dp"
+        android:layout_marginTop="@dimen/custom_value_8dp" />
 
     <Button
         android:id="@+id/btn_fragmentEditTitle_saveItem"
         style="@style/buttonForm.textStyle.big"
         android:layout_alignLeft="@+id/et_fragmentEditTitle_editTitle"
         android:layout_below="@+id/sp_fragmentEditTitle_itemType"
+        android:layout_marginBottom="@dimen/custom_value_16dp"
         android:text="@string/save" />
 
 </RelativeLayout>
