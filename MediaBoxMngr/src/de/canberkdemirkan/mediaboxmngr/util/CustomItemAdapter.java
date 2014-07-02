@@ -16,8 +16,7 @@ import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class CustomItemAdapter extends ArrayAdapter<Item> {
 
-	// TODO ViewHolder Pattern damit Liste beim Scrollen nicht durcheinander
-	// kommt
+	// TODO ViewHolder Pattern prevents list to mess up order while scrolling.
 	static class ViewHolder {
 		ImageView mImageItemIcon;
 		TextView mTextItemTitle;
@@ -26,7 +25,6 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 	}
 
 	private final Context mContext;
-	@SuppressWarnings("unused")
 	private ArrayList<Item> mItemList;
 
 	public CustomItemAdapter(Context context, ArrayList<Item> itemList) {

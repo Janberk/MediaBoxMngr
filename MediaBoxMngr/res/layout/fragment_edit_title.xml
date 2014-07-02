@@ -27,12 +27,12 @@
     <TextView
         android:id="@+id/tv_fragmentEditTitle_itemType"
         style="@style/textViewForm"
-        android:textColor="@color/pastel_red"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_fragmentEditTitle_editTitle"
         android:layout_centerHorizontal="true"
-        android:text="@string/item_type_label" />
+        android:text="@string/item_type_label"
+        android:textColor="@color/pastel_red" />
 
     <Spinner
         android:id="@+id/sp_fragmentEditTitle_itemType"

@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical"
     android:weightSum="10" >
 
@@ -14,17 +14,17 @@
 
     <include
         android:id="@+id/fragmentItemList_listView"
-        android:layout_weight="9"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="9"
         layout="@layout/fragment_list_view" >
     </include>
 
     <include
         android:id="@+id/fragmentItemList_menuBar"
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         layout="@layout/fragment_menu_bar" >
     </include>
 

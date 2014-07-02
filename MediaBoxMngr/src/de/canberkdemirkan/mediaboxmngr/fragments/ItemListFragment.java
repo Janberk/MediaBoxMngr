@@ -16,7 +16,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,13 +68,14 @@ public class ItemListFragment extends Fragment implements
 	private String mUser;
 	private String mJson;
 	private String mTypeAsString;
-	private boolean mEditMode;
+	public static boolean sEditMode;
 
 	private ListView mListView;
 	private ArrayList<Item> mItemList;
 	private CustomItemAdapter mItemAdapter;
 
 	private RelativeLayout mEditor;
+	private LinearLayout mListContainer;
 	private LinearLayout mMenuBar;
 
 	private EditText mEditEditTitle;
@@ -94,7 +94,7 @@ public class ItemListFragment extends Fragment implements
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-		mEditMode = false;
+		sEditMode = false;
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUser();
@@ -151,20 +151,8 @@ public class ItemListFragment extends Fragment implements
 		mItemAdapter.setNotifyOnChange(true);
 
 		mListView.setAdapter(mItemAdapter);
-		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View view,
-					int position, long id) {
-
-				Item item = (Item) mListView.getAdapter().getItem(position);
-				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
-				i.putExtra(Constants.KEY_USER_TAG, mUser);
-				i.putExtra(Constants.KEY_TYPE, item.getType().toString());
-				startActivityForResult(i, 0);
-			}
-		});
+		setListViewClickable(mListView);
 
 		mButtonSaveItem.setOnClickListener(new View.OnClickListener() {
 
@@ -264,7 +252,8 @@ public class ItemListFragment extends Fragment implements
 				.findViewById(R.id.fragmentItemList_menuBar);
 		mEditor = (RelativeLayout) view
 				.findViewById(R.id.fragmentItemList_editTitle);
-
+		mListContainer = (LinearLayout) view
+				.findViewById(R.id.fragmentItemList_listView);
 		mEditEditTitle = (EditText) view
 				.findViewById(R.id.et_fragmentEditTitle_editTitle);
 		mSpinnerItemType = (Spinner) view
@@ -352,22 +341,42 @@ public class ItemListFragment extends Fragment implements
 		return user;
 	}
 
+	private void setListViewClickable(ListView list) {
+		final ListView listView = list;
+		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View view,
+					int position, long id) {
+
+				Item item = (Item) listView.getAdapter().getItem(position);
+				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
+				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
+				i.putExtra(Constants.KEY_USER_TAG, mUser);
+				i.putExtra(Constants.KEY_TYPE, item.getType().toString());
+				startActivityForResult(i, 0);
+			}
+		});
+	}
+
 	private void switchMode() {
-		if (!mEditMode) {
+		if (!sEditMode) {
+			sEditMode = true;
 			mSpinnerItemType.setSelection(0);
-			mEditMode = true;
 			mEditor.setVisibility(View.VISIBLE);
-			changeAlphaOfView(mListView, 1.0F, 0.2F);
+			changeAlphaOfView(mListContainer, 1.0F, 0.2F);
 			mMenuBar.setVisibility(View.GONE);
 			mEditEditTitle.requestFocus();
+			mListView.setOnItemClickListener(null);
 			InputMethodManager imm = (InputMethodManager) getActivity()
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.showSoftInput(mEditEditTitle, InputMethodManager.SHOW_IMPLICIT);
-		} else if (mEditMode) {
+		} else if (sEditMode) {
 			mEditor.setVisibility(View.GONE);
-			changeAlphaOfView(mListView, 0.2F, 1.0F);
+			changeAlphaOfView(mListContainer, 0.2F, 1.0F);
 			mMenuBar.setVisibility(View.VISIBLE);
-			mEditMode = false;
+			setListViewClickable(mListView);
+			sEditMode = false;
 		}
 	}
 
