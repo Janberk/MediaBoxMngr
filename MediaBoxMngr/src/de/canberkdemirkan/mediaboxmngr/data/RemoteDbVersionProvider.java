@@ -34,7 +34,7 @@ public class RemoteDbVersionProvider {
 						try {
 							JSONObject obj = new JSONObject(response);
 							JSONArray jsonArray = obj.getJSONArray("version");
-							//JSONArray jsonArray = new JSONArray(response);
+							// JSONArray jsonArray = new JSONArray(response);
 							Log.d(Constants.LOG_TAG,
 									"ItemListFragment - getRemoteDbVersion() - onSuccess(): \n"
 											+ jsonArray.length());

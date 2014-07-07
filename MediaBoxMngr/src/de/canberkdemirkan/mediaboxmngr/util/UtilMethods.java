@@ -112,8 +112,8 @@ public class UtilMethods {
 
 	}
 
-	public static ArrayList<Item> createListFromTag(Context context, String user,
-			ListTag tag) {
+	public static ArrayList<Item> createListFromTag(Context context,
+			String user, ListTag tag) {
 		ArrayList<Item> result = null;
 
 		switch (tag) {
@@ -144,6 +144,7 @@ public class UtilMethods {
 					.getAllItems(user);
 			break;
 		}
+		ItemStock.get(context, user).setItemList(result);
 
 		return result;
 	}
