@@ -8,6 +8,15 @@
     android:weightSum="4" >
 
     <ImageView
+        android:id="@+id/iv_fragmentMenuBar_home"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_value_8dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/delete_item"
+        android:src="@drawable/ic_menu_home_white" />
+
+    <ImageView
         android:id="@+id/iv_fragmentMenuBar_allLists"
         android:layout_width="@dimen/custom_value_0dp"
         android:layout_height="wrap_content"
@@ -24,15 +33,6 @@
         android:layout_weight="1"
         android:contentDescription="@string/action_settings"
         android:src="@drawable/ic_menu_settings_white" />
-
-    <ImageView
-        android:id="@+id/iv_fragmentMenuBar_delete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/custom_value_8dp"
-        android:layout_weight="1"
-        android:contentDescription="@string/delete_item"
-        android:src="@drawable/ic_menu_trash_white" />
 
     <ImageView
         android:id="@+id/iv_fragmentMenuBar_logout"

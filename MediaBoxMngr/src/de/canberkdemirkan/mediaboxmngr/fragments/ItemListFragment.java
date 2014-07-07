@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,6 +16,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,6 +53,7 @@ import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
@@ -56,12 +61,16 @@ import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
 import de.canberkdemirkan.mediaboxmngr.util.CustomItemAdapter;
 import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter;
 import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter.SpinnerTag;
+import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
+@SuppressLint("NewApi")
 public class ItemListFragment extends Fragment implements
 		OnItemSelectedListener {
 
 	// public static int LOKAL_DB_VERSION = 0;
 	// public static int REMOTE_DB_VERSION = 0;
+
+	public static final String KEY_LIST_TAG = "de.canberkdemirkan.mediaboxmngr.keyListTag";
 
 	private SharedPreferences mSharedPreferences;
 	private ProgressDialog mProgressDialog;
@@ -82,12 +91,31 @@ public class ItemListFragment extends Fragment implements
 	private Spinner mSpinnerItemType;
 	private Button mButtonSaveItem;
 
+	private ImageView mImageHome;
 	private ImageView mImageAllLists;
 	private ImageView mImageSettings;
-	private ImageView mImageDelete;
 	private ImageView mImageLogout;
 
+	private ActionBar.Tab tabAll, tabAlbums, tabBooks, tabMovies;
+
 	private SpinnerTag mTypeSpinner = SpinnerTag.TypeSpinner;
+	public static ListTag sListTag;
+
+	public enum ListTag {
+		all, album, book, movie;
+	}
+
+	public static ItemListFragment newItemListFragment(ListTag listTag) {
+
+		Bundle passedData = new Bundle();
+		passedData.putSerializable(KEY_LIST_TAG, listTag);
+
+		ItemListFragment itemListFragment = new ItemListFragment();
+		itemListFragment.setArguments(passedData);
+
+		return itemListFragment;
+
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,14 +125,23 @@ public class ItemListFragment extends Fragment implements
 		sEditMode = false;
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
-		mUser = getUser();
+		mUser = getUserFromPrefs();
 		getActivity().setTitle(mUser);
 
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate(): " + mUser);
 		}
 
-		mItemList = ItemStock.get(getActivity(), mUser).getItemList();
+		Bundle bundle = getArguments();
+
+		if (bundle == null) {
+			sListTag = ListTag.all;
+		} else {
+			sListTag = (ListTag) bundle.get(ItemListFragment.KEY_LIST_TAG);
+		}
+
+		mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+				sListTag);
 
 		mProgressDialog = new ProgressDialog(getActivity());
 		mProgressDialog
@@ -147,10 +184,12 @@ public class ItemListFragment extends Fragment implements
 		// }
 		// }
 
-		mItemAdapter = new CustomItemAdapter(this.getActivity(), mItemList);
+		mItemAdapter = new CustomItemAdapter(getActivity(), mItemList);
 		mItemAdapter.setNotifyOnChange(true);
 
 		mListView.setAdapter(mItemAdapter);
+
+		addActionBarTabs();
 
 		setListViewClickable(mListView);
 
@@ -166,6 +205,14 @@ public class ItemListFragment extends Fragment implements
 				mItemAdapter.refresh(list);
 				mEditEditTitle.setText("");
 				switchMode();
+			}
+		});
+
+		mImageHome.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getActivity(), "Home", Toast.LENGTH_LONG).show();
 			}
 		});
 
@@ -195,43 +242,6 @@ public class ItemListFragment extends Fragment implements
 			}
 		});
 
-		mImageDelete.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG)
-						.show();
-				ItemStock.get(getActivity(), mUser).getDAOItem()
-						.deleteAllItems(mUser);
-				mItemList.clear();
-				mItemAdapter.refresh(mItemList);
-
-				// editMode = UtilMethods.modeSwitcher(editMode);
-				//
-				// int childCount = listView.getChildCount();
-				//
-				// for (int i = 0; i < childCount; i++) {
-				// View view = listView.getChildAt(i);
-				//
-				// if (view != null) {
-				// CheckBox cb_itemDelete = (CheckBox) view
-				// .findViewById(R.id.cb_itemDelete);
-				// ImageView iv_deleteSingleItem = (ImageView) view
-				// .findViewById(R.id.iv_deleteSingleItem);
-				// cb_itemDelete.setChecked(false);
-				//
-				// if (cb_itemDelete.getVisibility() == View.GONE) {
-				// cb_itemDelete.setVisibility(View.VISIBLE);
-				// iv_deleteSingleItem.setVisibility(View.VISIBLE);
-				// } else {
-				// cb_itemDelete.setVisibility(View.GONE);
-				// iv_deleteSingleItem.setVisibility(View.GONE);
-				// }
-				// }
-				// }
-			}
-		});
-
 		mImageLogout.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -243,6 +253,36 @@ public class ItemListFragment extends Fragment implements
 		});
 
 		return view;
+	}
+
+	private void addActionBarTabs() {
+		ActionBar actionBar = ((ActionBarActivity) getActivity())
+				.getSupportActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		tabAll = actionBar.newTab().setText("All").setTag(ListTag.all);
+		// tabAll.setTag(ListTag.all);
+		tabAlbums = actionBar.newTab().setText("Albums").setTag(ListTag.album);
+		// tabAlbums.setTag(ListTag.album);
+		tabBooks = actionBar.newTab().setText("Books").setTag(ListTag.book);
+		// tabBooks.setTag(ListTag.book);
+		tabMovies = actionBar.newTab().setText("Movies").setTag(ListTag.movie);
+		// tabMovies.setTag(ListTag.movie);
+
+		FragmentManager fm = getActivity().getSupportFragmentManager();
+		ItemListFragment fragment = (ItemListFragment) fm
+				.findFragmentById(R.id.fragmentContainer);
+
+		tabAll.setTabListener(new CustomTabListener(getActivity(), fragment));
+		tabAlbums
+				.setTabListener(new CustomTabListener(getActivity(), fragment));
+		tabBooks.setTabListener(new CustomTabListener(getActivity(), fragment));
+		tabMovies
+				.setTabListener(new CustomTabListener(getActivity(), fragment));
+
+		actionBar.addTab(tabAll);
+		actionBar.addTab(tabAlbums);
+		actionBar.addTab(tabBooks);
+		actionBar.addTab(tabMovies);
 	}
 
 	private void initViews(View view) {
@@ -260,12 +300,12 @@ public class ItemListFragment extends Fragment implements
 				.findViewById(R.id.sp_fragmentEditTitle_itemType);
 		mButtonSaveItem = (Button) view
 				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
+		mImageHome = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_home);
 		mImageAllLists = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_allLists);
 		mImageSettings = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_settings);
-		mImageDelete = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_delete);
 		mImageLogout = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
@@ -333,12 +373,13 @@ public class ItemListFragment extends Fragment implements
 		return item;
 	}
 
-	public String getUser() {
-		SharedPreferences sharedPreferences = getActivity()
-				.getSharedPreferences(Constants.KEY_MY_PREFERENCES,
-						Context.MODE_PRIVATE);
-		String user = sharedPreferences.getString(LoginFragment.KEY_EMAIL, "");
+	public String getUserFromPrefs() {
+		String user = mSharedPreferences.getString(LoginFragment.KEY_EMAIL, "");
 		return user;
+	}
+
+	public String getUser() {
+		return mUser;
 	}
 
 	private void setListViewClickable(ListView list) {
@@ -435,6 +476,8 @@ public class ItemListFragment extends Fragment implements
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onResume()");
 		}
+		mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+				sListTag);
 		mItemAdapter.refresh(mItemList);
 		super.onResume();
 	}
@@ -626,6 +669,14 @@ public class ItemListFragment extends Fragment implements
 	private static int getRemoteDbVersion() {
 		RemoteDbVersionProvider provider = new RemoteDbVersionProvider();
 		return provider.getVersion();
+	}
+
+	public CustomItemAdapter getItemAdapter() {
+		return mItemAdapter;
+	}
+
+	public ListTag getListTag() {
+		return sListTag;
 	}
 
 }

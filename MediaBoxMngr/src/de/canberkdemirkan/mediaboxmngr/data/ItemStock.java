@@ -43,7 +43,6 @@ public class ItemStock {
 			mSerializedItemList = new ArrayList<Item>();
 			Log.e(TAG, "Error loading items: ", e);
 		}
-
 		mItemList = mDAOItem.getAllItems(user);
 
 	}
@@ -95,6 +94,10 @@ public class ItemStock {
 
 	public ArrayList<Item> getItemList() {
 		return mItemList;
+	}
+
+	public void setItemList(ArrayList<Item> itemList) {
+		mItemList = itemList;
 	}
 
 	public DAOItem getDAOItem() {

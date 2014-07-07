@@ -30,6 +30,9 @@
     <string name="enter_data_label">Enter your personal data</string>
     <string name="enter_Login_label">Enter your E-mail and password</string>
     <string name="new_item">New Item</string>
+    <string name="edit">Edit</string>
+    <string name="menu">Menu</string>
+    <string name="delete_all">Delete All</string>
     <string name="delete_item">Delete</string>
     <string name="login">Log in</string>
     <string name="logout">Log out</string>

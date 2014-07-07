@@ -71,7 +71,9 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 	}
 
 	public void refresh(ArrayList<Item> itemList) {
-		this.mItemList = itemList;
+		// mItemList = itemList;
+		mItemList.clear();
+		mItemList.addAll(itemList);
 		notifyDataSetChanged();
 	}
 

@@ -126,6 +126,9 @@ public class DAOItem {
 				result.add(item);
 			}
 		}
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - getItemsByType(" + type + "): ");
+		}
 		return result;
 	}
 
@@ -542,7 +545,7 @@ public class DAOItem {
 		}
 		mSQLiteDB.execSQL(updateQuery);
 		close();
-		//increaseTableVersion();
+		// increaseTableVersion();
 	}
 
 	public String getSyncStatus() {

@@ -5,6 +5,8 @@
             <corners android:radius="5dp" />
 
             <solid android:color="#e0ffff" />
+
+            <!-- <gradient android:angle="90" android:centerColor="#eeeeee" android:endColor="@color/baby_blue_eyes" android:startColor="@color/baby_blue_eyes"></gradient> -->
         </shape></item>
 
 </selector>
