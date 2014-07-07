@@ -132,7 +132,7 @@ public class MediaBoxMngrContentProvider extends ContentProvider {
 		}
 
 		// To return the number of deleted items you must specify a where
-		// clause. To delete all rows and return a value pass in “1”.
+		// clause. To delete ALL rows and return a value pass in “1”.
 		if (selection == null)
 			selection = "1";
 		// Perform the deletion.

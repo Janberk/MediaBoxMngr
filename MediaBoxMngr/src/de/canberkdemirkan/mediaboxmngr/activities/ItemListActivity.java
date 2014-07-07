@@ -1,8 +1,8 @@
 package de.canberkdemirkan.mediaboxmngr.activities;
 
 import android.support.v4.app.Fragment;
+import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
-import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment.ListTag;
 
 public class ItemListActivity extends FragmentActivityBuilder {
 

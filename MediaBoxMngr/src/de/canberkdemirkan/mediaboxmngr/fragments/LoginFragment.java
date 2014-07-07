@@ -220,7 +220,7 @@ public class LoginFragment extends Fragment {
 								+ ": EMPTY FIELDS");
 			}
 			Toast.makeText(getActivity().getApplicationContext(),
-					"Please fill in all required fields.", Toast.LENGTH_LONG)
+					"Please fill in ALL required fields.", Toast.LENGTH_LONG)
 					.show();
 			break;
 		case RESPONSE_CODE_INVALID_EMAIL:

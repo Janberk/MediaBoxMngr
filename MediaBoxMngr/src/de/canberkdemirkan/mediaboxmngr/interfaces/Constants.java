@@ -58,14 +58,14 @@ public interface Constants {
 	String YEAR_PUBLISHED = "year_published";
 	String CONTENT = "content";
 	String RATING = "rating";
-	// movie
-	String PRODUCER = "producer"; // also for albums
+	// MOVIES
+	String PRODUCER = "producer"; // also for ALBUMS
 	String DIRECTOR = "director";
 	String SCRIPT = "script";
 	String ACTORS = "actors";
 	String MUSIC = "music";
 	String LENGTH = "length";
-	// album
+	// ALBUMS
 	String LABEL = "label";
 	String STUDIO = "studio";
 	String ARTIST = "artist";

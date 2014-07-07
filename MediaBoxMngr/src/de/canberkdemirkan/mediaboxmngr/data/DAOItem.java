@@ -122,12 +122,26 @@ public class DAOItem {
 		for (Item item : pre) {
 			fetchedType = item.getType();
 			if (fetchedType == type) {
-				// TODO evtl. add(0, item);
 				result.add(item);
 			}
 		}
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - getItemsByType(" + type + "): ");
+		}
+		return result;
+	}
+
+	public ArrayList<Item> getFavoriteItems(String user) {
+		ArrayList<Item> pre = getAllItems(user);
+		ArrayList<Item> result = new ArrayList<Item>();
+
+		for (Item item : pre) {
+			if (item.isFavorite()) {
+				result.add(item);
+			}
+		}
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - getFavoriteItems(): ");
 		}
 		return result;
 	}
@@ -145,7 +159,7 @@ public class DAOItem {
 		return result;
 	}
 
-	// delete all rows of the table 'item'
+	// delete ALL rows of the table 'item'
 	public boolean deleteAllItems(String user) {
 		String where = Constants.USER + " = " + '"' + user + '"';
 		open();
@@ -195,7 +209,7 @@ public class DAOItem {
 		return result;
 	}
 
-	// get all items as a list
+	// get ALL items as a list
 	public ArrayList<Item> getAllItems(String user) {
 		open();
 		ArrayList<Item> itemList = new ArrayList<Item>();

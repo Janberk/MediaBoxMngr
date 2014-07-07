@@ -14,9 +14,9 @@ import android.content.Context;
 import android.widget.ImageView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
+import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
-import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment.ListTag;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class UtilMethods {
@@ -117,29 +117,34 @@ public class UtilMethods {
 		ArrayList<Item> result = null;
 
 		switch (tag) {
-		case all:
-			ItemListFragment.sListTag = ListTag.all;
+		case ALL:
+			ItemListFragment.sListTag = ListTag.ALL;
 			result = ItemStock.get(context, user).getDAOItem()
 					.getAllItems(user);
 			break;
-		case album:
-			ItemListFragment.sListTag = ListTag.album;
+		case ALBUMS:
+			ItemListFragment.sListTag = ListTag.ALBUMS;
 			result = ItemStock.get(context, user).getDAOItem()
 					.getItemsByType(ItemType.Album, user);
 			break;
-		case book:
-			ItemListFragment.sListTag = ListTag.book;
+		case BOOKS:
+			ItemListFragment.sListTag = ListTag.BOOKS;
 			result = ItemStock.get(context, user).getDAOItem()
 					.getItemsByType(ItemType.Book, user);
 			break;
-		case movie:
-			ItemListFragment.sListTag = ListTag.movie;
+		case MOVIES:
+			ItemListFragment.sListTag = ListTag.MOVIES;
 			result = ItemStock.get(context, user).getDAOItem()
 					.getItemsByType(ItemType.Movie, user);
 			break;
+		case FAVORITES:
+			ItemListFragment.sListTag = ListTag.FAVORITES;
+			result = ItemStock.get(context, user).getDAOItem()
+					.getFavoriteItems(user);
+			break;
 
 		default:
-			ItemListFragment.sListTag = ListTag.all;
+			ItemListFragment.sListTag = ListTag.ALL;
 			result = ItemStock.get(context, user).getDAOItem()
 					.getAllItems(user);
 			break;

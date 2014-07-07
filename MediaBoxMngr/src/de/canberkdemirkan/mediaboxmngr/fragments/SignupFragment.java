@@ -165,7 +165,7 @@ public class SignupFragment extends Fragment {
 								+ ": EMPTY FIELDS");
 			}
 			Toast.makeText(getActivity().getApplicationContext(),
-					"Please fill in all required fields.", Toast.LENGTH_LONG)
+					"Please fill in ALL required fields.", Toast.LENGTH_LONG)
 					.show();
 			break;
 		case LoginFragment.RESPONSE_CODE_INVALID_DATA:

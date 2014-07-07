@@ -49,6 +49,7 @@ import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
+import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
@@ -96,14 +97,10 @@ public class ItemListFragment extends Fragment implements
 	private ImageView mImageSettings;
 	private ImageView mImageLogout;
 
-	private ActionBar.Tab tabAll, tabAlbums, tabBooks, tabMovies;
+	private ActionBar.Tab tabAll, tabAlbums, tabBooks, tabMovies, tabFavorites;
 
 	private SpinnerTag mTypeSpinner = SpinnerTag.TypeSpinner;
 	public static ListTag sListTag;
-
-	public enum ListTag {
-		all, album, book, movie;
-	}
 
 	public static ItemListFragment newItemListFragment(ListTag listTag) {
 
@@ -135,7 +132,7 @@ public class ItemListFragment extends Fragment implements
 		Bundle bundle = getArguments();
 
 		if (bundle == null) {
-			sListTag = ListTag.all;
+			sListTag = ListTag.ALL;
 		} else {
 			sListTag = (ListTag) bundle.get(ItemListFragment.KEY_LIST_TAG);
 		}
@@ -259,14 +256,16 @@ public class ItemListFragment extends Fragment implements
 		ActionBar actionBar = ((ActionBarActivity) getActivity())
 				.getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		tabAll = actionBar.newTab().setText("All").setTag(ListTag.all);
-		// tabAll.setTag(ListTag.all);
-		tabAlbums = actionBar.newTab().setText("Albums").setTag(ListTag.album);
-		// tabAlbums.setTag(ListTag.album);
-		tabBooks = actionBar.newTab().setText("Books").setTag(ListTag.book);
-		// tabBooks.setTag(ListTag.book);
-		tabMovies = actionBar.newTab().setText("Movies").setTag(ListTag.movie);
-		// tabMovies.setTag(ListTag.movie);
+		tabAll = actionBar.newTab().setText(ListTag.ALL.name())
+				.setTag(ListTag.ALL);
+		tabAlbums = actionBar.newTab().setText(ListTag.ALBUMS.name())
+				.setTag(ListTag.ALBUMS);
+		tabBooks = actionBar.newTab().setText(ListTag.BOOKS.name())
+				.setTag(ListTag.BOOKS);
+		tabMovies = actionBar.newTab().setText(ListTag.MOVIES.name())
+				.setTag(ListTag.MOVIES);
+		tabFavorites = actionBar.newTab().setText(ListTag.FAVORITES.name())
+				.setTag(ListTag.FAVORITES);
 
 		FragmentManager fm = getActivity().getSupportFragmentManager();
 		ItemListFragment fragment = (ItemListFragment) fm
@@ -278,11 +277,14 @@ public class ItemListFragment extends Fragment implements
 		tabBooks.setTabListener(new CustomTabListener(getActivity(), fragment));
 		tabMovies
 				.setTabListener(new CustomTabListener(getActivity(), fragment));
+		tabFavorites.setTabListener(new CustomTabListener(getActivity(),
+				fragment));
 
 		actionBar.addTab(tabAll);
 		actionBar.addTab(tabAlbums);
 		actionBar.addTab(tabBooks);
 		actionBar.addTab(tabMovies);
+		actionBar.addTab(tabFavorites);
 	}
 
 	private void initViews(View view) {
