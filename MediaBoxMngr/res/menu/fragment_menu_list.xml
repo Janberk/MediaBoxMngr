@@ -4,18 +4,18 @@
 
     <item
         android:id="@+id/menu__newItem"
-        android:icon="@android:drawable/ic_menu_add"
-        app:showAsAction="ifRoom"
-        android:title="@string/new_item"/>
+        android:icon="@drawable/ic_menu_add_light"
+        android:title="@string/new_item"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/menu__edit"
-        android:icon="@android:drawable/ic_menu_edit"
-        app:showAsAction="ifRoom"
-        android:title="@string/edit"/>
+        android:icon="@drawable/ic_menu_edit_light"
+        android:title="@string/edit"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/menu_deleteAll"
         android:icon="@drawable/ic_menu_trash_light"
-        app:showAsAction="never"
-        android:title="@string/delete_all"/>
+        android:title="@string/delete_all"
+        app:showAsAction="never"/>
 
 </menu>

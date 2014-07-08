@@ -31,6 +31,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -78,7 +79,9 @@ public class ItemListFragment extends Fragment implements
 	private String mUser;
 	private String mJson;
 	private String mTypeAsString;
+
 	public static boolean sEditMode;
+	public static boolean sDeleteMode;;
 
 	private ListView mListView;
 	private ArrayList<Item> mItemList;
@@ -96,6 +99,9 @@ public class ItemListFragment extends Fragment implements
 	private ImageView mImageSearch;
 	private ImageView mImageSettings;
 	private ImageView mImageLogout;
+	private ImageView mImageItemDelete;
+
+	private CheckBox mCheckBoxConfirmItemDelete;
 
 	private ActionBar.Tab tabAll, tabAlbums, tabBooks, tabMovies, tabFavorites;
 
@@ -119,7 +125,9 @@ public class ItemListFragment extends Fragment implements
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-		sEditMode = false;
+
+		sDeleteMode = false;
+
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUserFromPrefs();
@@ -329,6 +337,32 @@ public class ItemListFragment extends Fragment implements
 		case R.id.menu__newItem:
 			switchMode();
 			return true;
+		case R.id.menu__edit:
+
+			sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
+
+			int childCount = mListView.getChildCount();
+
+			for (int i = 0; i < childCount; i++) {
+				View view = mListView.getChildAt(i);
+
+				if (view != null) {
+
+					mImageItemDelete = (ImageView) view
+							.findViewById(R.id.iv_listItem_itemDeleteSingle);
+					mCheckBoxConfirmItemDelete = (CheckBox) view
+							.findViewById(R.id.cb_listItem_itemDelete);
+					mCheckBoxConfirmItemDelete.setChecked(false);
+
+					if (mCheckBoxConfirmItemDelete.getVisibility() == View.GONE) {
+						mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
+						mImageItemDelete.setVisibility(View.VISIBLE);
+					} else {
+						mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
+						mImageItemDelete.setVisibility(View.GONE);
+					}
+				}
+			}
 		default:
 			return super.onOptionsItemSelected(menuItem);
 		}
@@ -475,6 +509,7 @@ public class ItemListFragment extends Fragment implements
 
 	@Override
 	public void onResume() {
+		sDeleteMode = false;
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onResume()");
 		}
@@ -486,6 +521,7 @@ public class ItemListFragment extends Fragment implements
 
 	@Override
 	public void onPause() {
+		sDeleteMode = false;
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onPause()");
 		}

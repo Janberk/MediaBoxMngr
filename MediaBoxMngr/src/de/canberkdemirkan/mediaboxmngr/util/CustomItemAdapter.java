@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
+import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class CustomItemAdapter extends ArrayAdapter<Item> {
@@ -19,10 +20,14 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 	// TODO ViewHolder Pattern prevents list to mess up order while scrolling.
 	static class ViewHolder {
 		ImageView mImageItemIcon;
+		ImageView mImageItemDelete;
 		TextView mTextItemTitle;
 		TextView mTextItemCreationDate;
 		CheckBox mCheckBoxItemFavorite;
+		CheckBox mCheckBoxConfirmItemDelete;
 	}
+
+	public static boolean sDeletePermitted;
 
 	private final Context mContext;
 	private ArrayList<Item> mItemList;
@@ -31,6 +36,7 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		super(context, android.R.layout.simple_list_item_1, itemList);
 		this.mContext = context;
 		this.mItemList = itemList;
+		sDeletePermitted = false;
 	}
 
 	@Override
@@ -46,12 +52,16 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 			holder = new ViewHolder();
 			holder.mImageItemIcon = (ImageView) convertView
 					.findViewById(R.id.iv_listItem_itemIcon);
+			holder.mImageItemDelete = (ImageView) convertView
+					.findViewById(R.id.iv_listItem_itemDeleteSingle);
 			holder.mTextItemTitle = (TextView) convertView
 					.findViewById(R.id.tv_listItem_itemTitle);
 			holder.mTextItemCreationDate = (TextView) convertView
 					.findViewById(R.id.tv_listItem_itemCreationDate);
 			holder.mCheckBoxItemFavorite = (CheckBox) convertView
 					.findViewById(R.id.cb_listItem_itemFavorite);
+			holder.mCheckBoxConfirmItemDelete = (CheckBox) convertView
+					.findViewById(R.id.cb_listItem_itemDelete);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -68,7 +78,47 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		UtilMethods.setCustomIconToTypeOfMedia(holder.mImageItemIcon, type,
 				UtilMethods.ICON_DARK_TAG);
 
+		if (ItemListFragment.sDeleteMode) {
+			holder.mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
+			holder.mImageItemDelete.setVisibility(View.VISIBLE);
+		} else {
+			holder.mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
+			holder.mImageItemDelete.setVisibility(View.GONE);
+		}
+
+		setClickListenerCheckBox(holder.mCheckBoxConfirmItemDelete);
+		setClickListenerImageView(holder.mImageItemDelete, item, position);
+
 		return convertView;
+	}
+
+	public void setClickListenerCheckBox(final CheckBox checkBox) {
+		checkBox.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (checkBox.isChecked()) {
+					sDeletePermitted = true;
+				} else {
+					sDeletePermitted = false;
+				}
+			}
+		});
+	}
+
+	public void setClickListenerImageView(final ImageView image,
+			final Item item, final int position) {
+		image.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// if (deletePermitted) {
+				// itemList.remove(position);
+				// itemListFragment.getDaoItem().deleteItem(item);
+				// refresh(itemList);
+				// }
+			}
+		});
 	}
 
 	public void refresh(ArrayList<Item> itemList) {
