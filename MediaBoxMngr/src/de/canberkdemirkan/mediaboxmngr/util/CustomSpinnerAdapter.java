@@ -52,13 +52,16 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
 				.findViewById(R.id.iv_customSpinner_icon);
 		switch (position) {
 		case 0:
-			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Album);
+			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Album,
+					UtilMethods.ICON_LIGHT_TAG);
 			break;
 		case 1:
-			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Book);
+			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Book,
+					UtilMethods.ICON_LIGHT_TAG);
 			break;
 		case 2:
-			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Movie);
+			UtilMethods.setCustomIconToTypeOfMedia(icon, ItemType.Movie,
+					UtilMethods.ICON_LIGHT_TAG);
 			break;
 
 		default:

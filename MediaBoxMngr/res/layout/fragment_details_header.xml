@@ -19,7 +19,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/custom_value_12dp"
-        android:button="@drawable/custom_checkbox"
+        android:button="@drawable/custom_checkbox_favorites"
         android:gravity="center" />
 
 </RelativeLayout>

@@ -22,5 +22,6 @@
     <dimen name="custom_value_30dp">30dp</dimen>
     <dimen name="custom_value_32dp">32dp</dimen>
     <dimen name="custom_value_48dp">48dp</dimen>
+    <dimen name="custom_value_72dp">72dp</dimen>
 
 </resources>

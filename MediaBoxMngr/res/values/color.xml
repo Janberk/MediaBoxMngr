@@ -3,6 +3,7 @@
 
     <color name="baby_blue_eyes">#a1caf1</color>
     <color name="pastel_red">#ff6961</color>
+    <color name="background_000022">#000022</color>
     
     <color name="yellow">#FFFF00</color>
     <color name="fuchsia">#FF00FF</color>
@@ -19,5 +20,6 @@
     <color name="blue">#0000FF</color>
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 
 </resources>

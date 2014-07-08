@@ -93,7 +93,7 @@ public class ItemListFragment extends Fragment implements
 	private Button mButtonSaveItem;
 
 	private ImageView mImageHome;
-	private ImageView mImageAllLists;
+	private ImageView mImageSearch;
 	private ImageView mImageSettings;
 	private ImageView mImageLogout;
 
@@ -213,12 +213,12 @@ public class ItemListFragment extends Fragment implements
 			}
 		});
 
-		mImageAllLists.setOnClickListener(new View.OnClickListener() {
+		mImageSearch.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// loadItemsFromRemoteDb();
-				Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG)
+				Toast.makeText(getActivity(), "Search", Toast.LENGTH_LONG)
 						.show();
 			}
 		});
@@ -304,8 +304,8 @@ public class ItemListFragment extends Fragment implements
 				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
 		mImageHome = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_home);
-		mImageAllLists = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_allLists);
+		mImageSearch = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_search);
 		mImageSettings = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_settings);
 		mImageLogout = (ImageView) view
@@ -339,8 +339,8 @@ public class ItemListFragment extends Fragment implements
 			long id) {
 		mTypeAsString = (String) parent.getItemAtPosition(position);
 		RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
-		((TextView) layout.getChildAt(1)).setTextAppearance(getActivity(),
-				R.style.spinnerTextStyle);
+		((TextView) layout.findViewById(R.id.tv_customSpinner_label))
+				.setTextAppearance(getActivity(), R.style.spinnerTextStyle);
 	}
 
 	@Override

@@ -5,17 +5,17 @@
     <item
         android:id="@+id/menu__newItem"
         android:icon="@android:drawable/ic_menu_add"
-        android:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:title="@string/new_item"/>
     <item
         android:id="@+id/menu__edit"
         android:icon="@android:drawable/ic_menu_edit"
-        android:showAsAction="never"
+        app:showAsAction="ifRoom"
         android:title="@string/edit"/>
     <item
         android:id="@+id/menu_deleteAll"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:showAsAction="never"
+        android:icon="@drawable/ic_menu_trash_light"
+        app:showAsAction="never"
         android:title="@string/delete_all"/>
 
 </menu>

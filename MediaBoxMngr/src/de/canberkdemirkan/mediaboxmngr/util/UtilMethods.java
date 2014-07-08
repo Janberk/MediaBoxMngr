@@ -21,6 +21,9 @@ import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class UtilMethods {
 
+	public static final String ICON_LIGHT_TAG = "light";
+	public static final String ICON_DARK_TAG = "dark";
+
 	public static String dateToFormattedStringConverter(Date date) {
 		String timestampAsString = null;
 
@@ -91,18 +94,30 @@ public class UtilMethods {
 	}
 
 	public static void setCustomIconToTypeOfMedia(ImageView itemIcon,
-			ItemType type) {
+			ItemType type, String tag) {
 
 		switch (type) {
 
 		case Album:
-			itemIcon.setImageResource(R.drawable.icon_music);
+			if (tag.equals(UtilMethods.ICON_DARK_TAG)) {
+				itemIcon.setImageResource(R.drawable.ic_icon_album_dark);
+			} else {
+				itemIcon.setImageResource(R.drawable.ic_icon_album_light);
+			}
 			break;
 		case Book:
-			itemIcon.setImageResource(R.drawable.icon_book);
+			if (tag.equals(UtilMethods.ICON_DARK_TAG)) {
+				itemIcon.setImageResource(R.drawable.ic_icon_book_dark);
+			} else {
+				itemIcon.setImageResource(R.drawable.ic_icon_book_light);
+			}
 			break;
 		case Movie:
-			itemIcon.setImageResource(R.drawable.icon_movie);
+			if (tag.equals(UtilMethods.ICON_DARK_TAG)) {
+				itemIcon.setImageResource(R.drawable.ic_icon_movie_dark);
+			} else {
+				itemIcon.setImageResource(R.drawable.ic_icon_movie_light);
+			}
 			break;
 
 		default:

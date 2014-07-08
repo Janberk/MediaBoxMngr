@@ -65,7 +65,8 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		holder.mTextItemCreationDate.setText(item.getCreationDate().toString());
 		holder.mCheckBoxItemFavorite.setChecked(item.isFavorite());
 		holder.mImageItemIcon.setFadingEdgeLength(2);
-		UtilMethods.setCustomIconToTypeOfMedia(holder.mImageItemIcon, type);
+		UtilMethods.setCustomIconToTypeOfMedia(holder.mImageItemIcon, type,
+				UtilMethods.ICON_DARK_TAG);
 
 		return convertView;
 	}
