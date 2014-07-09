@@ -28,6 +28,11 @@ public interface Constants {
 	String KEY_CREATE_NEW_ITEM = "de.canberkdemirkan.mediaboxmngr.new_item";
 	String KEY_USER_TAG = "de.canberkdemirkan.mediaboxmngr.user_tag";
 	String KEY_LIST_TAG = "de.canberkdemirkan.mediaboxmngr.list_tag";
+	String KEY_DIALOG_POSITION = "de.canberkdemirkan.mediaboxmngr.dialog_position";
+	String KEY_DIALOG_ITEM_LIST = "de.canberkdemirkan.mediaboxmngr.dialog_item_list";
+	String KEY_DIALOG_TITLE = "de.canberkdemirkan.mediaboxmngr.dialog_title";
+	String KEY_DIALOG_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.dialog_fragment";
+	
 	//String TAG_ALL = ItemType.All.name();
 	String TAG_ALBUM = ItemType.Album.name();
 	String TAG_BOOK = ItemType.Book.name();

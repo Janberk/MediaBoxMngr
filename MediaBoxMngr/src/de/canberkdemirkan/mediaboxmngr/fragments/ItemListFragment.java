@@ -1,6 +1,7 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -66,16 +67,23 @@ import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter.SpinnerTag;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 @SuppressLint("NewApi")
-public class ItemListFragment extends Fragment implements
+public class ItemListFragment extends Fragment implements Serializable,
 		OnItemSelectedListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	// public static int LOKAL_DB_VERSION = 0;
 	// public static int REMOTE_DB_VERSION = 0;
 
 	public static final String KEY_LIST_TAG = "de.canberkdemirkan.mediaboxmngr.keyListTag";
+	public static final int REQUEST_LIST = 0;
 
 	private SharedPreferences mSharedPreferences;
 	private ProgressDialog mProgressDialog;
+	private ActionBar mActionBar;
 	private String mUser;
 	private String mJson;
 	private String mTypeAsString;
@@ -165,6 +173,9 @@ public class ItemListFragment extends Fragment implements
 
 		initViews(view);
 
+		mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
 		mEditor.setVisibility(View.GONE);
 
 		mSpinnerItemType.setAdapter(new CustomSpinnerAdapter(getActivity(),
@@ -189,7 +200,7 @@ public class ItemListFragment extends Fragment implements
 		// }
 		// }
 
-		mItemAdapter = new CustomItemAdapter(getActivity(), mItemList);
+		mItemAdapter = new CustomItemAdapter(getActivity(), this, mItemList);
 		mItemAdapter.setNotifyOnChange(true);
 
 		mListView.setAdapter(mItemAdapter);
@@ -261,18 +272,15 @@ public class ItemListFragment extends Fragment implements
 	}
 
 	private void addActionBarTabs() {
-		ActionBar actionBar = ((ActionBarActivity) getActivity())
-				.getSupportActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		tabAll = actionBar.newTab().setText(ListTag.ALL.name())
+		tabAll = mActionBar.newTab().setText(ListTag.ALL.name())
 				.setTag(ListTag.ALL);
-		tabAlbums = actionBar.newTab().setText(ListTag.ALBUMS.name())
+		tabAlbums = mActionBar.newTab().setText(ListTag.ALBUMS.name())
 				.setTag(ListTag.ALBUMS);
-		tabBooks = actionBar.newTab().setText(ListTag.BOOKS.name())
+		tabBooks = mActionBar.newTab().setText(ListTag.BOOKS.name())
 				.setTag(ListTag.BOOKS);
-		tabMovies = actionBar.newTab().setText(ListTag.MOVIES.name())
+		tabMovies = mActionBar.newTab().setText(ListTag.MOVIES.name())
 				.setTag(ListTag.MOVIES);
-		tabFavorites = actionBar.newTab().setText(ListTag.FAVORITES.name())
+		tabFavorites = mActionBar.newTab().setText(ListTag.FAVORITES.name())
 				.setTag(ListTag.FAVORITES);
 
 		FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -288,11 +296,11 @@ public class ItemListFragment extends Fragment implements
 		tabFavorites.setTabListener(new CustomTabListener(getActivity(),
 				fragment));
 
-		actionBar.addTab(tabAll);
-		actionBar.addTab(tabAlbums);
-		actionBar.addTab(tabBooks);
-		actionBar.addTab(tabMovies);
-		actionBar.addTab(tabFavorites);
+		mActionBar.addTab(tabAll);
+		mActionBar.addTab(tabAlbums);
+		mActionBar.addTab(tabBooks);
+		mActionBar.addTab(tabMovies);
+		mActionBar.addTab(tabFavorites);
 	}
 
 	private void initViews(View view) {
@@ -334,10 +342,10 @@ public class ItemListFragment extends Fragment implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-		case R.id.menu__newItem:
+		case R.id.menu_newItem:
 			switchMode();
 			return true;
-		case R.id.menu__edit:
+		case R.id.menu_edit:
 
 			sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
 
@@ -363,6 +371,13 @@ public class ItemListFragment extends Fragment implements
 					}
 				}
 			}
+		case R.id.menu_deleteAll:
+			ItemStock.get(getActivity(), mUser).getDAOItem()
+					.deleteAllItems(mUser);
+			mItemList.clear();
+			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+					sListTag);
+			mItemAdapter.refresh(mItemList);
 		default:
 			return super.onOptionsItemSelected(menuItem);
 		}
@@ -476,6 +491,25 @@ public class ItemListFragment extends Fragment implements
 		Intent intent = new Intent(getActivity().getApplicationContext(),
 				LoginActivity.class);
 		startActivity(intent);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != Activity.RESULT_OK)
+			return;
+		if (requestCode == REQUEST_LIST) {
+
+			try {
+				mItemList = (ArrayList<Item>) data
+						.getSerializableExtra(CustomAlertDialogFragment.EXTRA_DIALOG_LIST);
+			} catch (ClassCastException e) {
+				e.printStackTrace();
+			}
+			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+					sListTag);
+			mItemAdapter.refresh(mItemList);
+			// mActionBar.selectTab(tabAll);
+		}
 	}
 
 	/*

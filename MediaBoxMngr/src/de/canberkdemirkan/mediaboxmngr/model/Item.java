@@ -1,5 +1,6 @@
 package de.canberkdemirkan.mediaboxmngr.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,7 +11,12 @@ import android.graphics.Bitmap;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
-public abstract class Item {
+public abstract class Item implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	protected static final String JSON_UID = "uid";
 	protected static final String JSON_SYNCED = "synced";

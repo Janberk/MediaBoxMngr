@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <item
-        android:id="@+id/menu__newItem"
+        android:id="@+id/menu_newItem"
         android:icon="@drawable/ic_menu_add_light"
         android:title="@string/new_item"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/menu__edit"
+        android:id="@+id/menu_edit"
         android:icon="@drawable/ic_menu_edit_light"
         android:title="@string/edit"
         app:showAsAction="always"/>
