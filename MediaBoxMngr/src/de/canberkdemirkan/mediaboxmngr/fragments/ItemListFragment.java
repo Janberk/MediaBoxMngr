@@ -55,6 +55,7 @@ import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
+import de.canberkdemirkan.mediaboxmngr.dialogs.DeleteItemDialog;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
@@ -346,31 +347,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 			switchMode();
 			return true;
 		case R.id.menu_edit:
-
-			sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
-
-			int childCount = mListView.getChildCount();
-
-			for (int i = 0; i < childCount; i++) {
-				View view = mListView.getChildAt(i);
-
-				if (view != null) {
-
-					mImageItemDelete = (ImageView) view
-							.findViewById(R.id.iv_listItem_itemDeleteSingle);
-					mCheckBoxConfirmItemDelete = (CheckBox) view
-							.findViewById(R.id.cb_listItem_itemDelete);
-					mCheckBoxConfirmItemDelete.setChecked(false);
-
-					if (mCheckBoxConfirmItemDelete.getVisibility() == View.GONE) {
-						mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
-						mImageItemDelete.setVisibility(View.VISIBLE);
-					} else {
-						mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
-						mImageItemDelete.setVisibility(View.GONE);
-					}
-				}
-			}
+			showItemDelete();
 			return true;
 		case R.id.menu_deleteAll:
 			ItemStock.get(getActivity(), mUser).getDAOItem()
@@ -474,6 +451,33 @@ public class ItemListFragment extends Fragment implements Serializable,
 		}
 	}
 
+	private void showItemDelete() {
+		sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
+
+		int childCount = mListView.getChildCount();
+
+		for (int i = 0; i < childCount; i++) {
+			View view = mListView.getChildAt(i);
+
+			if (view != null) {
+
+				mImageItemDelete = (ImageView) view
+						.findViewById(R.id.iv_listItem_itemDeleteSingle);
+				mCheckBoxConfirmItemDelete = (CheckBox) view
+						.findViewById(R.id.cb_listItem_itemDelete);
+				mCheckBoxConfirmItemDelete.setChecked(false);
+
+				if (mCheckBoxConfirmItemDelete.getVisibility() == View.GONE) {
+					mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
+					mImageItemDelete.setVisibility(View.VISIBLE);
+				} else {
+					mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
+					mImageItemDelete.setVisibility(View.GONE);
+				}
+			}
+		}
+	}
+
 	private void changeAlphaOfView(View view, float from, float to) {
 		AlphaAnimation alpha = new AlphaAnimation(from, to);
 		alpha.setDuration(0); // Make animation instant
@@ -503,7 +507,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 			try {
 				mItemList = (ArrayList<Item>) data
-						.getSerializableExtra(CustomAlertDialogFragment.EXTRA_DIALOG_LIST);
+						.getSerializableExtra(DeleteItemDialog.EXTRA_DIALOG_LIST);
 			} catch (ClassCastException e) {
 				e.printStackTrace();
 			}
