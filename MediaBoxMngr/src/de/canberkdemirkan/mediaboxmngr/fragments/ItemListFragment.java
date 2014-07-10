@@ -79,9 +79,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 	// public static int LOKAL_DB_VERSION = 0;
 	// public static int REMOTE_DB_VERSION = 0;
 
-	public static final String KEY_LIST_TAG = "de.canberkdemirkan.mediaboxmngr.keyListTag";
-	public static final int REQUEST_LIST_DELETE = 001;
-
 	private SharedPreferences mSharedPreferences;
 	private FragmentManager mFragmentManager;
 	private ProgressDialog mProgressDialog;
@@ -121,7 +118,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	public static ItemListFragment newItemListFragment(ListTag listTag) {
 
 		Bundle passedData = new Bundle();
-		passedData.putSerializable(KEY_LIST_TAG, listTag);
+		passedData.putSerializable(Constants.KEY_LIST_TAG, listTag);
 
 		ItemListFragment itemListFragment = new ItemListFragment();
 		itemListFragment.setArguments(passedData);
@@ -154,7 +151,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		if (bundle == null) {
 			sListTag = ListTag.ALL;
 		} else {
-			sListTag = (ListTag) bundle.get(ItemListFragment.KEY_LIST_TAG);
+			sListTag = (ListTag) bundle.get(Constants.KEY_LIST_TAG);
 		}
 
 		mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
@@ -480,7 +477,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 				R.string.dialog_header_delete_all);
 		AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
 				mItemList, header, 0, AlertDialogDeletion.DIALOG_TAG_ALL);
-		dialog.setTargetFragment(this, REQUEST_LIST_DELETE);
+		dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
 		dialog.show(mFragmentManager, "");
 	}
 
@@ -510,7 +507,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != Activity.RESULT_OK)
 			return;
-		if (requestCode == REQUEST_LIST_DELETE) {
+		if (requestCode == Constants.REQUEST_LIST_DELETE) {
 
 			try {
 				mItemList = (ArrayList<Item>) data

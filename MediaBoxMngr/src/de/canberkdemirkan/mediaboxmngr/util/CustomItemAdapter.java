@@ -16,6 +16,7 @@ import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class CustomItemAdapter extends ArrayAdapter<Item> {
@@ -132,7 +133,7 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 						mFragment, mItemList, header, position,
 						AlertDialogDeletion.DIALOG_TAG_SINGLE);
 				dialog.setTargetFragment(mFragment,
-						ItemListFragment.REQUEST_LIST_DELETE);
+						Constants.REQUEST_LIST_DELETE);
 				dialog.show(mFragmentManager, "");
 			}
 		});

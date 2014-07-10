@@ -3,6 +3,7 @@ package de.canberkdemirkan.mediaboxmngr.activities;
 import android.support.v4.app.Fragment;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
+import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class ItemListActivity extends FragmentActivityBuilder {
 
@@ -11,7 +12,7 @@ public class ItemListActivity extends FragmentActivityBuilder {
 	protected Fragment createFragment() {
 
 		ListTag listTag = (ListTag) getIntent().getSerializableExtra(
-				ItemListFragment.KEY_LIST_TAG);
+				Constants.KEY_LIST_TAG);
 		if (listTag == null) {
 			return new ItemListFragment();
 		}

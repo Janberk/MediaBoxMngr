@@ -2,7 +2,7 @@ package de.canberkdemirkan.mediaboxmngr.interfaces;
 
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 
-public interface Constants {
+public interface Constants {	
 	
 	// request URLs for MySQL Database
 	String BUILD_JSON_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/build_json.php";
@@ -13,7 +13,8 @@ public interface Constants {
 	String LOG_TAG = "de.canberkdemirkan.mediaboxmngr";
 	
 	// result/request codes
-	int REQUEST_CODE = 0;
+	int REQUEST_CODE = 001;
+	int REQUEST_LIST_DELETE = 002;
 	
 	// spinner indices
 	int ALBUM = 0;
