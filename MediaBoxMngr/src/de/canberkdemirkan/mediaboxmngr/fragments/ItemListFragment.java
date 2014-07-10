@@ -55,7 +55,7 @@ import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
-import de.canberkdemirkan.mediaboxmngr.dialogs.DeleteItemDialog;
+import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
@@ -80,9 +80,10 @@ public class ItemListFragment extends Fragment implements Serializable,
 	// public static int REMOTE_DB_VERSION = 0;
 
 	public static final String KEY_LIST_TAG = "de.canberkdemirkan.mediaboxmngr.keyListTag";
-	public static final int REQUEST_LIST = 0;
+	public static final int REQUEST_LIST_DELETE = 001;
 
 	private SharedPreferences mSharedPreferences;
+	private FragmentManager mFragmentManager;
 	private ProgressDialog mProgressDialog;
 	private ActionBar mActionBar;
 	private String mUser;
@@ -141,6 +142,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUserFromPrefs();
 		getActivity().setTitle(mUser);
+
+		mFragmentManager = getActivity().getSupportFragmentManager();
 
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate(): " + mUser);
@@ -284,8 +287,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		tabFavorites = mActionBar.newTab().setText(ListTag.FAVORITES.name())
 				.setTag(ListTag.FAVORITES);
 
-		FragmentManager fm = getActivity().getSupportFragmentManager();
-		ItemListFragment fragment = (ItemListFragment) fm
+		ItemListFragment fragment = (ItemListFragment) mFragmentManager
 				.findFragmentById(R.id.fragmentContainer);
 
 		tabAll.setTabListener(new CustomTabListener(getActivity(), fragment));
@@ -350,12 +352,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 			showItemDelete();
 			return true;
 		case R.id.menu_deleteAll:
-			ItemStock.get(getActivity(), mUser).getDAOItem()
-					.deleteAllItems(mUser);
-			mItemList.clear();
-			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
-					sListTag);
-			mItemAdapter.refresh(mItemList);
+			deleteAllItems();
 			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
@@ -478,6 +475,15 @@ public class ItemListFragment extends Fragment implements Serializable,
 		}
 	}
 
+	private void deleteAllItems() {
+		final String header = getActivity().getResources().getString(
+				R.string.dialog_header_delete_all);
+		AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
+				mItemList, header, 0, AlertDialogDeletion.DIALOG_TAG_ALL);
+		dialog.setTargetFragment(this, REQUEST_LIST_DELETE);
+		dialog.show(mFragmentManager, "");
+	}
+
 	private void changeAlphaOfView(View view, float from, float to) {
 		AlphaAnimation alpha = new AlphaAnimation(from, to);
 		alpha.setDuration(0); // Make animation instant
@@ -499,22 +505,22 @@ public class ItemListFragment extends Fragment implements Serializable,
 		startActivity(intent);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != Activity.RESULT_OK)
 			return;
-		if (requestCode == REQUEST_LIST) {
+		if (requestCode == REQUEST_LIST_DELETE) {
 
 			try {
 				mItemList = (ArrayList<Item>) data
-						.getSerializableExtra(DeleteItemDialog.EXTRA_DIALOG_LIST);
+						.getSerializableExtra(Constants.EXTRA_DIALOG_LIST);
 			} catch (ClassCastException e) {
 				e.printStackTrace();
 			}
 			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
 					sListTag);
 			mItemAdapter.refresh(mItemList);
-			// mActionBar.selectTab(tabAll);
 		}
 	}
 

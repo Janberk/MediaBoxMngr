@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
-import de.canberkdemirkan.mediaboxmngr.dialogs.DeleteItemDialog;
+import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
@@ -128,10 +128,11 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 			@Override
 			public void onClick(View v) {
 
-				DeleteItemDialog dialog = DeleteItemDialog
-						.newInstance(position, mFragment, mItemList, header);
+				AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(
+						mFragment, mItemList, header, position,
+						AlertDialogDeletion.DIALOG_TAG_SINGLE);
 				dialog.setTargetFragment(mFragment,
-						ItemListFragment.REQUEST_LIST);
+						ItemListFragment.REQUEST_LIST_DELETE);
 				dialog.show(mFragmentManager, "");
 			}
 		});

@@ -2,6 +2,7 @@ package de.canberkdemirkan.mediaboxmngr.dialogs;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,37 +17,39 @@ import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
-public class DeleteItemDialog extends DialogFragment {
+public class AlertDialogDeletion extends DialogFragment {
 
-	public static final String EXTRA_DIALOG_LIST = "de.canberkdemirkan.mediaboxmngr.extra_dialog_list";
+	public static final String DIALOG_TAG_ALL = "de.canberkdemirkan.mediaboxmngr.delete_all";
+	public static final String DIALOG_TAG_SINGLE = "de.canberkdemirkan.mediaboxmngr.delete_single";
 
 	private int mPosition;
 	private ItemListFragment mFragment;
 	private ArrayList<Item> mItemList;
 	private String mTitle;
+	private String mTag;
 
-	public static DeleteItemDialog newInstance(int position,
-			ItemListFragment fragment, ArrayList<Item> itemList, String title) {
+	public static AlertDialogDeletion newInstance(ItemListFragment fragment,
+			ArrayList<Item> itemList, String title, int position, String tag) {
 
 		Bundle args = new Bundle();
 
-		args.putSerializable(Constants.KEY_DIALOG_POSITION, position);
 		args.putSerializable(Constants.KEY_DIALOG_FRAGMENT, fragment);
 		args.putSerializable(Constants.KEY_DIALOG_ITEM_LIST, itemList);
 		args.putSerializable(Constants.KEY_DIALOG_TITLE, title);
+		args.putSerializable(Constants.KEY_DIALOG_POSITION, position);
+		args.putSerializable(Constants.KEY_DIALOG_TAG, tag);
 
-		DeleteItemDialog dialogFragment = new DeleteItemDialog();
+		AlertDialogDeletion dialogFragment = new AlertDialogDeletion();
 		dialogFragment.setArguments(args);
 		return dialogFragment;
 
 	}
 
+	@SuppressLint("InflateParams")
 	@SuppressWarnings("unchecked")
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		mPosition = (Integer) getArguments().getSerializable(
-				Constants.KEY_DIALOG_POSITION);
 		mFragment = (ItemListFragment) getArguments().getSerializable(
 				Constants.KEY_DIALOG_FRAGMENT);
 		try {
@@ -57,6 +60,10 @@ public class DeleteItemDialog extends DialogFragment {
 		}
 		mTitle = (String) getArguments().getSerializable(
 				Constants.KEY_DIALOG_TITLE);
+		mPosition = (Integer) getArguments().getSerializable(
+				Constants.KEY_DIALOG_POSITION);
+		mTag = (String) getArguments()
+				.getSerializable(Constants.KEY_DIALOG_TAG);
 
 		View view = getActivity().getLayoutInflater().inflate(
 				R.layout.fragment_dialog_alert, null);
@@ -69,13 +76,24 @@ public class DeleteItemDialog extends DialogFragment {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int which) {
-								Item item = mItemList.get(mPosition);
-								mItemList.remove(mPosition);
-								ItemStock
-										.get(mFragment.getActivity(),
-												mFragment.getUser())
-										.getDAOItem().deleteItem(item);
-								ItemListFragment.sDeleteMode = false;
+
+								if (mTag.equals(DIALOG_TAG_SINGLE)) {
+									Item item = mItemList.get(mPosition);
+									mItemList.remove(mPosition);
+									ItemStock
+											.get(mFragment.getActivity(),
+													mFragment.getUser())
+											.getDAOItem().deleteItem(item);
+									ItemListFragment.sDeleteMode = false;
+								} else if (mTag.equals(DIALOG_TAG_ALL)) {
+									mItemList.clear();
+									ItemStock
+											.get(mFragment.getActivity(),
+													mFragment.getUser())
+											.getDAOItem()
+											.deleteAllItems(mFragment.getUser());
+								}
+
 								sendResult(Activity.RESULT_OK);
 							}
 						})
@@ -92,8 +110,9 @@ public class DeleteItemDialog extends DialogFragment {
 		if (getTargetFragment() == null)
 			return;
 		Intent i = new Intent();
-		i.putExtra(EXTRA_DIALOG_LIST, mItemList);
+		i.putExtra(Constants.EXTRA_DIALOG_LIST, mItemList);
 		getTargetFragment().onActivityResult(getTargetRequestCode(),
 				resultCode, i);
 	}
+
 }
