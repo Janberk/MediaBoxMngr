@@ -371,6 +371,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 					}
 				}
 			}
+			return true;
 		case R.id.menu_deleteAll:
 			ItemStock.get(getActivity(), mUser).getDAOItem()
 					.deleteAllItems(mUser);
@@ -378,6 +379,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
 					sListTag);
 			mItemAdapter.refresh(mItemList);
+			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
 		}
