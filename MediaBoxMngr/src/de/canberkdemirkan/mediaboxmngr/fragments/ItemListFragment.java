@@ -74,7 +74,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 14051981L;
 
 	// public static int LOKAL_DB_VERSION = 0;
 	// public static int REMOTE_DB_VERSION = 0;
@@ -83,10 +83,14 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private FragmentManager mFragmentManager;
 	private ProgressDialog mProgressDialog;
 	private ActionBar mActionBar;
+	private ActionBar.Tab tabAll, tabAlbums, tabBooks, tabMovies, tabFavorites;
+
 	private String mUser;
 	private String mJson;
 	private String mTypeAsString;
 
+	private SpinnerTag mTypeSpinner = SpinnerTag.TypeSpinner;
+	public static ListTag sListTag;
 	public static boolean sEditMode;
 	public static boolean sDeleteMode;;
 
@@ -102,19 +106,12 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private Spinner mSpinnerItemType;
 	private Button mButtonSaveItem;
 	private Button mButtonDeleteSelected;
-
 	private ImageView mImageHome;
 	private ImageView mImageSearch;
 	private ImageView mImageSettings;
 	private ImageView mImageLogout;
 	private ImageView mImageItemDelete;
-
 	private CheckBox mCheckBoxConfirmItemDelete;
-
-	private ActionBar.Tab tabAll, tabAlbums, tabBooks, tabMovies, tabFavorites;
-
-	private SpinnerTag mTypeSpinner = SpinnerTag.TypeSpinner;
-	public static ListTag sListTag;
 
 	public static ItemListFragment newItemListFragment(ListTag listTag) {
 
@@ -164,8 +161,31 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mProgressDialog.setCancelable(false);
 	}
 
-	public ListView getListView() {
-		return mListView;
+	private void initViews(View view) {
+		mListView = (ListView) view
+				.findViewById(R.id.listView_fragmentItemList);
+		mMenuBar = (LinearLayout) view
+				.findViewById(R.id.fragmentItemList_menuBar);
+		mEditor = (RelativeLayout) view
+				.findViewById(R.id.fragmentItemList_editTitle);
+		mListContainer = (LinearLayout) view
+				.findViewById(R.id.fragmentItemList_listView);
+		mEditEditTitle = (EditText) view
+				.findViewById(R.id.et_fragmentEditTitle_editTitle);
+		mSpinnerItemType = (Spinner) view
+				.findViewById(R.id.sp_fragmentEditTitle_itemType);
+		mButtonSaveItem = (Button) view
+				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
+		mButtonDeleteSelected = (Button) view
+				.findViewById(R.id.btn_fragmentItemList_deleteSelected);
+		mImageHome = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_home);
+		mImageSearch = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_search);
+		mImageSettings = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_settings);
+		mImageLogout = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
 
 	@SuppressLint("InflateParams")
@@ -222,14 +242,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 			@Override
 			public void onClick(View v) {
-				ItemType type = ItemType.valueOf(mTypeAsString);
-				Item newItem = createItem(type);
-				ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-				itemStock.addItem(newItem);
-				ArrayList<Item> list = itemStock.getItemList();
-				mItemAdapter.refresh(list);
-				mEditEditTitle.setText("");
-				switchEditMode();
+				saveItem();
 			}
 		});
 
@@ -319,33 +332,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mActionBar.addTab(tabFavorites);
 	}
 
-	private void initViews(View view) {
-		mListView = (ListView) view
-				.findViewById(R.id.listView_fragmentItemList);
-		mMenuBar = (LinearLayout) view
-				.findViewById(R.id.fragmentItemList_menuBar);
-		mEditor = (RelativeLayout) view
-				.findViewById(R.id.fragmentItemList_editTitle);
-		mListContainer = (LinearLayout) view
-				.findViewById(R.id.fragmentItemList_listView);
-		mEditEditTitle = (EditText) view
-				.findViewById(R.id.et_fragmentEditTitle_editTitle);
-		mSpinnerItemType = (Spinner) view
-				.findViewById(R.id.sp_fragmentEditTitle_itemType);
-		mButtonSaveItem = (Button) view
-				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
-		mButtonDeleteSelected = (Button) view
-				.findViewById(R.id.btn_fragmentItemList_deleteSelected);
-		mImageHome = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_home);
-		mImageSearch = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_search);
-		mImageSettings = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_settings);
-		mImageLogout = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_logout);
-	}
-
 	/*
 	 * 
 	 * Options Menu
@@ -392,7 +378,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	 * End Options Menu
 	 */
 
-	public Item createItem(ItemType type) {
+	private Item createItem(ItemType type) {
 		Item item = null;
 
 		switch (type) {
@@ -415,52 +401,16 @@ public class ItemListFragment extends Fragment implements Serializable,
 		return item;
 	}
 
-	public String getUserFromPrefs() {
-		String user = mSharedPreferences.getString(LoginFragment.KEY_EMAIL, "");
-		return user;
-	}
+	private void saveItem() {
+		ItemType type = ItemType.valueOf(mTypeAsString);
+		Item newItem = createItem(type);
+		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+		itemStock.addItem(newItem);
+		ArrayList<Item> list = itemStock.getItemList();
+		mItemAdapter.refresh(list);
+		mEditEditTitle.setText("");
+		switchEditMode();
 
-	public String getUser() {
-		return mUser;
-	}
-
-	private void setListViewClickable(ListView list) {
-		final ListView listView = list;
-		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View view,
-					int position, long id) {
-
-				Item item = (Item) listView.getAdapter().getItem(position);
-				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
-				i.putExtra(Constants.KEY_USER_TAG, mUser);
-				i.putExtra(Constants.KEY_TYPE, item.getType().toString());
-				startActivityForResult(i, 0);
-			}
-		});
-	}
-
-	private void switchEditMode() {
-		if (!sEditMode) {
-			sEditMode = true;
-			mSpinnerItemType.setSelection(0);
-			mEditor.setVisibility(View.VISIBLE);
-			changeAlphaOfView(mListContainer, 1.0F, 0.2F);
-			mMenuBar.setVisibility(View.GONE);
-			mEditEditTitle.requestFocus();
-			mListView.setOnItemClickListener(null);
-			InputMethodManager imm = (InputMethodManager) getActivity()
-					.getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.showSoftInput(mEditEditTitle, InputMethodManager.SHOW_IMPLICIT);
-		} else if (sEditMode) {
-			mEditor.setVisibility(View.GONE);
-			changeAlphaOfView(mListContainer, 0.2F, 1.0F);
-			mMenuBar.setVisibility(View.VISIBLE);
-			setListViewClickable(mListView);
-			sEditMode = false;
-		}
 	}
 
 	private void showItemDelete() {
@@ -497,7 +447,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		dialog.show(mFragmentManager, "");
 	}
 
-	public void deleteSelectedItems() {
+	private void deleteSelectedItems() {
 		mItemList = ItemStock.get(getActivity(), mUser).getDAOItem()
 				.getAllItems(mUser);
 		for (Item item : mItemList) {
@@ -552,7 +502,28 @@ public class ItemListFragment extends Fragment implements Serializable,
 		view.startAnimation(alpha);
 	}
 
-	public void logout() {
+	private void switchEditMode() {
+		if (!sEditMode) {
+			sEditMode = true;
+			mSpinnerItemType.setSelection(0);
+			mEditor.setVisibility(View.VISIBLE);
+			changeAlphaOfView(mListContainer, 1.0F, 0.2F);
+			mMenuBar.setVisibility(View.GONE);
+			mEditEditTitle.requestFocus();
+			mListView.setOnItemClickListener(null);
+			InputMethodManager imm = (InputMethodManager) getActivity()
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.showSoftInput(mEditEditTitle, InputMethodManager.SHOW_IMPLICIT);
+		} else if (sEditMode) {
+			mEditor.setVisibility(View.GONE);
+			changeAlphaOfView(mListContainer, 0.2F, 1.0F);
+			mMenuBar.setVisibility(View.VISIBLE);
+			setListViewClickable(mListView);
+			sEditMode = false;
+		}
+	}
+
+	private void logout() {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - logout()");
 		}
@@ -564,27 +535,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		Intent intent = new Intent(getActivity().getApplicationContext(),
 				LoginActivity.class);
 		startActivity(intent);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != Activity.RESULT_OK)
-			return;
-		if (requestCode == Constants.REQUEST_LIST_DELETE) {
-
-			try {
-				mItemList = (ArrayList<Item>) data
-						.getSerializableExtra(Constants.EXTRA_DIALOG_LIST);
-			} catch (ClassCastException e) {
-				e.printStackTrace();
-			}
-			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
-					sListTag);
-			mItemAdapter.refresh(mItemList);
-			updateVisibilityOfElements(sDeleteMode);
-
-		}
 	}
 
 	private void updateVisibilityOfElements(boolean value) {
@@ -621,33 +571,43 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	}
 
-	/*
-	 * 
-	 * Logging callback methods for debug purposes
-	 */
+	private void setListViewClickable(ListView list) {
+		final ListView listView = list;
+		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-	@Override
-	public void onAttach(Activity activity) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onAttach()");
-		}
-		super.onAttach(activity);
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View view,
+					int position, long id) {
+
+				Item item = (Item) listView.getAdapter().getItem(position);
+				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
+				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
+				i.putExtra(Constants.KEY_USER_TAG, mUser);
+				i.putExtra(Constants.KEY_TYPE, item.getType().toString());
+				startActivityForResult(i, 0);
+			}
+		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onActivityCreated()");
-		}
-		super.onActivityCreated(savedInstanceState);
-	}
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != Activity.RESULT_OK)
+			return;
+		if (requestCode == Constants.REQUEST_LIST_DELETE) {
 
-	@Override
-	public void onStart() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onStart()");
+			try {
+				mItemList = (ArrayList<Item>) data
+						.getSerializableExtra(Constants.EXTRA_DIALOG_LIST);
+			} catch (ClassCastException e) {
+				e.printStackTrace();
+			}
+			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+					sListTag);
+			mItemAdapter.refresh(mItemList);
+			updateVisibilityOfElements(sDeleteMode);
+
 		}
-		super.onStart();
 	}
 
 	@Override
@@ -670,43 +630,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		}
 		super.onPause();
 	}
-
-	@Override
-	public void onStop() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onStop()");
-		}
-		super.onStop();
-	}
-
-	@Override
-	public void onDestroyView() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onDestroyView()");
-		}
-		super.onDestroyView();
-	}
-
-	@Override
-	public void onDestroy() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onDestroy()");
-		}
-		super.onDestroy();
-	}
-
-	@Override
-	public void onDetach() {//
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onDetach()");
-		}
-		super.onDetach();
-	}
-
-	/*
-	 * 
-	 * End Logging callback methods for debug purposes
-	 */
 
 	public void loadItemsFromRemoteDb() {
 		Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG).show();
@@ -852,12 +775,25 @@ public class ItemListFragment extends Fragment implements Serializable,
 		return provider.getVersion();
 	}
 
-	public CustomItemAdapter getItemAdapter() {
-		return mItemAdapter;
+	public String getUserFromPrefs() {
+		String user = mSharedPreferences.getString(LoginFragment.KEY_EMAIL, "");
+		return user;
+	}
+
+	public String getUser() {
+		return mUser;
+	}
+
+	public ListView getListView() {
+		return mListView;
 	}
 
 	public ListTag getListTag() {
 		return sListTag;
+	}
+
+	public CustomItemAdapter getItemAdapter() {
+		return mItemAdapter;
 	}
 
 }

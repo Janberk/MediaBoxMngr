@@ -125,11 +125,6 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		});
 	}
 
-	private void updateItem(Item item) {
-		ItemStock.get(mFragment.getActivity(), mFragment.getUser()).updateItem(
-				item);
-	}
-
 	public void setClickListenerImageView(final ImageView image,
 			final Item item, final int position) {
 		final String header = mContext.getResources().getString(
@@ -138,7 +133,6 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 
 			@Override
 			public void onClick(View v) {
-
 				AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(
 						mFragment, mItemList, header, position,
 						AlertDialogDeletion.DIALOG_TAG_SINGLE);
@@ -149,8 +143,12 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		});
 	}
 
+	private void updateItem(Item item) {
+		ItemStock.get(mFragment.getActivity(), mFragment.getUser()).updateItem(
+				item);
+	}
+
 	public void refresh(ArrayList<Item> itemList) {
-		// mItemList = itemList;
 		mItemList.clear();
 		mItemList.addAll(itemList);
 		notifyDataSetChanged();
