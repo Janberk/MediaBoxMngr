@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
+import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
@@ -31,8 +32,6 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		CheckBox mCheckBoxConfirmItemDelete;
 	}
 
-	public static boolean sDeletePermitted;
-
 	private final Context mContext;
 	private ItemListFragment mFragment;
 	private ArrayList<Item> mItemList;
@@ -40,11 +39,11 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 
 	public CustomItemAdapter(Context context, ItemListFragment fragment,
 			ArrayList<Item> itemList) {
-		super(context, android.R.layout.simple_list_item_1, itemList);
+		super(context, android.R.layout.simple_list_item_multiple_choice,
+				itemList);
 		this.mContext = context;
 		this.mFragment = fragment;
 		this.mItemList = itemList;
-		sDeletePermitted = false;
 
 		if (getContext() instanceof FragmentActivity) {
 			mFragmentManager = ((FragmentActivity) context)
@@ -83,11 +82,13 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 
 		// Configure the view for this Item
 		Item item = getItem(position);
+		item.setRemovable(false);
 		ItemType type = (ItemType) mItemList.get(position).getType();
 
 		holder.mTextItemTitle.setText(item.getTitle());
 		holder.mTextItemCreationDate.setText(item.getCreationDate().toString());
 		holder.mCheckBoxItemFavorite.setChecked(item.isFavorite());
+		holder.mCheckBoxConfirmItemDelete.setChecked(false);
 		holder.mImageItemIcon.setFadingEdgeLength(2);
 		UtilMethods.setCustomIconToTypeOfMedia(holder.mImageItemIcon, type,
 				UtilMethods.ICON_DARK_TAG);
@@ -100,24 +101,33 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 			holder.mImageItemDelete.setVisibility(View.GONE);
 		}
 
-		setClickListenerCheckBox(holder.mCheckBoxConfirmItemDelete);
+		setClickListenerCheckBox(holder.mCheckBoxConfirmItemDelete, item,
+				position);
 		setClickListenerImageView(holder.mImageItemDelete, item, position);
 
 		return convertView;
 	}
 
-	public void setClickListenerCheckBox(final CheckBox checkBox) {
+	public void setClickListenerCheckBox(final CheckBox checkBox,
+			final Item item, final int position) {
 		checkBox.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				if (checkBox.isChecked()) {
-					sDeletePermitted = true;
-				} else {
-					sDeletePermitted = false;
+					item.setRemovable(true);
+					updateItem(item);
+				} else if (!checkBox.isChecked()) {
+					item.setRemovable(false);
+					updateItem(item);
 				}
 			}
 		});
+	}
+
+	private void updateItem(Item item) {
+		ItemStock.get(mFragment.getActivity(), mFragment.getUser()).updateItem(
+				item);
 	}
 
 	public void setClickListenerImageView(final ImageView image,

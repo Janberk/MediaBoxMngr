@@ -36,6 +36,7 @@
     <string name="delete_item">Delete</string>
     <string name="dialog_header_delete">Delete this item?</string>
     <string name="dialog_header_delete_all">Delete all items?</string>
+    <string name="dialog_header_delete_selected">Delete selected items?</string>
     <string name="login">Log in</string>
     <string name="logout">Log out</string>
     <string name="save">Save</string>

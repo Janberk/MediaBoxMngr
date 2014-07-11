@@ -11,6 +11,8 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 @SuppressLint("NewApi")
 public class CustomTabListener implements
 		android.support.v7.app.ActionBar.TabListener {
+	
+	public static ListTag sTag = null;
 
 	private ItemListFragment mFragment;
 	private FragmentActivity mActivity;
@@ -32,9 +34,9 @@ public class CustomTabListener implements
 	@Override
 	public void onTabSelected(android.support.v7.app.ActionBar.Tab tab,
 			android.support.v4.app.FragmentTransaction ft) {
-		ListTag tag = (ListTag) tab.getTag();
+		sTag = (ListTag) tab.getTag();
 		mFragment.getItemAdapter().refresh(
-				UtilMethods.createListFromTag(mActivity, mUser, tag));
+				UtilMethods.createListFromTag(mActivity, mUser, sTag));
 	}
 
 	@Override

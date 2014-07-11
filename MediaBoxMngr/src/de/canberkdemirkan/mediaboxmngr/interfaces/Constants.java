@@ -57,6 +57,7 @@ public interface Constants {
 	String COVER = "cover";
 	String GENRE = "genre";
 	String FAVORITE = "favorite";
+	String REMOVABLE = "removable";
 	String CREATION_DATE = "creation_date"; // also for user
 	String DELETED = "deleted"; // also for user
 	String DELETION_DATE = "deletion_date"; // also for user
@@ -105,7 +106,8 @@ public interface Constants {
 			+ TYPE + " TEXT, "
 			+ COVER + " BLOB, "
 			+ GENRE + " TEXT, "
-			+ FAVORITE + " INTEGER, "			
+			+ FAVORITE + " INTEGER, "
+			+ REMOVABLE + " INTEGER, "
 			+ CREATION_DATE + " TEXT, "
 			+ DELETED + " INTEGER, "
 			+ DELETION_DATE + " TEXT, "

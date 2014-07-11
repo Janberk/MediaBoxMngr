@@ -34,6 +34,7 @@ public class DAOItem {
 	public static int colCover;
 	public static int colGenre;
 	public static int colFavorite;
+	public static int colRemovable;
 	public static int colCreationDate;
 	public static int colDeleted;
 	public static int colDeletionDate;
@@ -167,6 +168,22 @@ public class DAOItem {
 		close();
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - deleteAllItems(): " + result);
+		}
+		increaseTableVersion();
+		return result;
+	}
+
+	// set item removable
+	public boolean setAllRemovable(boolean isRemovable) {
+		open();
+		ContentValues values = new ContentValues();
+		values.put(Constants.REMOVABLE, UtilMethods.isTrueAsInt(isRemovable));
+
+		boolean result = mSQLiteDB.update(Constants.TABLE_ITEMS, values, null,
+				null) > 0;
+		close();
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "DAOItem - setRemovable(): " + result);
 		}
 		increaseTableVersion();
 		return result;
@@ -346,6 +363,7 @@ public class DAOItem {
 					map.put(Constants.COVER, cursor.getString(colCover));
 					map.put(Constants.GENRE, cursor.getString(colGenre));
 					map.put(Constants.FAVORITE, cursor.getString(colFavorite));
+					map.put(Constants.REMOVABLE, cursor.getString(colRemovable));
 					map.put(Constants.CREATION_DATE,
 							cursor.getString(colCreationDate));
 					map.put(Constants.DELETED, cursor.getString(colDeleted));
@@ -401,6 +419,7 @@ public class DAOItem {
 
 		int synced = (Integer.parseInt(cursor.getString(colSynced)));
 		int favoriteAsInt = (Integer.parseInt(cursor.getString(colFavorite)));
+		int RemovableAsInt = (Integer.parseInt(cursor.getString(colRemovable)));
 		int inPossessionAsInt = (Integer.parseInt(cursor
 				.getString(colInPossession)));
 		int deletedAsInt = (Integer.parseInt(cursor.getString(colDeleted)));
@@ -432,6 +451,7 @@ public class DAOItem {
 		item.setType(type);
 		item.setGenre(genre);
 		item.setFavorite(UtilMethods.isTrue(favoriteAsInt));
+		item.setRemovable(UtilMethods.isTrue(RemovableAsInt));
 		item.setCreationDate(UtilMethods
 				.setCreationDateFromString(creationDate));
 		item.setInPossession(UtilMethods.isTrue(inPossessionAsInt));
@@ -455,6 +475,8 @@ public class DAOItem {
 				UtilMethods.isTrueAsInt(item.isInPossession()));
 		values.put(Constants.FAVORITE,
 				UtilMethods.isTrueAsInt(item.isFavorite()));
+		values.put(Constants.REMOVABLE,
+				UtilMethods.isTrueAsInt(item.isRemovable()));
 		values.put(Constants.DELETED, UtilMethods.isTrueAsInt(item.isDeleted()));
 
 		if (item.getDeletionDate() != null) {
@@ -506,6 +528,7 @@ public class DAOItem {
 		colCover = cursor.getColumnIndex(Constants.COVER);
 		colGenre = cursor.getColumnIndex(Constants.GENRE);
 		colFavorite = cursor.getColumnIndex(Constants.FAVORITE);
+		colRemovable = cursor.getColumnIndex(Constants.REMOVABLE);
 		colCreationDate = cursor.getColumnIndex(Constants.CREATION_DATE);
 		colDeleted = cursor.getColumnIndex(Constants.DELETED);
 		colDeletionDate = cursor.getColumnIndex(Constants.DELETION_DATE);

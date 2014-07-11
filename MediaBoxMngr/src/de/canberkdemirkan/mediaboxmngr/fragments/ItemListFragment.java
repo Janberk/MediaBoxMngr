@@ -101,6 +101,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private EditText mEditEditTitle;
 	private Spinner mSpinnerItemType;
 	private Button mButtonSaveItem;
+	private Button mButtonDeleteSelected;
 
 	private ImageView mImageHome;
 	private ImageView mImageSearch;
@@ -163,6 +164,11 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mProgressDialog.setCancelable(false);
 	}
 
+	public ListView getListView() {
+		return mListView;
+	}
+
+	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -178,6 +184,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		mEditor.setVisibility(View.GONE);
+		mButtonDeleteSelected.setVisibility(View.GONE);
 
 		mSpinnerItemType.setAdapter(new CustomSpinnerAdapter(getActivity(),
 				R.layout.custom_spinner, R.id.tv_customSpinner_label,
@@ -204,6 +211,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mItemAdapter = new CustomItemAdapter(getActivity(), this, mItemList);
 		mItemAdapter.setNotifyOnChange(true);
 
+		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		mListView.setAdapter(mItemAdapter);
 
 		addActionBarTabs();
@@ -221,7 +229,15 @@ public class ItemListFragment extends Fragment implements Serializable,
 				ArrayList<Item> list = itemStock.getItemList();
 				mItemAdapter.refresh(list);
 				mEditEditTitle.setText("");
-				switchMode();
+				switchEditMode();
+			}
+		});
+
+		mButtonDeleteSelected.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				deleteSelectedItems();
 			}
 		});
 
@@ -318,6 +334,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.sp_fragmentEditTitle_itemType);
 		mButtonSaveItem = (Button) view
 				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
+		mButtonDeleteSelected = (Button) view
+				.findViewById(R.id.btn_fragmentItemList_deleteSelected);
 		mImageHome = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_home);
 		mImageSearch = (ImageView) view
@@ -343,7 +361,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 		case R.id.menu_newItem:
-			switchMode();
+			switchEditMode();
 			return true;
 		case R.id.menu_edit:
 			showItemDelete();
@@ -424,7 +442,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		});
 	}
 
-	private void switchMode() {
+	private void switchEditMode() {
 		if (!sEditMode) {
 			sEditMode = true;
 			mSpinnerItemType.setSelection(0);
@@ -461,14 +479,12 @@ public class ItemListFragment extends Fragment implements Serializable,
 						.findViewById(R.id.cb_listItem_itemDelete);
 				mCheckBoxConfirmItemDelete.setChecked(false);
 
-				if (mCheckBoxConfirmItemDelete.getVisibility() == View.GONE) {
-					mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
-					mImageItemDelete.setVisibility(View.VISIBLE);
-				} else {
-					mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
-					mImageItemDelete.setVisibility(View.GONE);
-				}
+				updateVisibilityOfElements(sDeleteMode);
 			}
+		}
+		if (!sDeleteMode) {
+			ItemStock.get(getActivity(), getUser()).getDAOItem()
+					.setAllRemovable(false);
 		}
 	}
 
@@ -479,6 +495,54 @@ public class ItemListFragment extends Fragment implements Serializable,
 				mItemList, header, 0, AlertDialogDeletion.DIALOG_TAG_ALL);
 		dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
 		dialog.show(mFragmentManager, "");
+	}
+
+	public void deleteSelectedItems() {
+		mItemList = ItemStock.get(getActivity(), mUser).getDAOItem()
+				.getAllItems(mUser);
+		for (Item item : mItemList) {
+			if (item.isRemovable()) {
+				ItemStock.get(getActivity(), mUser).getDAOItem()
+						.deleteItem(item);
+			}
+		}
+
+		ItemStock.get(getActivity(), mUser).getDAOItem().setAllRemovable(false);
+
+		if (CustomTabListener.sTag != null) {
+			mItemList.clear();
+			switch (CustomTabListener.sTag) {
+			case ALL:
+				mActionBar.selectTab(tabAll);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.ALL);
+				break;
+			case ALBUMS:
+				mActionBar.selectTab(tabAlbums);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.ALBUMS);
+				break;
+			case BOOKS:
+				mActionBar.selectTab(tabBooks);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.BOOKS);
+				break;
+			case MOVIES:
+				mActionBar.selectTab(tabMovies);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.MOVIES);
+				break;
+
+			default:
+				mActionBar.selectTab(tabAll);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.ALL);
+				break;
+			}
+			mItemAdapter.refresh(mItemList);
+			sDeleteMode = false;
+			updateVisibilityOfElements(sDeleteMode);
+		}
 	}
 
 	private void changeAlphaOfView(View view, float from, float to) {
@@ -518,7 +582,43 @@ public class ItemListFragment extends Fragment implements Serializable,
 			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
 					sListTag);
 			mItemAdapter.refresh(mItemList);
+			updateVisibilityOfElements(sDeleteMode);
+
 		}
+	}
+
+	private void updateVisibilityOfElements(boolean value) {
+
+		if (value) {
+			if (mMenuBar != null) {
+				mMenuBar.setVisibility(View.GONE);
+			}
+			if (mCheckBoxConfirmItemDelete != null) {
+				mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
+			}
+			if (mImageItemDelete != null) {
+				mImageItemDelete.setVisibility(View.VISIBLE);
+			}
+			if (mButtonDeleteSelected != null) {
+				mButtonDeleteSelected.setVisibility(View.VISIBLE);
+			}
+
+		} else {
+			if (mMenuBar != null) {
+				mMenuBar.setVisibility(View.VISIBLE);
+			}
+			if (mCheckBoxConfirmItemDelete != null) {
+				mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
+			}
+			if (mImageItemDelete != null) {
+				mImageItemDelete.setVisibility(View.GONE);
+			}
+			if (mButtonDeleteSelected != null) {
+				mButtonDeleteSelected.setVisibility(View.GONE);
+			}
+
+		}
+
 	}
 
 	/*
