@@ -332,52 +332,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mActionBar.addTab(tabFavorites);
 	}
 
-	/*
-	 * 
-	 * Options Menu
-	 */
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.fragment_menu_list, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem) {
-		switch (menuItem.getItemId()) {
-		case R.id.menu_newItem:
-			switchEditMode();
-			return true;
-		case R.id.menu_edit:
-			showItemDelete();
-			return true;
-		case R.id.menu_deleteAll:
-			deleteAllItems();
-			return true;
-		default:
-			return super.onOptionsItemSelected(menuItem);
-		}
-	}
-
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
-		mTypeAsString = (String) parent.getItemAtPosition(position);
-		RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
-		((TextView) layout.findViewById(R.id.tv_customSpinner_label))
-				.setTextAppearance(getActivity(), R.style.spinnerTextStyle);
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
-	}
-
-	/*
-	 * 
-	 * End Options Menu
-	 */
-
 	private Item createItem(ItemType type) {
 		Item item = null;
 
@@ -448,51 +402,12 @@ public class ItemListFragment extends Fragment implements Serializable,
 	}
 
 	private void deleteSelectedItems() {
-		mItemList = ItemStock.get(getActivity(), mUser).getDAOItem()
-				.getAllItems(mUser);
-		for (Item item : mItemList) {
-			if (item.isRemovable()) {
-				ItemStock.get(getActivity(), mUser).getDAOItem()
-						.deleteItem(item);
-			}
-		}
-
-		ItemStock.get(getActivity(), mUser).getDAOItem().setAllRemovable(false);
-
-		if (CustomTabListener.sTag != null) {
-			mItemList.clear();
-			switch (CustomTabListener.sTag) {
-			case ALL:
-				mActionBar.selectTab(tabAll);
-				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
-						ListTag.ALL);
-				break;
-			case ALBUMS:
-				mActionBar.selectTab(tabAlbums);
-				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
-						ListTag.ALBUMS);
-				break;
-			case BOOKS:
-				mActionBar.selectTab(tabBooks);
-				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
-						ListTag.BOOKS);
-				break;
-			case MOVIES:
-				mActionBar.selectTab(tabMovies);
-				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
-						ListTag.MOVIES);
-				break;
-
-			default:
-				mActionBar.selectTab(tabAll);
-				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
-						ListTag.ALL);
-				break;
-			}
-			mItemAdapter.refresh(mItemList);
-			sDeleteMode = false;
-			updateVisibilityOfElements(sDeleteMode);
-		}
+		final String header = getActivity().getResources().getString(
+				R.string.dialog_header_delete_selected);
+		AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
+				mItemList, header, 0, AlertDialogDeletion.DIALOG_TAG_SELECTED);
+		dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
+		dialog.show(mFragmentManager, "");
 	}
 
 	private void changeAlphaOfView(View view, float from, float to) {
@@ -609,6 +524,52 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		}
 	}
+
+	/*
+	 * 
+	 * Options Menu
+	 */
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.fragment_menu_list, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+		case R.id.menu_newItem:
+			switchEditMode();
+			return true;
+		case R.id.menu_edit:
+			showItemDelete();
+			return true;
+		case R.id.menu_deleteAll:
+			deleteAllItems();
+			return true;
+		default:
+			return super.onOptionsItemSelected(menuItem);
+		}
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position,
+			long id) {
+		mTypeAsString = (String) parent.getItemAtPosition(position);
+		RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
+		((TextView) layout.findViewById(R.id.tv_customSpinner_label))
+				.setTextAppearance(getActivity(), R.style.spinnerTextStyle);
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+	}
+
+	/*
+	 * 
+	 * End Options Menu
+	 */
 
 	@Override
 	public void onResume() {
