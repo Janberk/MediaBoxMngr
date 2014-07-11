@@ -17,5 +17,9 @@
         android:icon="@drawable/ic_menu_trash_light"
         android:title="@string/delete_all"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_dummyData"
+        android:title="Create dummy data"
+        app:showAsAction="never"/>
 
 </menu>

@@ -52,6 +52,7 @@ import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
+import de.canberkdemirkan.mediaboxmngr.data.DummyDataProvider;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
@@ -548,9 +549,22 @@ public class ItemListFragment extends Fragment implements Serializable,
 		case R.id.menu_deleteAll:
 			deleteAllItems();
 			return true;
+		case R.id.menu_dummyData:
+			createDummyList();
+			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
 		}
+	}
+
+	private void createDummyList() {
+		DummyDataProvider data = new DummyDataProvider(mUser);
+		ArrayList<Item> list = data.getItemList();
+		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
+		for (Item item : list) {
+			itemStock.addItem(item);
+		}
+		mItemAdapter.refresh(itemStock.getItemList());
 	}
 
 	@Override
