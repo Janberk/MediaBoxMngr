@@ -56,5 +56,6 @@
     <string name="item_got_it_label">Got it!</string>
     <string name="item_wish_list_label">Wish list</string>
     <string name="item_original_title_hint">Enter original title.</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

@@ -20,11 +20,9 @@
         android:label="@string/app_name"
         android:theme="@style/CustomActionBarTheme" >
         <activity
-            android:name="de.canberkdemirkan.mediaboxmngr.activities.LoginActivity"
-            android:configChanges="orientation"
+            android:name="de.canberkdemirkan.mediaboxmngr.activities.SplashScreenActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            android:theme="@style/CustomActionBarTheme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,19 +30,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="de.canberkdemirkan.mediaboxmngr.activities.SignupActivity"
+            android:name=".activities.LoginActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".activities.SignupActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name="de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity"
+            android:name=".activities.ItemListActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name="de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity"
+            android:name=".activities.ItemPagerActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -55,7 +60,7 @@
         </activity>
 
         <provider
-            android:name="de.canberkdemirkan.mediaboxmngr.data.MediaBoxMngrContentProvider"
+            android:name=".data.MediaBoxMngrContentProvider"
             android:authorities="de.canberkdemirkan.provider.mediaboxmngr"
             android:exported="false" />
     </application>

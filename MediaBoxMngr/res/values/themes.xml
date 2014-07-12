@@ -13,6 +13,11 @@
         <item name="actionMenuTextColor">#ffffff</item>
     </style>
 
+    <style name="CustomActionBarTheme.NoTitleBar" parent="@style/Theme.AppCompat">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">False</item>
+    </style>
+
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
