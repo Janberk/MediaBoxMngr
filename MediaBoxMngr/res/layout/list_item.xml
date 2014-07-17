@@ -5,6 +5,7 @@
     android:layout_margin="@dimen/custom_value_8dp"
     android:background="@drawable/list_item_shape"
     android:orientation="vertical"
+    android:longClickable="true"
     android:padding="@dimen/custom_value_8dp" >
 
     <CheckBox

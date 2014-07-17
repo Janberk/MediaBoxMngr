@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -98,6 +100,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private ListView mListView;
 	private ArrayList<Item> mItemList;
 	private CustomItemAdapter mItemAdapter;
+
+	private ActionMode mActionMode;
 
 	private RelativeLayout mEditor;
 	private LinearLayout mListContainer;
@@ -189,6 +193,49 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
 
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.fragment_menu_cab, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			int position = Integer.parseInt(mode.getTag().toString());
+
+			switch (item.getItemId()) {
+			case R.id.menu_editItem:
+				Item clickedItem = (Item) mListView.getAdapter().getItem(
+						position);
+				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
+				i.putExtra(Constants.KEY_ITEM_ID, clickedItem.getUniqueId());
+				i.putExtra(Constants.KEY_USER_TAG, mUser);
+				i.putExtra(Constants.KEY_TYPE, clickedItem.getType().toString());
+				startActivityForResult(i, 0);
+				mode.finish();
+				return true;
+			case R.id.menu_deleteItem:
+				mode.finish();
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		public void onDestroyActionMode(ActionMode mode) {
+			sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
+			updateVisibilityOfElements(sDeleteMode);
+		};
+	};
+
 	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -231,12 +278,31 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		mItemAdapter = new CustomItemAdapter(getActivity(), this, mItemList);
 		mItemAdapter.setNotifyOnChange(true);
-
-		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		mListView.setLongClickable(true);
 		mListView.setAdapter(mItemAdapter);
+
+		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> av, View view,
+					int pos, long id) {
+				if (BuildConfig.DEBUG) {
+					Log.d(Constants.LOG_TAG,
+							"ItemListFragment - setOnItemLongClickListener(); position: "
+									+ pos);
+				}
+				mActionMode = getActivity()
+						.startActionMode(mActionModeCallback);
+				mActionMode.setTag(pos);
+				showItemDelete();
+				view.setSelected(true);
+				return true;
+			}
+		});
+		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
 		addActionBarTabs();
 
+		mListView.setClickable(true);
 		setListViewClickable(mListView);
 
 		mButtonSaveItem.setOnClickListener(new View.OnClickListener() {
@@ -494,13 +560,15 @@ public class ItemListFragment extends Fragment implements Serializable,
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view,
 					int position, long id) {
-
-				Item item = (Item) listView.getAdapter().getItem(position);
-				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
-				i.putExtra(Constants.KEY_USER_TAG, mUser);
-				i.putExtra(Constants.KEY_TYPE, item.getType().toString());
-				startActivityForResult(i, 0);
+				if (mActionMode == null) {
+					Item item = (Item) listView.getAdapter().getItem(position);
+					Intent i = new Intent(getActivity(),
+							ItemPagerActivity.class);
+					i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
+					i.putExtra(Constants.KEY_USER_TAG, mUser);
+					i.putExtra(Constants.KEY_TYPE, item.getType().toString());
+					startActivityForResult(i, 0);
+				}
 			}
 		});
 	}
