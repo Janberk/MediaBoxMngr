@@ -72,7 +72,7 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 @SuppressLint("NewApi")
 public class ItemListFragment extends Fragment implements Serializable,
-		OnItemSelectedListener {
+		View.OnClickListener, OnItemLongClickListener, OnItemSelectedListener {
 
 	/**
 	 * 
@@ -135,9 +135,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-
 		sDeleteMode = false;
-
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUserFromPrefs();
@@ -193,49 +191,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
 
-	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			MenuInflater inflater = mode.getMenuInflater();
-			inflater.inflate(R.menu.fragment_menu_cab, menu);
-			return true;
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			return false;
-		}
-
-		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			int position = Integer.parseInt(mode.getTag().toString());
-
-			switch (item.getItemId()) {
-			case R.id.menu_editItem:
-				Item clickedItem = (Item) mListView.getAdapter().getItem(
-						position);
-				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(Constants.KEY_ITEM_ID, clickedItem.getUniqueId());
-				i.putExtra(Constants.KEY_USER_TAG, mUser);
-				i.putExtra(Constants.KEY_TYPE, clickedItem.getType().toString());
-				startActivityForResult(i, 0);
-				mode.finish();
-				return true;
-			case R.id.menu_deleteItem:
-				mode.finish();
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		public void onDestroyActionMode(ActionMode mode) {
-			sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
-			updateVisibilityOfElements(sDeleteMode);
-		};
-	};
-
 	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -278,92 +233,22 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		mItemAdapter = new CustomItemAdapter(getActivity(), this, mItemList);
 		mItemAdapter.setNotifyOnChange(true);
+
+		mListView.setOnItemLongClickListener(this);
+		mListView.setClickable(true);
 		mListView.setLongClickable(true);
 		mListView.setAdapter(mItemAdapter);
-
-		mListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			public boolean onItemLongClick(AdapterView<?> av, View view,
-					int pos, long id) {
-				if (BuildConfig.DEBUG) {
-					Log.d(Constants.LOG_TAG,
-							"ItemListFragment - setOnItemLongClickListener(); position: "
-									+ pos);
-				}
-				mActionMode = getActivity()
-						.startActionMode(mActionModeCallback);
-				mActionMode.setTag(pos);
-				showItemDelete();
-				view.setSelected(true);
-				return true;
-			}
-		});
 		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		setListViewClickable(mListView);
 
 		addActionBarTabs();
 
-		mListView.setClickable(true);
-		setListViewClickable(mListView);
-
-		mButtonSaveItem.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				saveItem();
-			}
-		});
-
-		mButtonDeleteSelected.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				deleteSelectedItems();
-			}
-		});
-
-		mImageHome.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Home", Toast.LENGTH_LONG).show();
-			}
-		});
-
-		mImageSearch.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// loadItemsFromRemoteDb();
-				Toast.makeText(getActivity(), "Search", Toast.LENGTH_LONG)
-						.show();
-			}
-		});
-
-		mImageSettings.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG)
-						.show();
-				// try {
-				// syncWithRemoteDb();
-				// } catch (JSONException e) {
-				// e.printStackTrace();
-				// } catch (IOException e) {
-				// e.printStackTrace();
-				// }
-			}
-		});
-
-		mImageLogout.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Logout", Toast.LENGTH_LONG)
-						.show();
-				logout();
-			}
-		});
+		mButtonSaveItem.setOnClickListener(this);
+		mButtonDeleteSelected.setOnClickListener(this);
+		mImageHome.setOnClickListener(this);
+		mImageSearch.setOnClickListener(this);
+		mImageSettings.setOnClickListener(this);
+		mImageLogout.setOnClickListener(this);
 
 		return view;
 	}
@@ -837,6 +722,103 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	public CustomItemAdapter getItemAdapter() {
 		return mItemAdapter;
+	}
+
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.fragment_menu_cab, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			int position = Integer.parseInt(mode.getTag().toString());
+
+			switch (item.getItemId()) {
+			case R.id.menu_editItem:
+				Item clickedItem = (Item) mListView.getAdapter().getItem(
+						position);
+				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
+				i.putExtra(Constants.KEY_ITEM_ID, clickedItem.getUniqueId());
+				i.putExtra(Constants.KEY_USER_TAG, mUser);
+				i.putExtra(Constants.KEY_TYPE, clickedItem.getType().toString());
+				startActivityForResult(i, 0);
+				mode.finish();
+				return true;
+			case R.id.menu_deleteItem:
+				mode.finish();
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		public void onDestroyActionMode(ActionMode mode) {
+			sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
+			updateVisibilityOfElements(sDeleteMode);
+		};
+	};
+
+	// click listeners
+	@Override
+	public void onClick(View view) {
+
+		if (view == mButtonSaveItem) {
+			saveItem();
+		}
+		if (view == mButtonDeleteSelected) {
+			deleteSelectedItems();
+		}
+		if (view == mImageHome) {
+			Toast.makeText(getActivity(), "Home", Toast.LENGTH_LONG).show();
+		}
+		if (view == mImageSearch) {
+			// loadItemsFromRemoteDb();
+			Toast.makeText(getActivity(), "Search", Toast.LENGTH_LONG).show();
+		}
+		if (view == mImageSettings) {
+			Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG).show();
+			// try {
+			// syncWithRemoteDb();
+			// } catch (JSONException e) {
+			// e.printStackTrace();
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
+		}
+		if (view == mImageLogout) {
+			Toast.makeText(getActivity(), "Logout", Toast.LENGTH_LONG).show();
+			logout();
+		}
+
+	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			int position, long id) {
+
+		if (parent == mListView) {
+			if (BuildConfig.DEBUG) {
+				Log.d(Constants.LOG_TAG,
+						"ItemListFragment - setOnItemLongClickListener(); position: "
+								+ position);
+			}
+			mActionMode = getActivity().startActionMode(mActionModeCallback);
+			mActionMode.setTag(position);
+			showItemDelete();
+			view.setSelected(true);
+			return true;
+		}
+
+		return false;
 	}
 
 }
