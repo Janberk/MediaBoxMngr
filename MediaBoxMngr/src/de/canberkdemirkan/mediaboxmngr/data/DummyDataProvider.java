@@ -22,8 +22,8 @@ public class DummyDataProvider {
 		ArrayList<Item> list = new ArrayList<Item>();
 		Item item = null;
 
-		for (int i = 1; i <= 300; i++) {
-			if (i < 101) {
+		for (int i = 1; i <= 30; i++) {
+			if (i < 11) {
 				item = new MusicAlbum();
 				item.setType(ItemType.Album);
 				item.setUser(mUser);
@@ -31,7 +31,7 @@ public class DummyDataProvider {
 				if ((i % 2) != 0) {
 					item.setFavorite(true);
 				}
-			} else if (i < 201) {
+			} else if (i < 21) {
 				item = new Book();
 				item.setType(ItemType.Book);
 				item.setUser(mUser);
@@ -39,7 +39,7 @@ public class DummyDataProvider {
 				if ((i % 2) != 0) {
 					item.setFavorite(true);
 				}
-			} else if (i < 301) {
+			} else if (i < 31) {
 				item = new Movie();
 				item.setType(ItemType.Movie);
 				item.setUser(mUser);

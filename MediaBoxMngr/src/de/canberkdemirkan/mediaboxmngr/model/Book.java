@@ -7,6 +7,11 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class Book extends Item {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3888624184736706992L;
+
 	private String mEdition;
 	private String mPublishingHouse;
 	private String mAuthor;

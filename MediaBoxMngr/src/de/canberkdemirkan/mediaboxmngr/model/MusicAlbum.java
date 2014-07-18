@@ -7,6 +7,11 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class MusicAlbum extends Item {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2488645846887564126L;
+
 	private String mLabel;
 	private String mStudio;
 	private String mProducer;

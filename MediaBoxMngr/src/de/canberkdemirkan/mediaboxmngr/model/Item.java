@@ -16,7 +16,7 @@ public abstract class Item implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1430431442705653406L;
 
 	protected static final String JSON_UID = "uid";
 	protected static final String JSON_SYNCED = "synced";

@@ -7,6 +7,11 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class Movie extends Item {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1938544458752745082L;
+
 	private String mProducer;
 	private String mDirector;
 	private String mScript;

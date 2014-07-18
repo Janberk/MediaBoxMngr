@@ -32,9 +32,16 @@ import de.canberkdemirkan.mediaboxmngr.activities.SignupActivity;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class LoginFragment extends Fragment {
-
+	
+	// Emulator
 	public static final String LOGIN_URL = "http://10.0.2.2:80/development/mediaboxmngr_backend/users/log_in.php";
-	//public static final String LOGIN_URL = "http://192.168.0.13:8080/development/mediaboxmngr_backend/users/log_in.php";
+	
+	// PC
+	// public static final String LOGIN_URL = "http://192.168.1.50:80/development/mediaboxmngr_backend/users/log_in.php";
+	
+	// Laptop
+	// public static final String LOGIN_URL = "http://192.168.0.13:8080/development/mediaboxmngr_backend/users/log_in.php";
+	
 	public static final int DEFAULT_TIMEOUT = 20 * 1000;
 
 	public static final String KEY_EMAIL = "emailKey";
