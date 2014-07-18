@@ -25,11 +25,11 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 	// TODO ViewHolder Pattern prevents list to mess up order while scrolling.
 	static class ViewHolder {
 		ImageView mImageItemIcon;
-		ImageView mImageItemDelete;
+		// ImageView mImageItemDelete;
 		TextView mTextItemTitle;
 		TextView mTextItemCreationDate;
 		CheckBox mCheckBoxItemFavorite;
-		CheckBox mCheckBoxConfirmItemDelete;
+		// CheckBox mCheckBoxConfirmItemDelete;
 	}
 
 	private final Context mContext;
@@ -65,16 +65,16 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 			holder = new ViewHolder();
 			holder.mImageItemIcon = (ImageView) convertView
 					.findViewById(R.id.iv_listItem_itemIcon);
-			holder.mImageItemDelete = (ImageView) convertView
-					.findViewById(R.id.iv_listItem_itemDeleteSingle);
+			// holder.mImageItemDelete = (ImageView) convertView
+			// .findViewById(R.id.iv_listItem_itemDeleteSingle);
 			holder.mTextItemTitle = (TextView) convertView
 					.findViewById(R.id.tv_listItem_itemTitle);
 			holder.mTextItemCreationDate = (TextView) convertView
 					.findViewById(R.id.tv_listItem_itemCreationDate);
 			holder.mCheckBoxItemFavorite = (CheckBox) convertView
 					.findViewById(R.id.cb_listItem_itemFavorite);
-			holder.mCheckBoxConfirmItemDelete = (CheckBox) convertView
-					.findViewById(R.id.cb_listItem_itemDelete);
+			// holder.mCheckBoxConfirmItemDelete = (CheckBox) convertView
+			// .findViewById(R.id.cb_listItem_itemDelete);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -82,28 +82,27 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 
 		// Configure the view for this Item
 		Item item = getItem(position);
-		item.setRemovable(false);
 		ItemType type = (ItemType) mItemList.get(position).getType();
 
 		holder.mTextItemTitle.setText(item.getTitle());
 		holder.mTextItemCreationDate.setText(item.getCreationDate().toString());
 		holder.mCheckBoxItemFavorite.setChecked(item.isFavorite());
-		holder.mCheckBoxConfirmItemDelete.setChecked(false);
+		// holder.mCheckBoxConfirmItemDelete.setChecked(false);
 		holder.mImageItemIcon.setFadingEdgeLength(2);
 		UtilMethods.setCustomIconToTypeOfMedia(holder.mImageItemIcon, type,
 				UtilMethods.ICON_DARK_TAG);
 
-		if (ItemListFragment.sDeleteMode) {
-			holder.mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
-			holder.mImageItemDelete.setVisibility(View.VISIBLE);
-		} else {
-			holder.mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
-			holder.mImageItemDelete.setVisibility(View.GONE);
-		}
+		// if (ItemListFragment.sDeleteMode) {
+		// holder.mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
+		// holder.mImageItemDelete.setVisibility(View.VISIBLE);
+		// } else {
+		// holder.mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
+		// holder.mImageItemDelete.setVisibility(View.GONE);
+		// }
 
-		setClickListenerCheckBox(holder.mCheckBoxConfirmItemDelete, item,
-				position);
-		setClickListenerImageView(holder.mImageItemDelete, item, position);
+		// setClickListenerCheckBox(holder.mCheckBoxConfirmItemDelete, item,
+		// position);
+		// setClickListenerImageView(holder.mImageItemDelete, item, position);
 
 		return convertView;
 	}
@@ -115,11 +114,7 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 			@Override
 			public void onClick(View v) {
 				if (checkBox.isChecked()) {
-					item.setRemovable(true);
-					updateItem(item);
 				} else if (!checkBox.isChecked()) {
-					item.setRemovable(false);
-					updateItem(item);
 				}
 			}
 		});

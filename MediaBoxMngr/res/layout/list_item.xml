@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:layout_margin="@dimen/custom_value_8dp"
-    android:background="@drawable/list_item_shape"
+    android:background="@drawable/list_item_background"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical"
-    android:longClickable="true"
     android:padding="@dimen/custom_value_8dp" >
 
     <CheckBox
@@ -26,7 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/iv_listItem_itemIcon"
-        android:text="@string/item_title_label" />
+        android:text="@string/item_title_label"
+        android:textIsSelectable="false" />
 
     <ImageView
         android:id="@+id/iv_listItem_itemIcon"
@@ -37,7 +38,7 @@
         android:contentDescription="@string/item_cover_label"
         android:src="@drawable/ic_launcher" />
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/iv_listItem_itemDeleteSingle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,9 +46,9 @@
         android:layout_alignParentLeft="true"
         android:layout_marginRight="@dimen/custom_value_4dp"
         android:contentDescription="@string/delete_item"
-        android:src="@drawable/ic_menu_cross" />
+        android:src="@drawable/ic_menu_cross" /> -->
 
-    <CheckBox
+    <!-- <CheckBox
         android:id="@+id/cb_listItem_itemDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,7 +58,7 @@
         android:button="@drawable/custom_checkbox"
         android:enabled="true"
         android:focusable="false"
-        android:gravity="center" />
+        android:gravity="center" /> -->
 
     <TextView
         android:id="@+id/tv_listItem_itemGenre"
@@ -69,6 +70,7 @@
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="@string/item_genre_label"
+        android:textIsSelectable="false"
         android:textSize="12sp"
         android:textStyle="normal" />
 
@@ -81,6 +83,7 @@
         android:layout_alignBottom="@+id/tv_listItem_itemGenre"
         android:layout_toLeftOf="@+id/cb_listItem_itemFavorite"
         android:text="@string/item_creation_date_label"
+        android:textIsSelectable="false"
         android:textSize="12sp"
         android:textStyle="normal" />
 

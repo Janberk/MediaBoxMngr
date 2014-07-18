@@ -8,11 +8,6 @@
         android:title="@string/new_item"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/menu_edit"
-        android:icon="@drawable/ic_menu_trash_light"
-        android:title="@string/edit"
-        app:showAsAction="always"/>
-    <item
         android:id="@+id/menu_deleteAll"
         android:icon="@drawable/ic_menu_trash_light"
         android:title="@string/delete_all"

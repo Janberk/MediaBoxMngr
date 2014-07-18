@@ -82,11 +82,11 @@ public class AlertDialogDeletion extends DialogFragment {
 									int which) {
 
 								if (mTag.equals(DIALOG_TAG_SINGLE)) {
-									deleteSingleItem();
+									deleteSelectedItem();
 								} else if (mTag.equals(DIALOG_TAG_SELECTED)) {
 									deleteSelectedItem();
 								} else if (mTag.equals(DIALOG_TAG_ALL)) {
-									deleteAllItem();
+									deleteAllItems();
 								}
 								sendResult(Activity.RESULT_OK);
 							}
@@ -100,26 +100,11 @@ public class AlertDialogDeletion extends DialogFragment {
 						}).create();
 	}
 
-	private void deleteSingleItem() {
-		Item item = mItemList.get(mPosition);
-		mItemList.remove(mPosition);
-		ItemStock.get(mFragment.getActivity(), mFragment.getUser())
-				.getDAOItem().deleteItem(item);
-		ItemListFragment.sDeleteMode = false;
-	}
-
 	private void deleteSelectedItem() {
-		mItemList = ItemStock.get(getActivity(), mFragment.getUser())
-				.getDAOItem().getAllItems(mFragment.getUser());
 		for (Item item : mItemList) {
-			if (item.isRemovable()) {
-				ItemStock.get(getActivity(), mFragment.getUser()).getDAOItem()
-						.deleteItem(item);
-			}
+			ItemStock.get(getActivity(), mFragment.getUser()).getDAOItem()
+					.deleteItem(item);
 		}
-
-		ItemStock.get(getActivity(), mFragment.getUser()).getDAOItem()
-				.setAllRemovable(false);
 		if (CustomTabListener.sTag != null) {
 			mItemList.clear();
 			switch (CustomTabListener.sTag) {
@@ -151,10 +136,9 @@ public class AlertDialogDeletion extends DialogFragment {
 				break;
 			}
 		}
-		ItemListFragment.sDeleteMode = false;
 	}
 
-	private void deleteAllItem() {
+	private void deleteAllItems() {
 		mItemList.clear();
 		ItemStock.get(mFragment.getActivity(), mFragment.getUser())
 				.getDAOItem().deleteAllItems(mFragment.getUser());

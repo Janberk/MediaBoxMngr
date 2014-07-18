@@ -30,15 +30,6 @@
                 android:layout_below="@+id/tv_fragmentLogin_forgotPassword"
                 android:layout_centerHorizontal="true"
                 android:text="@string/sign_up_link_label" />
-
-            <TextView
-                android:id="@+id/tv_fragmentLogin_forgotPassword"
-                style="@style/textViewForm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/forgot_password_label" />
         </RelativeLayout>
 
         <RelativeLayout

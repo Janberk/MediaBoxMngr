@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,11 +31,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -72,7 +72,8 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 @SuppressLint("NewApi")
 public class ItemListFragment extends Fragment implements Serializable,
-		View.OnClickListener, OnItemLongClickListener, OnItemSelectedListener {
+		View.OnClickListener, AdapterView.OnItemClickListener,
+		OnItemSelectedListener, MultiChoiceModeListener {
 
 	/**
 	 * 
@@ -96,6 +97,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	public static ListTag sListTag;
 	public static boolean sEditMode;
 	public static boolean sDeleteMode;;
+	private static int sCABSelectionCount = 0;
 
 	private ListView mListView;
 	private ArrayList<Item> mItemList;
@@ -110,13 +112,10 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private EditText mEditEditTitle;
 	private Spinner mSpinnerItemType;
 	private Button mButtonSaveItem;
-	private Button mButtonDeleteSelected;
 	private ImageView mImageHome;
 	private ImageView mImageSearch;
 	private ImageView mImageSettings;
 	private ImageView mImageLogout;
-	private ImageView mImageItemDelete;
-	private CheckBox mCheckBoxConfirmItemDelete;
 
 	public static ItemListFragment newItemListFragment(ListTag listTag) {
 
@@ -179,8 +178,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.sp_fragmentEditTitle_itemType);
 		mButtonSaveItem = (Button) view
 				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
-		mButtonDeleteSelected = (Button) view
-				.findViewById(R.id.btn_fragmentItemList_deleteSelected);
 		mImageHome = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_home);
 		mImageSearch = (ImageView) view
@@ -207,7 +204,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		mEditor.setVisibility(View.GONE);
-		mButtonDeleteSelected.setVisibility(View.GONE);
 
 		mSpinnerItemType.setAdapter(new CustomSpinnerAdapter(getActivity(),
 				R.layout.custom_spinner, R.id.tv_customSpinner_label,
@@ -234,17 +230,24 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mItemAdapter = new CustomItemAdapter(getActivity(), this, mItemList);
 		mItemAdapter.setNotifyOnChange(true);
 
-		mListView.setOnItemLongClickListener(this);
-		mListView.setClickable(true);
-		mListView.setLongClickable(true);
 		mListView.setAdapter(mItemAdapter);
-		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		setListViewClickable(mListView);
+
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+			// Use floating context menus on Froyo and Gingerbread
+			registerForContextMenu(mListView);
+		} else {
+			// Use contextual action bar on Honeycomb and higher
+			mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			mListView.setMultiChoiceModeListener(this);
+		}
+
+		mListView.setOnItemClickListener(this);
+		// mListView.setOnItemLongClickListener(this);
+		mListView.setItemsCanFocus(false);
 
 		addActionBarTabs();
 
 		mButtonSaveItem.setOnClickListener(this);
-		mButtonDeleteSelected.setOnClickListener(this);
 		mImageHome.setOnClickListener(this);
 		mImageSearch.setOnClickListener(this);
 		mImageSettings.setOnClickListener(this);
@@ -319,31 +322,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	}
 
-	private void showItemDelete() {
-		sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
-
-		int childCount = mListView.getChildCount();
-
-		for (int i = 0; i < childCount; i++) {
-			View view = mListView.getChildAt(i);
-
-			if (view != null) {
-
-				mImageItemDelete = (ImageView) view
-						.findViewById(R.id.iv_listItem_itemDeleteSingle);
-				mCheckBoxConfirmItemDelete = (CheckBox) view
-						.findViewById(R.id.cb_listItem_itemDelete);
-				mCheckBoxConfirmItemDelete.setChecked(false);
-
-				updateVisibilityOfElements(sDeleteMode);
-			}
-		}
-		if (!sDeleteMode) {
-			ItemStock.get(getActivity(), getUser()).getDAOItem()
-					.setAllRemovable(false);
-		}
-	}
-
 	private void deleteAllItems() {
 		final String header = getActivity().getResources().getString(
 				R.string.dialog_header_delete_all);
@@ -353,11 +331,58 @@ public class ItemListFragment extends Fragment implements Serializable,
 		dialog.show(mFragmentManager, "");
 	}
 
+	private void showItemDetails() {
+		int count = 0;
+
+		for (int i = 0; i < mItemAdapter.getCount(); i++) {
+			if (getListView().isItemChecked(i)) {
+				count++;
+				if (count == 1) {
+					Item selectedItem = mItemAdapter.getItem(i);
+					Intent intent = new Intent(getActivity(),
+							ItemPagerActivity.class);
+					intent.putExtra(Constants.KEY_ITEM_ID,
+							selectedItem.getUniqueId());
+					intent.putExtra(Constants.KEY_USER_TAG, mUser);
+					intent.putExtra(Constants.KEY_TYPE, selectedItem.getType()
+							.toString());
+					startActivityForResult(intent, 0);
+				}
+			}
+		}
+	}
+
 	private void deleteSelectedItems() {
 		final String header = getActivity().getResources().getString(
 				R.string.dialog_header_delete_selected);
-		AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
-				mItemList, header, 0, AlertDialogDeletion.DIALOG_TAG_SELECTED);
+		ArrayList<Item> selectedItems = new ArrayList<Item>();
+		String addition = null;
+		int count = 0;
+
+		for (int i = 0; i < mItemAdapter.getCount(); i++) {
+			if (getListView().isItemChecked(i)) {
+				count++;
+				Item selectedItem = mItemAdapter.getItem(i);
+				selectedItems.add(selectedItem);
+				String title = selectedItem.getTitle();
+				if (count == 1) {
+					addition = title;
+				}
+			}
+		}
+		AlertDialogDeletion dialog = null;
+		if (count == 1) {
+			dialog = AlertDialogDeletion.newInstance(this, selectedItems,
+					header + "\n" + addition, 0,
+					AlertDialogDeletion.DIALOG_TAG_SINGLE);
+		}
+		if (count > 1) {
+			addition = count + " of " + mItemAdapter.getCount();
+			dialog = AlertDialogDeletion.newInstance(this, selectedItems,
+					header + "\n" + addition, 0,
+					AlertDialogDeletion.DIALOG_TAG_SELECTED);
+		}
+
 		dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
 		dialog.show(mFragmentManager, "");
 	}
@@ -385,7 +410,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 			mEditor.setVisibility(View.GONE);
 			changeAlphaOfView(mListContainer, 0.2F, 1.0F);
 			mMenuBar.setVisibility(View.VISIBLE);
-			setListViewClickable(mListView);
+			mListView.setOnItemClickListener(this);
 			sEditMode = false;
 		}
 	}
@@ -404,60 +429,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		startActivity(intent);
 	}
 
-	private void updateVisibilityOfElements(boolean value) {
-
-		if (value) {
-			if (mMenuBar != null) {
-				mMenuBar.setVisibility(View.GONE);
-			}
-			if (mCheckBoxConfirmItemDelete != null) {
-				mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
-			}
-			if (mImageItemDelete != null) {
-				mImageItemDelete.setVisibility(View.VISIBLE);
-			}
-			if (mButtonDeleteSelected != null) {
-				mButtonDeleteSelected.setVisibility(View.VISIBLE);
-			}
-
-		} else {
-			if (mMenuBar != null) {
-				mMenuBar.setVisibility(View.VISIBLE);
-			}
-			if (mCheckBoxConfirmItemDelete != null) {
-				mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
-			}
-			if (mImageItemDelete != null) {
-				mImageItemDelete.setVisibility(View.GONE);
-			}
-			if (mButtonDeleteSelected != null) {
-				mButtonDeleteSelected.setVisibility(View.GONE);
-			}
-
-		}
-
-	}
-
-	private void setListViewClickable(ListView list) {
-		final ListView listView = list;
-		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View view,
-					int position, long id) {
-				if (mActionMode == null) {
-					Item item = (Item) listView.getAdapter().getItem(position);
-					Intent i = new Intent(getActivity(),
-							ItemPagerActivity.class);
-					i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
-					i.putExtra(Constants.KEY_USER_TAG, mUser);
-					i.putExtra(Constants.KEY_TYPE, item.getType().toString());
-					startActivityForResult(i, 0);
-				}
-			}
-		});
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -474,7 +445,10 @@ public class ItemListFragment extends Fragment implements Serializable,
 			mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
 					sListTag);
 			mItemAdapter.refresh(mItemList);
-			updateVisibilityOfElements(sDeleteMode);
+
+			if (mMenuBar != null) {
+				mMenuBar.setVisibility(View.VISIBLE);
+			}
 
 		}
 	}
@@ -495,9 +469,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		switch (menuItem.getItemId()) {
 		case R.id.menu_newItem:
 			switchEditMode();
-			return true;
-		case R.id.menu_edit:
-			showItemDelete();
 			return true;
 		case R.id.menu_deleteAll:
 			deleteAllItems();
@@ -724,58 +695,12 @@ public class ItemListFragment extends Fragment implements Serializable,
 		return mItemAdapter;
 	}
 
-	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			MenuInflater inflater = mode.getMenuInflater();
-			inflater.inflate(R.menu.fragment_menu_cab, menu);
-			return true;
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			return false;
-		}
-
-		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			int position = Integer.parseInt(mode.getTag().toString());
-
-			switch (item.getItemId()) {
-			case R.id.menu_editItem:
-				Item clickedItem = (Item) mListView.getAdapter().getItem(
-						position);
-				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(Constants.KEY_ITEM_ID, clickedItem.getUniqueId());
-				i.putExtra(Constants.KEY_USER_TAG, mUser);
-				i.putExtra(Constants.KEY_TYPE, clickedItem.getType().toString());
-				startActivityForResult(i, 0);
-				mode.finish();
-				return true;
-			case R.id.menu_deleteItem:
-				mode.finish();
-				return true;
-			default:
-				return false;
-			}
-		}
-
-		public void onDestroyActionMode(ActionMode mode) {
-			sDeleteMode = UtilMethods.modeSwitcher(sDeleteMode);
-			updateVisibilityOfElements(sDeleteMode);
-		};
-	};
-
 	// click listeners
 	@Override
 	public void onClick(View view) {
 
 		if (view == mButtonSaveItem) {
 			saveItem();
-		}
-		if (view == mButtonDeleteSelected) {
-			deleteSelectedItems();
 		}
 		if (view == mImageHome) {
 			Toast.makeText(getActivity(), "Home", Toast.LENGTH_LONG).show();
@@ -802,23 +727,83 @@ public class ItemListFragment extends Fragment implements Serializable,
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
-
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
 		if (parent == mListView) {
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"ItemListFragment - setOnItemLongClickListener(); position: "
-								+ position);
+			if (mActionMode == null) {
+				Item item = (Item) mListView.getAdapter().getItem(position);
+				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
+				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
+				i.putExtra(Constants.KEY_USER_TAG, mUser);
+				i.putExtra(Constants.KEY_TYPE, item.getType().toString());
+				startActivityForResult(i, 0);
 			}
-			mActionMode = getActivity().startActionMode(mActionModeCallback);
-			mActionMode.setTag(position);
-			showItemDelete();
-			view.setSelected(true);
-			return true;
+		}
+	}
+
+	// ActionMode Callbacks
+	@Override
+	public void onItemCheckedStateChanged(ActionMode mode, int position,
+			long id, boolean checked) {
+		if (checked) {
+			sCABSelectionCount++;
+		} else {
+			sCABSelectionCount--;
 		}
 
-		return false;
+		mode.invalidate();
+	}
+
+	@Override
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		MenuInflater inflater = mode.getMenuInflater();
+		inflater.inflate(R.menu.fragment_menu_cab, menu);
+		if (mMenuBar != null) {
+			mMenuBar.setVisibility(View.GONE);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+		if (sCABSelectionCount < 2) {
+			MenuItem item = menu.findItem(R.id.menu_editItem);
+			item.setVisible(true);
+			return true;
+		} else {
+			MenuItem item = menu.findItem(R.id.menu_editItem);
+			item.setVisible(false);
+			return true;
+		}
+	}
+
+	@Override
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		// int position =
+		// Integer.parseInt(mode.getTag().toString());
+
+		switch (item.getItemId()) {
+		case R.id.menu_editItem:
+			showItemDetails();
+			mode.finish();
+			return true;
+		case R.id.menu_deleteItem:
+			deleteSelectedItems();
+			mItemAdapter.refresh(ItemStock.get(getActivity(), mUser)
+					.getItemList());
+			mode.finish();
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public void onDestroyActionMode(ActionMode mode) {
+		if (mMenuBar != null) {
+			mMenuBar.setVisibility(View.VISIBLE);
+		}
+		sCABSelectionCount = 0;
 	}
 
 }

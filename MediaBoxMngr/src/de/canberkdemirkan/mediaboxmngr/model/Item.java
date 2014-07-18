@@ -28,7 +28,6 @@ public abstract class Item implements Serializable {
 	protected static final String JSON_DELETION_DATE = "deletion_date";
 	protected static final String JSON_IN_POSSESSION = "in_possession";
 	protected static final String JSON_FAVORITE = "favorite";
-	protected static final String JSON_REMOVABLE = "removable";
 
 	protected static final String JSON_TITLE = "title";
 	protected static final String JSON_ORIGINAL_TITLE = "original_title";
@@ -49,7 +48,6 @@ public abstract class Item implements Serializable {
 	private Date mDeletionDate;
 	private boolean mInPossession;
 	private boolean mFavorite;
-	private boolean mRemovable;
 
 	private String mTitle;
 	private String mOriginalTitle;
@@ -107,9 +105,6 @@ public abstract class Item implements Serializable {
 		}
 		if (json.has(JSON_FAVORITE)) {
 			mFavorite = json.getBoolean(JSON_FAVORITE);
-		}
-		if (json.has(JSON_REMOVABLE)) {
-			mRemovable = json.getBoolean(JSON_REMOVABLE);
 		}
 		if (json.has(JSON_TITLE)) {
 			mTitle = json.getString(JSON_TITLE);
@@ -208,14 +203,6 @@ public abstract class Item implements Serializable {
 
 	public void setFavorite(boolean favorite) {
 		mFavorite = favorite;
-	}
-	
-	public boolean isRemovable() {
-		return mRemovable;
-	}
-
-	public void setRemovable(boolean removable) {
-		mRemovable = removable;
 	}
 
 	public String getTitle() {
