@@ -1,44 +1,64 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#000022" >
 
-    <LinearLayout
+    <include
+        android:id="@+id/fragmentDetails_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/custom_value_4dp"
+        layout="@layout/fragment_details_header" >
+    </include>
 
-        <include
-            android:id="@+id/fragmentDetails_header"
+    <include
+        android:id="@+id/fragmentDetails_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragmentDetails_header"
+        android:layout_margin="@dimen/custom_value_4dp"
+        layout="@layout/fragment_details_content" >
+    </include>
+
+    <include
+        android:id="@+id/fragmentDetails_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragmentDetails_content"
+        android:layout_margin="@dimen/custom_value_4dp"
+        layout="@layout/fragment_details_footer" >
+    </include>
+
+    <RelativeLayout
+        android:id="@+id/fragmentDetails_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fragmentDetails_menuBar"
+        android:layout_below="@+id/fragmentDetails_footer" >
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/custom_value_4dp"
-            layout="@layout/fragment_details_header" >
-        </include>
+            android:layout_height="wrap_content" >
 
-        <include
-            android:id="@+id/fragmentDetails_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/custom_value_4dp"
-            layout="@layout/fragment_details_content" >
-        </include>
+            <include
+                android:id="@+id/fragmentDetails_book"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/fragmentDetails_menuBar"
+                android:layout_below="@+id/fragmentDetails_footer"
+                android:layout_margin="@dimen/custom_value_4dp"
+                layout="@layout/fragment_details_book" >
+            </include>
+        </ScrollView>
+    </RelativeLayout>
 
-        <include
-            android:id="@+id/fragmentDetails_footer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/custom_value_4dp"
-            layout="@layout/fragment_details_footer" >
-        </include>
+    <include
+        android:id="@+id/fragmentDetails_menuBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/fragment_menu_bar" >
+    </include>
 
-        <include
-            android:id="@+id/fragmentDetails_specific"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/custom_value_4dp"
-            layout="@layout/fragment_details_specific" >
-        </include>
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

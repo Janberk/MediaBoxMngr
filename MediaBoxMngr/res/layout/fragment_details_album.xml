@@ -1,0 +1,163 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000022" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/custom_value_16dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_genre"
+            style="@style/textViewDetails"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Genre" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_genre"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_genre"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter genre"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_original"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_genre"
+            android:layout_centerHorizontal="true"
+            android:text="Orig. title" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_original"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_original"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter orig. title"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_country"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_original"
+            android:layout_centerHorizontal="true"
+            android:text="Country" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_country"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_country"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter country"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_year"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_country"
+            android:layout_centerHorizontal="true"
+            android:text="Year" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_year"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_year"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter year"
+            android:inputType="text" />
+        
+        <TextView
+            android:id="@+id/tv_fragmentDetails_artist"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_year"
+            android:layout_centerHorizontal="true"
+            android:text="Artist" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_artist"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_artist"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter artist"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_label"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_artist"
+            android:layout_centerHorizontal="true"
+            android:text="Label" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_label"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_label"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter label"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_studio"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_label"
+            android:layout_centerHorizontal="true"
+            android:text="Studio" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_studio"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_studio"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter studio"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_producer"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_studio"
+            android:layout_centerHorizontal="true"
+            android:text="Producer" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_producer"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_producer"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter producer"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_format"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_producer"
+            android:layout_centerHorizontal="true"
+            android:text="Format" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_format"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_format"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter format"
+            android:inputType="text" />
+        
+        <TextView
+            android:id="@+id/tv_fragmentDetails_titleCount"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_format"
+            android:layout_centerHorizontal="true"
+            android:text="Title count" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_titleCount"
+            style="@style/editTextForm.textStyle.input"
+            android:layout_below="@+id/tv_fragmentDetails_titleCount"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter title count"
+            android:inputType="text" />
+    </RelativeLayout>
+
+</ScrollView>

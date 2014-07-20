@@ -19,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
@@ -35,6 +36,8 @@ public class ItemFragment extends Fragment {
 
 	private String mUser;
 	private Item mItem;
+
+	private RelativeLayout mContentContainer;
 
 	private EditText mEditItemTitle;
 	private TextView mTextItemGenre;
@@ -129,6 +132,9 @@ public class ItemFragment extends Fragment {
 				.findViewById(R.id.et_fragmentDetails_edition);
 		mEditItemIsbn = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_isbn);
+		mContentContainer = (RelativeLayout) view
+				.findViewById(R.id.fragmentDetails_container);
+		// mContentContainer.setVisibility(View.GONE);
 	}
 
 	@TargetApi(11)

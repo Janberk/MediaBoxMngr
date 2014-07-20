@@ -1,31 +1,30 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:orientation="vertical"
-    android:weightSum="10" >
+    android:animateLayoutChanges="true" >
 
     <include
         android:id="@+id/fragmentItemList_editTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         layout="@layout/fragment_edit_title" >
     </include>
 
     <include
         android:id="@+id/fragmentItemList_listView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8.8"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fragmentItemList_editTitle"
         layout="@layout/fragment_list_view" >
     </include>
 
     <include
         android:id="@+id/fragmentItemList_menuBar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.2"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         layout="@layout/fragment_menu_bar" >
     </include>
 
-</LinearLayout>
+</RelativeLayout>
