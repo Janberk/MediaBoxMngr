@@ -23,6 +23,7 @@ public interface Constants {
 	
 	// intent extra keys/tags
 	String KEY_MY_PREFERENCES = "de.canberkdemirkan.mediaboxmngr.app_prefs";
+	String KEY_ITEM_UID = "de.canberkdemirkan.mediaboxmngr.item_uid";
 	String KEY_ITEM_ID = "de.canberkdemirkan.mediaboxmngr.item_id";
 	String KEY_TYPE = "de.canberkdemirkan.mediaboxmngr.item_type";
 	String KEY_ITEM_CREATION_DATE = "de.canberkdemirkan.mediaboxmngr.item_creation_date";

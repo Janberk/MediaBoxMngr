@@ -31,6 +31,11 @@ public class DummyDataProvider {
 				if ((i % 2) != 0) {
 					item.setFavorite(true);
 				}
+				item.setGenre(i + " Action");
+				item.setOriginalTitle("OT Test item Nr. " + i);
+				item.setCountry(i + " USA");
+				item.setYearPublished(i + " 1981");
+				item.setContent(item.toString());
 			} else if (i < 21) {
 				item = new Book();
 				item.setType(ItemType.Book);
@@ -39,6 +44,11 @@ public class DummyDataProvider {
 				if ((i % 2) != 0) {
 					item.setFavorite(true);
 				}
+				item.setGenre(i + " Action");
+				item.setOriginalTitle("OT Test item Nr. " + i);
+				item.setCountry(i + " USA");
+				item.setYearPublished(i + " 1981");
+				item.setContent(item.toString());
 			} else if (i < 31) {
 				item = new Movie();
 				item.setType(ItemType.Movie);
@@ -47,6 +57,11 @@ public class DummyDataProvider {
 				if ((i % 2) != 0) {
 					item.setFavorite(true);
 				}
+				item.setGenre(i + " Action");
+				item.setOriginalTitle("OT Test item Nr. " + i);
+				item.setCountry(i + " USA");
+				item.setYearPublished(i + " 1981");
+				item.setContent(item.toString());
 			}
 			list.add(item);
 		}

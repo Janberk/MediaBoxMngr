@@ -313,13 +313,10 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private void saveItem() {
 		ItemType type = ItemType.valueOf(mTypeAsString);
 		Item newItem = createItem(type);
-		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		itemStock.addItem(newItem);
-		ArrayList<Item> list = itemStock.getItemList();
-		mItemAdapter.refresh(list);
+		ItemStock.get(getActivity(), mUser).addItem(newItem);
+		mItemAdapter.refresh(ItemStock.get(getActivity(), mUser).getItemList());
 		mEditEditTitle.setText("");
 		switchEditMode();
-
 	}
 
 	private void deleteAllItems() {
@@ -341,7 +338,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 					Item selectedItem = mItemAdapter.getItem(i);
 					Intent intent = new Intent(getActivity(),
 							ItemPagerActivity.class);
-					intent.putExtra(Constants.KEY_ITEM_ID,
+					intent.putExtra(Constants.KEY_ITEM_UID,
 							selectedItem.getUniqueId());
 					intent.putExtra(Constants.KEY_USER_TAG, mUser);
 					intent.putExtra(Constants.KEY_TYPE, selectedItem.getType()
@@ -733,9 +730,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 			if (mActionMode == null) {
 				Item item = (Item) mListView.getAdapter().getItem(position);
 				Intent i = new Intent(getActivity(), ItemPagerActivity.class);
-				i.putExtra(Constants.KEY_ITEM_ID, item.getUniqueId());
+				i.putExtra(Constants.KEY_ITEM_UID, item.getUniqueId());
 				i.putExtra(Constants.KEY_USER_TAG, mUser);
-				i.putExtra(Constants.KEY_TYPE, item.getType().toString());
 				startActivityForResult(i, 0);
 			}
 		}

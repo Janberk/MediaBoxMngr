@@ -100,14 +100,6 @@ public class Movie extends Item {
 		sb.append("Creation date: "
 				+ UtilMethods.dateToFormattedStringConverter(getCreationDate())
 				+ "\n");
-		if (getDeletionDate() == null) {
-			sb.append("Deletion date:\n");
-		} else {
-			sb.append("Deletion date: "
-					+ UtilMethods
-							.dateToFormattedStringConverter(getDeletionDate())
-					+ "\n");
-		}
 		sb.append("Created by: " + getUser() + "\n");
 		sb.append("Title: " + getTitle() + "\n");
 		sb.append("Original title: " + getOriginalTitle() + "\n");
@@ -126,6 +118,14 @@ public class Movie extends Item {
 		sb.append("Rating: " + getRating() + "\n");
 		sb.append("In Possession?: " + isInPossession() + "\n");
 		sb.append("Deleted?: " + isDeleted() + "\n");
+		if (getDeletionDate() == null) {
+			sb.append("Deletion date:\n");
+		} else {
+			sb.append("Deletion date: "
+					+ UtilMethods
+							.dateToFormattedStringConverter(getDeletionDate())
+					+ "\n");
+		}
 
 		return sb.toString();
 	}

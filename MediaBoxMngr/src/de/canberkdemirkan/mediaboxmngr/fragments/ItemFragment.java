@@ -3,7 +3,10 @@ package de.canberkdemirkan.mediaboxmngr.fragments;
 import java.util.UUID;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,25 +22,36 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
+import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
-public class ItemFragment extends Fragment {
+public class ItemFragment extends Fragment implements View.OnClickListener,
+		OnCheckedChangeListener, TextWatcher {
 
-	public static String ITEM_TYPE;
+	public static String sItemType;
 
+	private SharedPreferences mSharedPreferences;
+
+	private UUID mItemId;
 	private String mUser;
 	private Item mItem;
 
 	private RelativeLayout mContentContainer;
+
+	private ImageView mImageHome;
+	private ImageView mImageSearch;
+	private ImageView mImageSettings;
+	private ImageView mImageLogout;
 
 	private EditText mEditItemTitle;
 	private TextView mTextItemGenre;
@@ -46,12 +60,6 @@ public class ItemFragment extends Fragment {
 	private TextView mTextItemYear;
 	private EditText mEditItemContent;
 	private CheckBox mCheckBoxItemFavorite;
-
-	private CheckBox mCheckBoxGotIt;
-	private CheckBox mCheckBoxWishList;
-	private Spinner mSpinnerItemGenre;
-	private Spinner mSpinnerItemCountry;
-	private Spinner mSpinnerItemYear;
 
 	private EditText mEditItemGenre;
 	private EditText mEditItemOriginalTitle;
@@ -65,7 +73,7 @@ public class ItemFragment extends Fragment {
 	public static ItemFragment newInstance(UUID itemId, String userTag) {
 		Bundle args = new Bundle();
 
-		args.putSerializable(Constants.KEY_ITEM_ID, itemId);
+		args.putSerializable(Constants.KEY_ITEM_UID, itemId);
 		args.putSerializable(Constants.KEY_USER_TAG, userTag);
 
 		ItemFragment fragment = new ItemFragment();
@@ -82,13 +90,15 @@ public class ItemFragment extends Fragment {
 		}
 		setHasOptionsMenu(true);
 
-		UUID itemId = (UUID) getArguments().getSerializable(
-				Constants.KEY_ITEM_ID);
+		mSharedPreferences = getActivity().getSharedPreferences(
+				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
+
+		mItemId = (UUID) getArguments().getSerializable(Constants.KEY_ITEM_UID);
 		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
 
-		ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		mItem = itemStock.getItem(itemId);
-		ITEM_TYPE = mItem.getType().toString();
+		mItem = ItemStock.get(getActivity(), mUser).getItem(mItemId);
+
+		sItemType = mItem.getType().toString();
 	}
 
 	private void initViews(View view) {
@@ -135,6 +145,14 @@ public class ItemFragment extends Fragment {
 		mContentContainer = (RelativeLayout) view
 				.findViewById(R.id.fragmentDetails_container);
 		// mContentContainer.setVisibility(View.GONE);
+		mImageHome = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_home);
+		mImageSearch = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_search);
+		mImageSettings = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_settings);
+		mImageLogout = (ImageView) view
+				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
 
 	@TargetApi(11)
@@ -146,7 +164,7 @@ public class ItemFragment extends Fragment {
 		}
 
 		View view = null;
-		switch (ItemType.valueOf(ITEM_TYPE)) {
+		switch (ItemType.valueOf(sItemType)) {
 		case Album:
 			view = inflater
 					.inflate(R.layout.fragment_details, container, false);
@@ -173,260 +191,75 @@ public class ItemFragment extends Fragment {
 		}
 
 		mEditItemTitle.setText(mItem.getTitle());
-		mEditItemTitle.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mItem.setTitle(s.toString());
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				updateItem();
-			}
-		});
-
 		mEditItemGenre.setText(mItem.getGenre());
-		mEditItemGenre.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mItem.setGenre(s.toString());
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				updateItem();
-			}
-		});
-
 		mEditItemOriginalTitle.setText(mItem.getOriginalTitle());
-		mEditItemOriginalTitle.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mItem.setOriginalTitle(s.toString());
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				updateItem();
-			}
-		});
-
 		mEditItemCountry.setText(mItem.getCountry());
-		mEditItemCountry.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mItem.setCountry(s.toString());
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				updateItem();
-			}
-		});
-
 		mEditItemYear.setText(mItem.getYearPublished());
-		mEditItemYear.addTextChangedListener(new TextWatcher() {
+		mEditItemContent.setText(mItem.getContent());
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mItem.setYearPublished(s.toString());
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				updateItem();
-			}
-		});
+		mEditItemTitle.addTextChangedListener(this);
+		mEditItemGenre.addTextChangedListener(this);
+		mEditItemOriginalTitle.addTextChangedListener(this);
+		mEditItemCountry.addTextChangedListener(this);
+		mEditItemYear.addTextChangedListener(this);
+		mEditItemContent.addTextChangedListener(this);
 
 		if (mItem instanceof Book) {
 			mEditItemAuthor.setText(((Book) mItem).getAuthor());
-
-			mEditItemAuthor.addTextChangedListener(new TextWatcher() {
-
-				@Override
-				public void beforeTextChanged(CharSequence s, int start,
-						int count, int after) {
-				}
-
-				@Override
-				public void onTextChanged(CharSequence s, int start,
-						int before, int count) {
-					((Book) mItem).setAuthor(s.toString());
-				}
-
-				@Override
-				public void afterTextChanged(Editable s) {
-					updateItem();
-				}
-			});
+			mEditItemAuthor.addTextChangedListener(this);
 		}
 
 		if (mItem instanceof Book) {
 			mEditItemPublishingHouse.setText(((Book) mItem)
 					.getPublishingHouse());
-
-			mEditItemPublishingHouse.addTextChangedListener(new TextWatcher() {
-
-				@Override
-				public void beforeTextChanged(CharSequence s, int start,
-						int count, int after) {
-				}
-
-				@Override
-				public void onTextChanged(CharSequence s, int start,
-						int before, int count) {
-					((Book) mItem).setPublishingHouse(s.toString());
-				}
-
-				@Override
-				public void afterTextChanged(Editable s) {
-					updateItem();
-				}
-			});
+			mEditItemPublishingHouse.addTextChangedListener(this);
 		}
 
 		if (mItem instanceof Book) {
 			mEditItemEdition.setText(((Book) mItem).getEdition());
-
-			mEditItemEdition.addTextChangedListener(new TextWatcher() {
-
-				@Override
-				public void beforeTextChanged(CharSequence s, int start,
-						int count, int after) {
-				}
-
-				@Override
-				public void onTextChanged(CharSequence s, int start,
-						int before, int count) {
-					((Book) mItem).setEdition(s.toString());
-				}
-
-				@Override
-				public void afterTextChanged(Editable s) {
-					updateItem();
-				}
-			});
+			mEditItemEdition.addTextChangedListener(this);
 		}
 
 		if (mItem instanceof Book) {
 			mEditItemIsbn.setText(((Book) mItem).getIsbn());
-
-			mEditItemIsbn.addTextChangedListener(new TextWatcher() {
-
-				@Override
-				public void beforeTextChanged(CharSequence s, int start,
-						int count, int after) {
-				}
-
-				@Override
-				public void onTextChanged(CharSequence s, int start,
-						int before, int count) {
-					((Book) mItem).setIsbn(s.toString());
-				}
-
-				@Override
-				public void afterTextChanged(Editable s) {
-					updateItem();
-				}
-			});
+			mEditItemIsbn.addTextChangedListener(this);
 		}
 
-		mEditItemContent.setText(mItem.getContent());
-		mEditItemContent.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				mItem.setContent(s.toString());
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				updateItem();
-			}
-		});
-
 		mCheckBoxItemFavorite.setChecked(mItem.isFavorite());
-		mCheckBoxItemFavorite
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						mItem.setFavorite(isChecked);
-						updateItem();
-					}
-				});
+		mCheckBoxItemFavorite.setOnCheckedChangeListener(this);
 
-		// mCheckBoxGotIt.setChecked(mItem.isInPossession());
-		// mCheckBoxGotIt
-		// .setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// mItem.setInPossession(isChecked);
-		// updateItem();
-		// }
-		// });
-		//
 		// mSpinnerItemGenre.setAdapter(new CustomSpinnerAdapter(getActivity(),
 		// R.layout.custom_spinner, R.id.tv_customSpinner_label,
 		// CustomSpinnerAdapter.getContent()));
 
+		updateItemDetails();
+
+		mImageHome.setOnClickListener(this);
+		mImageSearch.setOnClickListener(this);
+		mImageSettings.setOnClickListener(this);
+		mImageLogout.setOnClickListener(this);
+
+		return view;
+	}
+
+	private void updateItemDetails() {
 		String itemGenre = mItem.getGenre();
 		String itemOriginalTitle = mItem.getOriginalTitle();
 		String itemCountry = mItem.getCountry();
 		String itemYear = mItem.getYearPublished();
 
-		if (itemGenre != null && itemOriginalTitle != null
-				&& itemCountry != null && itemYear != null) {
-			mTextItemGenre.setText(itemGenre);
-			mTextItemOriginalTitle.setText(itemOriginalTitle);
-			mTextItemCountry.setText(itemCountry);
-			mTextItemYear.setText(itemYear);
+		setTextIfNotNull(mTextItemGenre, itemGenre);
+		setTextIfNotNull(mTextItemOriginalTitle, itemOriginalTitle);
+		setTextIfNotNull(mTextItemCountry, itemCountry);
+		setTextIfNotNull(mTextItemYear, itemYear);
+	}
+
+	private void setTextIfNotNull(TextView view, String s) {
+		if (s != null) {
+			view.setText(s);
 		} else {
-			mTextItemGenre.setText("");
-			mTextItemOriginalTitle.setText("");
-			mTextItemCountry.setText("");
-			mTextItemYear.setText("");
+			view.setText("");
 		}
-		return view;
 	}
 
 	@Override
@@ -452,30 +285,6 @@ public class ItemFragment extends Fragment {
 	 */
 
 	@Override
-	public void onAttach(Activity activity) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onAttach()");
-		}
-		super.onAttach(activity);
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onActivityCreated()");
-		}
-		super.onActivityCreated(savedInstanceState);
-	}
-
-	@Override
-	public void onStart() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onStart()");
-		}
-		super.onStart();
-	}
-
-	@Override
 	public void onResume() {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemFragment - onStart()");
@@ -492,36 +301,103 @@ public class ItemFragment extends Fragment {
 		super.onPause();
 	}
 
-	@Override
-	public void onStop() {
+	private void logout() {
 		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onStop()");
+			Log.d(Constants.LOG_TAG, "ItemFragment - logout()");
 		}
-		super.onStop();
+		Editor editor = mSharedPreferences.edit();
+		editor.remove(LoginFragment.KEY_EMAIL);
+		editor.remove(LoginFragment.KEY_PASSWORD);
+		editor.commit();
+		getActivity().finish();
+		Intent intent = new Intent(getActivity().getApplicationContext(),
+				LoginActivity.class);
+		startActivity(intent);
+	}
+
+	// click listeners
+	@Override
+	public void onClick(View view) {
+
+		if (view == mImageHome) {
+			Toast.makeText(getActivity(), "Home", Toast.LENGTH_LONG).show();
+		}
+		if (view == mImageSearch) {
+			// loadItemsFromRemoteDb();
+			Toast.makeText(getActivity(), "Search", Toast.LENGTH_LONG).show();
+		}
+		if (view == mImageSettings) {
+			Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG).show();
+			// try {
+			// syncWithRemoteDb();
+			// } catch (JSONException e) {
+			// e.printStackTrace();
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
+		}
+		if (view == mImageLogout) {
+			Toast.makeText(getActivity(), "Logout", Toast.LENGTH_LONG).show();
+			logout();
+		}
+
+	}
+
+	// text watcher callback methods
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
 	}
 
 	@Override
-	public void onDestroyView() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onDestroyView()");
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+		if (mEditItemTitle.getText().hashCode() == s.hashCode()) {
+			mItem.setTitle(s.toString());
 		}
-		super.onDestroyView();
+		if (mEditItemGenre.getText().hashCode() == s.hashCode()) {
+			mItem.setGenre(s.toString());
+		}
+		if (mEditItemOriginalTitle.getText().hashCode() == s.hashCode()) {
+			mItem.setOriginalTitle(s.toString());
+		}
+		if (mEditItemCountry.getText().hashCode() == s.hashCode()) {
+			mItem.setCountry(s.toString());
+		}
+		if (mEditItemYear.getText().hashCode() == s.hashCode()) {
+			mItem.setYearPublished(s.toString());
+		}
+		if (mEditItemContent.getText().hashCode() == s.hashCode()) {
+			mItem.setContent(s.toString());
+		}
+		if (mEditItemAuthor.getText().hashCode() == s.hashCode()) {
+			((Book) mItem).setAuthor(s.toString());
+		}
+		if (mEditItemPublishingHouse.getText().hashCode() == s.hashCode()) {
+			((Book) mItem).setPublishingHouse(s.toString());
+		}
+		if (mEditItemEdition.getText().hashCode() == s.hashCode()) {
+			((Book) mItem).setEdition(s.toString());
+		}
+		if (mEditItemIsbn.getText().hashCode() == s.hashCode()) {
+			((Book) mItem).setIsbn(s.toString());
+		}
+
 	}
 
 	@Override
-	public void onDestroy() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onDestroy()");
-		}
-		super.onDestroy();
+	public void afterTextChanged(Editable s) {
+		updateItemDetails();
+		updateItem();
 	}
 
+	// check box listener callback
 	@Override
-	public void onDetach() {//
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onDetach()");
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if (buttonView == mCheckBoxItemFavorite) {
+			mItem.setFavorite(isChecked);
+			updateItem();
 		}
-		super.onDetach();
 	}
 
 }

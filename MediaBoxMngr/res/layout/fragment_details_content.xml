@@ -56,19 +56,23 @@
 
         <TextView
             android:id="@+id/tv_fragmentDetails_itemGenre"
-            style="@style/textViewDetails" />
+            style="@style/textViewDetails"
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_fragmentDetails_itemOriginalTitle"
-            style="@style/textViewDetails" />
+            style="@style/textViewDetails"
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_fragmentDetails_itemCountry"
-            style="@style/textViewDetails" />
+            style="@style/textViewDetails"
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_fragmentDetails_itemYear"
-            style="@style/textViewDetails" />
+            style="@style/textViewDetails"
+            android:text="" />
     </LinearLayout>
 
 </LinearLayout>

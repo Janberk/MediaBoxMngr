@@ -74,9 +74,9 @@ public class ItemStock {
 		return mDAOItem.buildJSONfromSQLite(user);
 	}
 
-	public void addItem(Item item) {
+	public Item addItem(Item item) {
 		mItemList.add(0, item);
-		mDAOItem.insertItem(item);
+		return mDAOItem.insertItem(item);
 	}
 
 	public void updateItem(Item item) {

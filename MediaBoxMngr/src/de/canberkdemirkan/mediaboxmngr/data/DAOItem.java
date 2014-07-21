@@ -98,6 +98,33 @@ public class DAOItem {
 		return item;
 	}
 
+	// get item by id (row)
+	public Item getItemByRow(int id) {
+		open();
+		Item item = null;
+		Cursor cursor = null;
+		String selectQuery = "SELECT * FROM " + Constants.TABLE_ITEMS
+				+ " WHERE " + Constants.ID + "=" + '"' + id + '"';
+
+		try {
+			cursor = mSQLiteDB.rawQuery(selectQuery, null);
+
+			if (cursor != null) {
+				cursor.moveToFirst();
+				item = createItemFromTableValues(cursor);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+			close();
+		}
+		return item;
+	}
+
 	// update existing item
 	public boolean updateItem(Item item) {
 		open();
@@ -412,33 +439,74 @@ public class DAOItem {
 		String user = cursor.getString(colUser);
 		String title = cursor.getString(colTitle);
 		String genre = cursor.getString(colGenre);
+		String originalTitle = cursor.getString(colOriginalTitle);
+		String country = cursor.getString(colCountry);
+		String yearPublished = cursor.getString(colYearPublished);
+		String content = cursor.getString(colContent);
+		String rating = cursor.getString(colRating);
+		String producer = cursor.getString(colProducer);
+		String director = cursor.getString(colDirector);
+		String script = cursor.getString(colScript);
+		String actors = cursor.getString(colActors);
+		String music = cursor.getString(colMusic);
+		String length = cursor.getString(colLength);
+		String label = cursor.getString(colLabel);
+		String studio = cursor.getString(colStudio);
+		String artist = cursor.getString(colArtist);
+		String format = cursor.getString(colFormat);
+		String titleCount = cursor.getString(colTitleCount);
+		String edition = cursor.getString(colEdition);
+		String publishingHouse = cursor.getString(colPublishingHouse);
+		String author = cursor.getString(colAuthor);
+		String isbn = cursor.getString(colIsbn);
 
 		switch (type) {
 		case Album:
 			item = new MusicAlbum(id, user);
+			((MusicAlbum) item).setLabel(label);
+			((MusicAlbum) item).setStudio(studio);
+			((MusicAlbum) item).setProducer(producer);
+			((MusicAlbum) item).setArtist(artist);
+			((MusicAlbum) item).setFormat(format);
+			((MusicAlbum) item).setTitleCount(titleCount);
 			break;
 		case Book:
 			item = new Book(id, user);
+			((Book) item).setEdition(edition);
+			((Book) item).setPublishingHouse(publishingHouse);
+			((Book) item).setAuthor(author);
+			((Book) item).setIsbn(isbn);
 			break;
 		case Movie:
 			item = new Movie(id, user);
+			((Movie) item).setProducer(producer);
+			((Movie) item).setDirector(director);
+			((Movie) item).setScript(script);
+			((Movie) item).setActors(actors);
+			((Movie) item).setMusic(music);
+			((Movie) item).setLength(length);
+
 			break;
 		default:
 			break;
 		}
 		// item.setCover(cover);
+		// item.setDeletionDate();
 		item.setSynced(UtilMethods.isTrue(synced));
 		item.setTitle(title);
 		item.setType(type);
 		item.setGenre(genre);
+		item.setCountry(country);
+		item.setContent(content);
+		item.setRating(rating);
+		item.setYearPublished(yearPublished);
+		item.setOriginalTitle(originalTitle);
 		item.setFavorite(UtilMethods.isTrue(favoriteAsInt));
 		item.setCreationDate(UtilMethods
 				.setCreationDateFromString(creationDate));
 		item.setInPossession(UtilMethods.isTrue(inPossessionAsInt));
 		item.setDeleted(UtilMethods.isTrue(deletedAsInt));
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "DAOItem - createItemFromTableValues()");
-		}
+
 		return item;
 	}
 

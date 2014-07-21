@@ -15,7 +15,8 @@ import de.canberkdemirkan.mediaboxmngr.fragments.ItemFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
-public class ItemPagerActivity extends FragmentActivity {
+public class ItemPagerActivity extends FragmentActivity implements
+		ViewPager.OnPageChangeListener {
 
 	private ViewPager mViewPager;
 	private ArrayList<Item> mItemList;
@@ -25,7 +26,7 @@ public class ItemPagerActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		UUID itemId = (UUID) getIntent().getSerializableExtra(
-				Constants.KEY_ITEM_ID);
+				Constants.KEY_ITEM_UID);
 		String userTag = (String) getIntent().getSerializableExtra(
 				Constants.KEY_USER_TAG);
 
@@ -45,24 +46,26 @@ public class ItemPagerActivity extends FragmentActivity {
 			}
 		}
 
-		mViewPager
-				.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-					public void onPageScrollStateChanged(int state) {
-					}
+		mViewPager.setOnPageChangeListener(this);
+	}
 
-					public void onPageScrolled(int pos, float posOffset,
-							int posOffsetPixels) {
-						Item item = mItemList.get(pos);
-						ItemFragment.ITEM_TYPE = item.getType().toString();
-					}
+	// listener callback methods
+	@Override
+	public void onPageScrollStateChanged(int state) {
+	}
 
-					public void onPageSelected(int pos) {
-						Item item = mItemList.get(pos);
-						if (item.getTitle() != null) {
-							setTitle(item.getTitle());
-						}
-					}
-				});
+	@Override
+	public void onPageScrolled(int pos, float posOffset, int posOffsetPixels) {
+		Item item = mItemList.get(pos);
+		ItemFragment.sItemType = item.getType().toString();
+	}
+
+	@Override
+	public void onPageSelected(int pos) {
+		Item item = mItemList.get(pos);
+		if (item.getTitle() != null) {
+			setTitle(item.getTitle());
+		}
 	}
 
 	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
