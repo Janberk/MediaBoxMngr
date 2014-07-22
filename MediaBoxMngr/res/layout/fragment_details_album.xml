@@ -6,7 +6,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/custom_value_16dp" >
 
         <TextView
@@ -68,7 +67,7 @@
             android:layout_centerHorizontal="true"
             android:hint="Enter year"
             android:inputType="text" />
-        
+
         <TextView
             android:id="@+id/tv_fragmentDetails_artist"
             style="@style/textViewDetails"
@@ -143,7 +142,7 @@
             android:layout_centerHorizontal="true"
             android:hint="Enter format"
             android:inputType="text" />
-        
+
         <TextView
             android:id="@+id/tv_fragmentDetails_titleCount"
             style="@style/textViewDetails"

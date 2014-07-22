@@ -15,6 +15,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,13 +40,12 @@ import de.canberkdemirkan.mediaboxmngr.model.Item;
 public class ItemFragment extends Fragment implements View.OnClickListener,
 		OnCheckedChangeListener, TextWatcher {
 
-	public static String sItemType;
-
 	private SharedPreferences mSharedPreferences;
 
-	private UUID mItemId;
-	private String mUser;
 	private Item mItem;
+	private UUID mItemId;
+	public static String sItemType;
+	private String mUser;
 
 	private RelativeLayout mContentContainer;
 
@@ -85,9 +86,7 @@ public class ItemFragment extends Fragment implements View.OnClickListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onCreate()");
-		}
+
 		setHasOptionsMenu(true);
 
 		mSharedPreferences = getActivity().getSharedPreferences(
@@ -97,7 +96,6 @@ public class ItemFragment extends Fragment implements View.OnClickListener,
 		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
 
 		mItem = ItemStock.get(getActivity(), mUser).getItem(mItemId);
-
 		sItemType = mItem.getType().toString();
 	}
 
@@ -159,9 +157,6 @@ public class ItemFragment extends Fragment implements View.OnClickListener,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onCreateView()");
-		}
 
 		View view = null;
 		switch (ItemType.valueOf(sItemType)) {
@@ -263,12 +258,24 @@ public class ItemFragment extends Fragment implements View.OnClickListener,
 	}
 
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.fragment_menu_details, menu);
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 		case android.R.id.home:
 			if (NavUtils.getParentActivityName(getActivity()) != null) {
 				NavUtils.navigateUpFromSameTask(getActivity());
 			}
+			return true;
+		case R.id.menu_editItem:
+			Toast.makeText(getActivity(), "Edit", Toast.LENGTH_LONG).show();
+			return true;
+		case R.id.menu_deleteItem:
+			Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
@@ -286,17 +293,11 @@ public class ItemFragment extends Fragment implements View.OnClickListener,
 
 	@Override
 	public void onResume() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onStart()");
-		}
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onStart()");
-		}
 		ItemStock.get(getActivity(), mUser).saveSerializedItems();
 		super.onPause();
 	}

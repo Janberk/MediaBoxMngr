@@ -6,7 +6,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/custom_value_16dp" >
 
         <TextView
@@ -128,7 +127,7 @@
             android:layout_centerHorizontal="true"
             android:hint="Enter cast"
             android:inputType="text" />
-        
+
         <TextView
             android:id="@+id/tv_fragmentDetails_music"
             style="@style/textViewDetails"
@@ -143,7 +142,7 @@
             android:layout_centerHorizontal="true"
             android:hint="Enter music composer"
             android:inputType="text" />
-        
+
         <TextView
             android:id="@+id/tv_fragmentDetails_length"
             style="@style/textViewDetails"

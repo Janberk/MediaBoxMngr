@@ -62,10 +62,10 @@ public class ItemPagerActivity extends FragmentActivity implements
 
 	@Override
 	public void onPageSelected(int pos) {
-		Item item = mItemList.get(pos);
-		if (item.getTitle() != null) {
-			setTitle(item.getTitle());
-		}
+		// Item item = mItemList.get(pos);
+		// if (item.getTitle() != null) {
+		// setTitle(item.getTitle());
+		// }
 	}
 
 	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

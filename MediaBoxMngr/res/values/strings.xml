@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Media Box Mngr</string>
+    <string name="app_name">M.B.M.</string>
     <string name="action_settings">Settings</string>
     <string name="all_lists">All Lists</string>
     <string name="itemList_header">Items</string>
