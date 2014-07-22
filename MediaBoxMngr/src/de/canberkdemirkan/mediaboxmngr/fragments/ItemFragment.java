@@ -161,16 +161,16 @@ public class ItemFragment extends Fragment implements View.OnClickListener,
 		View view = null;
 		switch (ItemType.valueOf(sItemType)) {
 		case Album:
-			view = inflater
-					.inflate(R.layout.fragment_details, container, false);
+			view = inflater.inflate(R.layout.fragment_details_album_view,
+					container, false);
 			break;
 		case Book:
-			view = inflater
-					.inflate(R.layout.fragment_details, container, false);
+			view = inflater.inflate(R.layout.fragment_details_book_view,
+					container, false);
 			break;
 		case Movie:
-			view = inflater
-					.inflate(R.layout.fragment_details, container, false);
+			view = inflater.inflate(R.layout.fragment_details_movie_view,
+					container, false);
 			break;
 
 		default:

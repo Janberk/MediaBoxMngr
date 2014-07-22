@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:background="@drawable/list_item_shape_default"
-    android:orientation="vertical" >
+    android:background="@drawable/list_item_shape_default" >
 
     <EditText
         android:id="@+id/et_fragmentDetails_itemTitle"

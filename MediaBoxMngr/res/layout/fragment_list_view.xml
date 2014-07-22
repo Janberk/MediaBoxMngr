@@ -6,8 +6,10 @@
     <ListView
         android:id="@+id/listView_fragmentItemList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:choiceMode="multipleChoice"
-        android:dividerHeight="@dimen/custom_value_2dp" />
+        android:clipToPadding="false"
+        android:dividerHeight="@dimen/custom_value_2dp"
+        android:paddingBottom="@dimen/custom_value_48dp" />
 
 </LinearLayout>
