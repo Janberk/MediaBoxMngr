@@ -14,6 +14,7 @@ import android.view.View;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
+import de.canberkdemirkan.mediaboxmngr.fragments.ItemFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
@@ -25,22 +26,39 @@ public class AlertDialogDeletion extends DialogFragment {
 	public static final String DIALOG_TAG_ALL = "de.canberkdemirkan.mediaboxmngr.delete_all";
 	public static final String DIALOG_TAG_SELECTED = "de.canberkdemirkan.mediaboxmngr.delete_selected";
 	public static final String DIALOG_TAG_SINGLE = "de.canberkdemirkan.mediaboxmngr.delete_single";
+	public static final String DIALOG_TAG_DETAIL_SINGLE = "de.canberkdemirkan.mediaboxmngr.delete_detail_single";
 
-	private int mPosition;
-	private ItemListFragment mFragment;
+	private ItemListFragment mItemListFragment;
+	private ItemFragment mItemFragment;
 	private ArrayList<Item> mItemList;
+	private Item mItem;
 	private String mTitle;
 	private String mTag;
 
 	public static AlertDialogDeletion newInstance(ItemListFragment fragment,
-			ArrayList<Item> itemList, String title, int position, String tag) {
+			ArrayList<Item> itemList, String title, String tag) {
 
 		Bundle args = new Bundle();
 
 		args.putSerializable(Constants.KEY_DIALOG_FRAGMENT, fragment);
 		args.putSerializable(Constants.KEY_DIALOG_ITEM_LIST, itemList);
 		args.putSerializable(Constants.KEY_DIALOG_TITLE, title);
-		args.putSerializable(Constants.KEY_DIALOG_POSITION, position);
+		args.putSerializable(Constants.KEY_DIALOG_TAG, tag);
+
+		AlertDialogDeletion dialogFragment = new AlertDialogDeletion();
+		dialogFragment.setArguments(args);
+		return dialogFragment;
+
+	}
+
+	public static AlertDialogDeletion newInstance(ItemFragment fragment,
+			Item item, String title, String tag) {
+
+		Bundle args = new Bundle();
+
+		args.putSerializable(Constants.KEY_DIALOG_FRAGMENT, fragment);
+		args.putSerializable(Constants.KEY_DIALOG_ITEM, item);
+		args.putSerializable(Constants.KEY_DIALOG_TITLE, title);
 		args.putSerializable(Constants.KEY_DIALOG_TAG, tag);
 
 		AlertDialogDeletion dialogFragment = new AlertDialogDeletion();
@@ -54,18 +72,27 @@ public class AlertDialogDeletion extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		mFragment = (ItemListFragment) getArguments().getSerializable(
-				Constants.KEY_DIALOG_FRAGMENT);
-		try {
-			mItemList = (ArrayList<Item>) getArguments().getSerializable(
-					Constants.KEY_DIALOG_ITEM_LIST);
-		} catch (ClassCastException e) {
-			e.printStackTrace();
+		if (getArguments().getSerializable(Constants.KEY_DIALOG_FRAGMENT) instanceof ItemListFragment) {
+			mItemListFragment = (ItemListFragment) getArguments()
+					.getSerializable(Constants.KEY_DIALOG_FRAGMENT);
+			try {
+				mItemList = (ArrayList<Item>) getArguments().getSerializable(
+						Constants.KEY_DIALOG_ITEM_LIST);
+			} catch (ClassCastException e) {
+				e.printStackTrace();
+			}
+
+		} else if (getArguments()
+				.getSerializable(Constants.KEY_DIALOG_FRAGMENT) instanceof ItemFragment) {
+			mItemFragment = (ItemFragment) getArguments().getSerializable(
+					Constants.KEY_DIALOG_FRAGMENT);
+			mItem = (Item) getArguments().getSerializable(
+					Constants.KEY_DIALOG_ITEM);
 		}
+
 		mTitle = (String) getArguments().getSerializable(
 				Constants.KEY_DIALOG_TITLE);
-		mPosition = (Integer) getArguments().getSerializable(
-				Constants.KEY_DIALOG_POSITION);
+
 		mTag = (String) getArguments()
 				.getSerializable(Constants.KEY_DIALOG_TAG);
 
@@ -83,6 +110,9 @@ public class AlertDialogDeletion extends DialogFragment {
 
 								if (mTag.equals(DIALOG_TAG_SINGLE)) {
 									deleteSelectedItem();
+								} else if (mTag
+										.equals(DIALOG_TAG_DETAIL_SINGLE)) {
+									deleteItem();
 								} else if (mTag.equals(DIALOG_TAG_SELECTED)) {
 									deleteSelectedItem();
 								} else if (mTag.equals(DIALOG_TAG_ALL)) {
@@ -102,37 +132,37 @@ public class AlertDialogDeletion extends DialogFragment {
 
 	private void deleteSelectedItem() {
 		for (Item item : mItemList) {
-			ItemStock.get(getActivity(), mFragment.getUser()).getDAOItem()
-					.deleteItem(item);
+			ItemStock.get(getActivity(), mItemListFragment.getUser())
+					.getDAOItem().deleteItem(item);
 		}
 		if (CustomTabListener.sTag != null) {
 			mItemList.clear();
 			switch (CustomTabListener.sTag) {
 			case ALL:
 				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mFragment.getUser(), ListTag.ALL);
+						mItemListFragment.getUser(), ListTag.ALL);
 				break;
 			case ALBUMS:
 				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mFragment.getUser(), ListTag.ALBUMS);
+						mItemListFragment.getUser(), ListTag.ALBUMS);
 				break;
 			case BOOKS:
 				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mFragment.getUser(), ListTag.BOOKS);
+						mItemListFragment.getUser(), ListTag.BOOKS);
 				break;
 			case MOVIES:
 				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mFragment.getUser(), ListTag.MOVIES);
+						mItemListFragment.getUser(), ListTag.MOVIES);
 				break;
 
 			case FAVORITES:
 				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mFragment.getUser(), ListTag.FAVORITES);
+						mItemListFragment.getUser(), ListTag.FAVORITES);
 				break;
 
 			default:
 				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mFragment.getUser(), ListTag.ALL);
+						mItemListFragment.getUser(), ListTag.ALL);
 				break;
 			}
 		}
@@ -140,8 +170,16 @@ public class AlertDialogDeletion extends DialogFragment {
 
 	private void deleteAllItems() {
 		mItemList.clear();
-		ItemStock.get(mFragment.getActivity(), mFragment.getUser())
-				.getDAOItem().deleteAllItems(mFragment.getUser());
+		ItemStock
+				.get(mItemListFragment.getActivity(),
+						mItemListFragment.getUser()).getDAOItem()
+				.deleteAllItems(mItemListFragment.getUser());
+	}
+
+	private void deleteItem() {
+		ItemStock.get(getActivity(), mItemFragment.getUser()).getDAOItem()
+				.deleteItem(mItem);
+		getActivity().finish();
 	}
 
 	private void sendResult(int resultCode) {

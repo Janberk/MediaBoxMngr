@@ -1,15 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" >
-    <item
+
+    <item
         android:id="@+id/menu_editItem"
         android:icon="@drawable/ic_menu_edit_light"
-        android:title="@string/edit"
-        app:showAsAction="always"/>
+        android:showAsAction="ifRoom"
+        android:title="@string/edit"/>
     <item
         android:id="@+id/menu_deleteItem"
         android:icon="@drawable/ic_menu_trash_light"
-        android:title="@string/delete_item"
-        app:showAsAction="always"/>
+        android:showAsAction="ifRoom"
+        android:title="@string/delete_item"/>
 
 </menu>

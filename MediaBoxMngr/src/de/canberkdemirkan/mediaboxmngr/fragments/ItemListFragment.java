@@ -29,7 +29,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
@@ -323,7 +322,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		final String header = getActivity().getResources().getString(
 				R.string.dialog_header_delete_all);
 		AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
-				mItemList, header, 0, AlertDialogDeletion.DIALOG_TAG_ALL);
+				mItemList, header, AlertDialogDeletion.DIALOG_TAG_ALL);
 		dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
 		dialog.show(mFragmentManager, "");
 	}
@@ -370,13 +369,13 @@ public class ItemListFragment extends Fragment implements Serializable,
 		AlertDialogDeletion dialog = null;
 		if (count == 1) {
 			dialog = AlertDialogDeletion.newInstance(this, selectedItems,
-					header + "\n" + addition, 0,
+					header + "\n" + addition,
 					AlertDialogDeletion.DIALOG_TAG_SINGLE);
 		}
 		if (count > 1) {
 			addition = count + " of " + mItemAdapter.getCount();
 			dialog = AlertDialogDeletion.newInstance(this, selectedItems,
-					header + "\n" + addition, 0,
+					header + "\n" + addition,
 					AlertDialogDeletion.DIALOG_TAG_SELECTED);
 		}
 
@@ -384,19 +383,20 @@ public class ItemListFragment extends Fragment implements Serializable,
 		dialog.show(mFragmentManager, "");
 	}
 
-	private void changeAlphaOfView(View view, float from, float to) {
-		AlphaAnimation alpha = new AlphaAnimation(from, to);
-		alpha.setDuration(0); // Make animation instant
-		alpha.setFillAfter(true); // Tell it to persist after the animation ends
-		view.startAnimation(alpha);
-	}
+	// private void changeAlphaOfView(View view, float from, float to) {
+	// AlphaAnimation alpha = new AlphaAnimation(from, to);
+	// alpha.setDuration(0); // Make animation instant
+	// alpha.setFillAfter(true); // Tell it to persist after the animation ends
+	// view.startAnimation(alpha);
+	// }
 
 	private void switchEditMode() {
 		if (!sEditMode) {
 			sEditMode = true;
 			mSpinnerItemType.setSelection(0);
 			mEditor.setVisibility(View.VISIBLE);
-			changeAlphaOfView(mListContainer, 1.0F, 0.2F);
+			mListContainer.setVisibility(View.GONE);
+			// changeAlphaOfView(mListContainer, 1.0F, 0.2F);
 			mMenuBar.setVisibility(View.GONE);
 			mEditEditTitle.requestFocus();
 			mListView.setOnItemClickListener(null);
@@ -405,7 +405,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 			imm.showSoftInput(mEditEditTitle, InputMethodManager.SHOW_IMPLICIT);
 		} else if (sEditMode) {
 			mEditor.setVisibility(View.GONE);
-			changeAlphaOfView(mListContainer, 0.2F, 1.0F);
+			// changeAlphaOfView(mListContainer, 0.2F, 1.0F);
+			mListContainer.setVisibility(View.VISIBLE);
 			mMenuBar.setVisibility(View.VISIBLE);
 			mListView.setOnItemClickListener(this);
 			sEditMode = false;
