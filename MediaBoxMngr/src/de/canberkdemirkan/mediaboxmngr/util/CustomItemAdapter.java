@@ -128,7 +128,7 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 			@Override
 			public void onClick(View v) {
 				AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(
-						mFragment, mItemList, header,
+						mFragment, mItemList, null, header,
 						AlertDialogDeletion.DIALOG_TAG_SINGLE);
 				dialog.setTargetFragment(mFragment,
 						Constants.REQUEST_LIST_DELETE);

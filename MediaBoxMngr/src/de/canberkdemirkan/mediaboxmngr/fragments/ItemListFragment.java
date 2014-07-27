@@ -322,7 +322,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		final String header = getActivity().getResources().getString(
 				R.string.dialog_header_delete_all);
 		AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
-				mItemList, header, AlertDialogDeletion.DIALOG_TAG_ALL);
+				mItemList, null, header, AlertDialogDeletion.DIALOG_TAG_ALL);
 		dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
 		dialog.show(mFragmentManager, "");
 	}
@@ -368,13 +368,13 @@ public class ItemListFragment extends Fragment implements Serializable,
 		}
 		AlertDialogDeletion dialog = null;
 		if (count == 1) {
-			dialog = AlertDialogDeletion.newInstance(this, selectedItems,
+			dialog = AlertDialogDeletion.newInstance(this, selectedItems, null,
 					header + "\n" + addition,
 					AlertDialogDeletion.DIALOG_TAG_SINGLE);
 		}
 		if (count > 1) {
 			addition = count + " of " + mItemAdapter.getCount();
-			dialog = AlertDialogDeletion.newInstance(this, selectedItems,
+			dialog = AlertDialogDeletion.newInstance(this, selectedItems, null,
 					header + "\n" + addition,
 					AlertDialogDeletion.DIALOG_TAG_SELECTED);
 		}

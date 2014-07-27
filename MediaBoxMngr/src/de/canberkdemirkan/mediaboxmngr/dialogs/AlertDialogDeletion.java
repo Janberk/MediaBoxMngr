@@ -1,5 +1,6 @@
 package de.canberkdemirkan.mediaboxmngr.dialogs;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
@@ -10,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
@@ -35,31 +37,29 @@ public class AlertDialogDeletion extends DialogFragment {
 	private String mTitle;
 	private String mTag;
 
-	public static AlertDialogDeletion newInstance(ItemListFragment fragment,
-			ArrayList<Item> itemList, String title, String tag) {
+	public static AlertDialogDeletion newInstance(Fragment fragment,
+			ArrayList<Item> itemList, Item item, String title, String tag) {
 
 		Bundle args = new Bundle();
 
-		args.putSerializable(Constants.KEY_DIALOG_FRAGMENT, fragment);
-		args.putSerializable(Constants.KEY_DIALOG_ITEM_LIST, itemList);
-		args.putSerializable(Constants.KEY_DIALOG_TITLE, title);
-		args.putSerializable(Constants.KEY_DIALOG_TAG, tag);
-
-		AlertDialogDeletion dialogFragment = new AlertDialogDeletion();
-		dialogFragment.setArguments(args);
-		return dialogFragment;
-
-	}
-
-	public static AlertDialogDeletion newInstance(ItemFragment fragment,
-			Item item, String title, String tag) {
-
-		Bundle args = new Bundle();
-
-		args.putSerializable(Constants.KEY_DIALOG_FRAGMENT, fragment);
-		args.putSerializable(Constants.KEY_DIALOG_ITEM, item);
-		args.putSerializable(Constants.KEY_DIALOG_TITLE, title);
-		args.putSerializable(Constants.KEY_DIALOG_TAG, tag);
+		try {
+			args.putSerializable(Constants.KEY_DIALOG_FRAGMENT,
+					(Serializable) fragment);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (itemList != null) {
+			args.putSerializable(Constants.KEY_DIALOG_ITEM_LIST, itemList);
+		}
+		if (item != null) {
+			args.putSerializable(Constants.KEY_DIALOG_ITEM, item);
+		}
+		if (title != null) {
+			args.putSerializable(Constants.KEY_DIALOG_TITLE, title);
+		}
+		if (tag != null) {
+			args.putSerializable(Constants.KEY_DIALOG_TAG, tag);
+		}
 
 		AlertDialogDeletion dialogFragment = new AlertDialogDeletion();
 		dialogFragment.setArguments(args);

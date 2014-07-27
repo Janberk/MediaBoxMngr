@@ -294,9 +294,9 @@ public class ItemFragment extends Fragment implements Serializable,
 		case R.id.menu_deleteItem:
 			final String header = getActivity().getResources().getString(
 					R.string.dialog_header_delete);
-			AlertDialogDeletion dialog = AlertDialogDeletion
-					.newInstance(this, mItem, header,
-							AlertDialogDeletion.DIALOG_TAG_DETAIL_SINGLE);
+			AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
+					null, mItem, header,
+					AlertDialogDeletion.DIALOG_TAG_DETAIL_SINGLE);
 			dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
 			dialog.show(mFragmentManager, "");
 
