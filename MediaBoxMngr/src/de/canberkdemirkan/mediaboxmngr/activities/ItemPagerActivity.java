@@ -88,4 +88,8 @@ public class ItemPagerActivity extends FragmentActivity implements
 		}
 	}
 
+	public ViewPager getmViewPager() {
+		return mViewPager;
+	}
+
 }

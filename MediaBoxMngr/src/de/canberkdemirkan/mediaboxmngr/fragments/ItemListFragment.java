@@ -116,7 +116,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private ImageView mImageSettings;
 	private ImageView mImageLogout;
 
-	public static ItemListFragment newItemListFragment(ListTag listTag) {
+	public static ItemListFragment newInstance(ListTag listTag) {
 
 		Bundle passedData = new Bundle();
 		passedData.putSerializable(Constants.KEY_LIST_TAG, listTag);

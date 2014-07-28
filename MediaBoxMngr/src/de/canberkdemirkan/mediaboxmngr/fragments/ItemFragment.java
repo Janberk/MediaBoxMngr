@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,15 +32,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
+import de.canberkdemirkan.mediaboxmngr.activities.ItemEditorActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
-import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
-import de.canberkdemirkan.mediaboxmngr.model.Movie;
-import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
 
 public class ItemFragment extends Fragment implements Serializable,
 		View.OnClickListener, OnCheckedChangeListener, TextWatcher {
@@ -63,38 +62,18 @@ public class ItemFragment extends Fragment implements Serializable,
 	private ImageView mImageLogout;
 
 	private EditText mEditItemTitle;
+	private TextView mTextItemContent;
 	private TextView mTextItemGenre;
 	private TextView mTextItemOriginalTitle;
 	private TextView mTextItemCountry;
 	private TextView mTextItemYear;
-	private EditText mEditItemContent;
+
 	private CheckBox mCheckBoxItemFavorite;
 
-	private EditText mEditItemGenre;
-	private EditText mEditItemOriginalTitle;
-	private EditText mEditItemCountry;
-	private EditText mEditItemYear;
-
-	private EditText mEditItemAuthor;
-	private EditText mEditItemPublishingHouse;
-	private EditText mEditItemEdition;
-	private EditText mEditItemIsbn;
-
-	private EditText mEditItemProducerMovie;
-	private EditText mEditItemDirector;
-	private EditText mEditItemScript;
-	private EditText mEditItemActors;
-	private EditText mEditItemMusic;
-	private EditText mEditItemLength;
-
-	private EditText mEditItemArtist;
-	private EditText mEditItemLabel;
-	private EditText mEditItemStudio;
-	private EditText mEditItemProducerAlbum;
-	private EditText mEditItemFormat;
-	private EditText mEditItemTitleCount;
-
 	public static ItemFragment newInstance(UUID itemId, String userTag) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onCreate()");
+		}
 		Bundle args = new Bundle();
 
 		args.putSerializable(Constants.KEY_ITEM_UID, itemId);
@@ -109,7 +88,9 @@ public class ItemFragment extends Fragment implements Serializable,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onCreateView()");
+		}
 		setHasOptionsMenu(true);
 
 		mSharedPreferences = getActivity().getSharedPreferences(
@@ -127,6 +108,8 @@ public class ItemFragment extends Fragment implements Serializable,
 	private void initViews(View view) {
 		mEditItemTitle = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_itemTitle);
+		mTextItemContent = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemContent);
 		mTextItemGenre = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemGenre);
 		mTextItemOriginalTitle = (TextView) view
@@ -135,8 +118,6 @@ public class ItemFragment extends Fragment implements Serializable,
 				.findViewById(R.id.tv_fragmentDetails_itemCountry);
 		mTextItemYear = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemYear);
-		mEditItemContent = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_itemContent);
 		mCheckBoxItemFavorite = (CheckBox) view
 				.findViewById(R.id.cb_fragmentDetails_itemFavorite);
 		// mCheckBoxGotIt = (CheckBox) view
@@ -149,49 +130,6 @@ public class ItemFragment extends Fragment implements Serializable,
 		// .findViewById(R.id.sp_fragmentBasics_itemCountry);
 		// mSpinnerItemYear = (Spinner) view
 		// .findViewById(R.id.sp_fragmentBasics_itemYear);
-		mEditItemGenre = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_genre);
-		mEditItemOriginalTitle = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_original);
-		mEditItemCountry = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_country);
-		mEditItemYear = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_year);
-
-		mEditItemAuthor = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_author);
-		mEditItemPublishingHouse = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_publisher);
-		mEditItemEdition = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_edition);
-		mEditItemIsbn = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_isbn);
-
-		mEditItemProducerMovie = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_producer);
-		mEditItemDirector = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_director);
-		mEditItemScript = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_script);
-		mEditItemActors = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_actors);
-		mEditItemMusic = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_music);
-		mEditItemLength = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_length);
-
-		mEditItemArtist = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_artist);
-		mEditItemLabel = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_label);
-		mEditItemStudio = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_studio);
-		mEditItemProducerAlbum = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_producer);
-		mEditItemFormat = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_format);
-		mEditItemTitleCount = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_titleCount);
 
 		mImageHome = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_home);
@@ -235,7 +173,8 @@ public class ItemFragment extends Fragment implements Serializable,
 			}
 		}
 
-		configureTextFields();
+		mEditItemTitle.setText(mItem.getTitle());
+		mEditItemTitle.addTextChangedListener(this);
 
 		mCheckBoxItemFavorite.setChecked(mItem.isFavorite());
 		mCheckBoxItemFavorite.setOnCheckedChangeListener(this);
@@ -255,11 +194,13 @@ public class ItemFragment extends Fragment implements Serializable,
 	}
 
 	private void updateItemDetails() {
+		String itemContent = mItem.getContent();
 		String itemGenre = mItem.getGenre();
 		String itemOriginalTitle = mItem.getOriginalTitle();
 		String itemCountry = mItem.getCountry();
 		String itemYear = mItem.getYearPublished();
 
+		setTextIfNotNull(mTextItemContent, itemContent);
 		setTextIfNotNull(mTextItemGenre, itemGenre);
 		setTextIfNotNull(mTextItemOriginalTitle, itemOriginalTitle);
 		setTextIfNotNull(mTextItemCountry, itemCountry);
@@ -289,7 +230,12 @@ public class ItemFragment extends Fragment implements Serializable,
 			}
 			return true;
 		case R.id.menu_editItem:
-			Toast.makeText(getActivity(), "Edit", Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(getActivity(), ItemEditorActivity.class);
+			intent.putExtra(Constants.KEY_USER_TAG, mUser);
+			intent.putExtra(Constants.KEY_ITEM_UID, mItem.getUniqueId());
+			intent.putExtra(Constants.EXTRA_DETAILS_ITEM, mItem);
+
+			startActivityForResult(intent, 0);
 			return true;
 		case R.id.menu_deleteItem:
 			final String header = getActivity().getResources().getString(
@@ -317,11 +263,25 @@ public class ItemFragment extends Fragment implements Serializable,
 
 	@Override
 	public void onResume() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onResume()");
+		}
+		mItemId = (UUID) getArguments().getSerializable(Constants.KEY_ITEM_UID);
+		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
+
+		mItem = ItemStock.get(getActivity(), mUser).getItem(mItemId);
+		ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.viewPager);
+		viewPager.getAdapter().notifyDataSetChanged();
+		updateItemDetails();		
+
 		super.onResume();
 	}
 
 	@Override
 	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemFragment - onPause()");
+		}
 		ItemStock.get(getActivity(), mUser).saveSerializedItems();
 		super.onPause();
 	}
@@ -380,75 +340,6 @@ public class ItemFragment extends Fragment implements Serializable,
 		if (mEditItemTitle.getText().hashCode() == s.hashCode()) {
 			mItem.setTitle(s.toString());
 		}
-		if (mEditItemGenre.getText().hashCode() == s.hashCode()) {
-			mItem.setGenre(s.toString());
-		}
-		if (mEditItemOriginalTitle.getText().hashCode() == s.hashCode()) {
-			mItem.setOriginalTitle(s.toString());
-		}
-		if (mEditItemCountry.getText().hashCode() == s.hashCode()) {
-			mItem.setCountry(s.toString());
-		}
-		if (mEditItemYear.getText().hashCode() == s.hashCode()) {
-			mItem.setYearPublished(s.toString());
-		}
-		if (mEditItemContent.getText().hashCode() == s.hashCode()) {
-			mItem.setContent(s.toString());
-		}
-		if (mItem instanceof Book) {
-			if (mEditItemAuthor.getText().hashCode() == s.hashCode()) {
-				((Book) mItem).setAuthor(s.toString());
-			}
-			if (mEditItemPublishingHouse.getText().hashCode() == s.hashCode()) {
-				((Book) mItem).setPublishingHouse(s.toString());
-			}
-			if (mEditItemEdition.getText().hashCode() == s.hashCode()) {
-				((Book) mItem).setEdition(s.toString());
-			}
-			if (mEditItemIsbn.getText().hashCode() == s.hashCode()) {
-				((Book) mItem).setIsbn(s.toString());
-			}
-		}
-		if (mItem instanceof Movie) {
-			if (mEditItemProducerMovie.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setProducer(s.toString());
-			}
-			if (mEditItemDirector.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setDirector(s.toString());
-			}
-			if (mEditItemScript.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setScript(s.toString());
-			}
-			if (mEditItemActors.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setActors(s.toString());
-			}
-			if (mEditItemMusic.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setMusic(s.toString());
-			}
-			if (mEditItemLength.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setLength(s.toString());
-			}
-		}
-		if (mItem instanceof MusicAlbum) {
-			if (mEditItemArtist.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setArtist(s.toString());
-			}
-			if (mEditItemLabel.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setLabel(s.toString());
-			}
-			if (mEditItemStudio.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setStudio(s.toString());
-			}
-			if (mEditItemProducerAlbum.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setProducer(s.toString());
-			}
-			if (mEditItemFormat.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setFormat(s.toString());
-			}
-			if (mEditItemTitleCount.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setTitleCount(s.toString());
-			}
-		}
 
 	}
 
@@ -464,64 +355,6 @@ public class ItemFragment extends Fragment implements Serializable,
 		if (buttonView == mCheckBoxItemFavorite) {
 			mItem.setFavorite(isChecked);
 			updateItem();
-		}
-	}
-
-	private void configureTextFields() {
-		mEditItemTitle.setText(mItem.getTitle());
-		mEditItemGenre.setText(mItem.getGenre());
-		mEditItemOriginalTitle.setText(mItem.getOriginalTitle());
-		mEditItemCountry.setText(mItem.getCountry());
-		mEditItemYear.setText(mItem.getYearPublished());
-		mEditItemContent.setText(mItem.getContent());
-
-		mEditItemTitle.addTextChangedListener(this);
-		mEditItemGenre.addTextChangedListener(this);
-		mEditItemOriginalTitle.addTextChangedListener(this);
-		mEditItemCountry.addTextChangedListener(this);
-		mEditItemYear.addTextChangedListener(this);
-		mEditItemContent.addTextChangedListener(this);
-
-		if (mItem instanceof Book) {
-			mEditItemAuthor.setText(((Book) mItem).getAuthor());
-			mEditItemAuthor.addTextChangedListener(this);
-			mEditItemPublishingHouse.setText(((Book) mItem)
-					.getPublishingHouse());
-			mEditItemPublishingHouse.addTextChangedListener(this);
-			mEditItemEdition.setText(((Book) mItem).getEdition());
-			mEditItemEdition.addTextChangedListener(this);
-			mEditItemIsbn.setText(((Book) mItem).getIsbn());
-			mEditItemIsbn.addTextChangedListener(this);
-		}
-
-		if (mItem instanceof Movie) {
-			mEditItemProducerMovie.setText(((Movie) mItem).getProducer());
-			mEditItemProducerMovie.addTextChangedListener(this);
-			mEditItemDirector.setText(((Movie) mItem).getDirector());
-			mEditItemDirector.addTextChangedListener(this);
-			mEditItemScript.setText(((Movie) mItem).getScript());
-			mEditItemScript.addTextChangedListener(this);
-			mEditItemActors.setText(((Movie) mItem).getActors());
-			mEditItemActors.addTextChangedListener(this);
-			mEditItemMusic.setText(((Movie) mItem).getMusic());
-			mEditItemMusic.addTextChangedListener(this);
-			mEditItemLength.setText(((Movie) mItem).getLength());
-			mEditItemLength.addTextChangedListener(this);
-		}
-
-		if (mItem instanceof MusicAlbum) {
-			mEditItemArtist.setText(((MusicAlbum) mItem).getArtist());
-			mEditItemArtist.addTextChangedListener(this);
-			mEditItemLabel.setText(((MusicAlbum) mItem).getLabel());
-			mEditItemLabel.addTextChangedListener(this);
-			mEditItemStudio.setText(((MusicAlbum) mItem).getStudio());
-			mEditItemStudio.addTextChangedListener(this);
-			mEditItemProducerAlbum.setText(((MusicAlbum) mItem).getProducer());
-			mEditItemProducerAlbum.addTextChangedListener(this);
-			mEditItemFormat.setText(((MusicAlbum) mItem).getFormat());
-			mEditItemFormat.addTextChangedListener(this);
-			mEditItemTitleCount.setText(((MusicAlbum) mItem).getTitleCount());
-			mEditItemTitleCount.addTextChangedListener(this);
 		}
 	}
 

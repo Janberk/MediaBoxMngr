@@ -9,9 +9,29 @@
         android:paddingBottom="@dimen/custom_value_16dp" >
 
         <TextView
-            android:id="@+id/tv_fragmentDetails_genre"
+            android:id="@+id/tv_fragmentDetails_itemContent"
             style="@style/textViewDetails"
             android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/custom_value_16dp"
+            android:layout_marginBottom="@dimen/custom_value_8dp"
+            android:text="@string/item_content_label" />
+
+        <EditText
+            android:id="@+id/et_fragmentDetails_itemContent"
+            style="@style/inputDetails"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_below="@+id/tv_fragmentDetails_itemContent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/custom_value_8dp"
+            android:hint="@string/item_content_hint"
+            android:inputType="textMultiLine" />
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_genre"
+            style="@style/textViewDetails"
+            android:layout_below="@+id/et_fragmentDetails_itemContent"
             android:layout_centerHorizontal="true"
             android:text="Genre" />
 

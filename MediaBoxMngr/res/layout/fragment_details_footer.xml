@@ -9,12 +9,10 @@
         style="@style/textViewDetails"
         android:text="@string/item_content_label" />
 
-    <EditText
-        android:id="@+id/et_fragmentDetails_itemContent"
-        style="@style/inputDetails"
+    <TextView
+        android:id="@+id/tv_fragmentDetails_itemContent"
+        style="@style/textViewDetails"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:hint="@string/item_content_hint"
-        android:inputType="textMultiLine" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

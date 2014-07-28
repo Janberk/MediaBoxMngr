@@ -36,6 +36,12 @@ public interface Constants {
 	String KEY_DIALOG_TITLE = "de.canberkdemirkan.mediaboxmngr.dialog_title";
 	String KEY_DIALOG_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.dialog_fragment";
 	String EXTRA_DIALOG_LIST = "de.canberkdemirkan.mediaboxmngr.extra_dialog_list";
+	String EXTRA_DETAILS_ITEM = "de.canberkdemirkan.mediaboxmngr.extra_details_item";
+	String EXTRA_DETAILS_CONTENT = "de.canberkdemirkan.mediaboxmngr.extra_details_content";
+	String EXTRA_DETAILS_GENRE = "de.canberkdemirkan.mediaboxmngr.extra_details_genre";
+	String EXTRA_DETAILS_ORIGINAL_TITLE = "de.canberkdemirkan.mediaboxmngr.extra_details_original_title";
+	String EXTRA_DETAILS_COUNTRY = "de.canberkdemirkan.mediaboxmngr.extra_details_country";
+	String EXTRA_DETAILS_YEAR = "de.canberkdemirkan.mediaboxmngr.extra_details_year";
 	
 	//String TAG_ALL = ItemType.All.name();
 	String TAG_ALBUM = ItemType.Album.name();

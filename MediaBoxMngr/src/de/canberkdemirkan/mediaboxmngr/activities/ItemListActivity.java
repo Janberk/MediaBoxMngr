@@ -16,7 +16,7 @@ public class ItemListActivity extends FragmentActivityBuilder {
 		if (listTag == null) {
 			return new ItemListFragment();
 		}
-		return new ItemListFragment().newItemListFragment(listTag);
+		return new ItemListFragment().newInstance(listTag);
 	}
 
 }

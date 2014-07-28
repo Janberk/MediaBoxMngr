@@ -13,17 +13,13 @@ import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 public class SplashScreenFragment extends Fragment {
 
 	// Splash screen timer
-	private static int SPLASH_TIME_OUT = 3000;
-
-	public void initElements(View view) {
-	}
+	private static int SPLASH_TIME_OUT = 2000;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		View view = inflater.inflate(R.layout.fragment_splash_screen, null);
-		initElements(view);
 
 		new Handler().postDelayed(new Runnable() {
 

@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragmentDetailsFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#000022" >
@@ -29,29 +30,6 @@
         android:layout_margin="@dimen/custom_value_4dp"
         layout="@layout/fragment_details_footer" >
     </include>
-
-    <RelativeLayout
-        android:id="@+id/fragmentDetails_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fragmentDetails_menuBar"
-        android:layout_below="@+id/fragmentDetails_footer" >
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <include
-                android:id="@+id/fragmentDetails_book"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/fragmentDetails_menuBar"
-                android:layout_below="@+id/fragmentDetails_footer"
-                android:layout_margin="@dimen/custom_value_4dp"
-                layout="@layout/fragment_details_book" >
-            </include>
-        </ScrollView>
-    </RelativeLayout>
 
     <include
         android:id="@+id/fragmentDetails_menuBar"
