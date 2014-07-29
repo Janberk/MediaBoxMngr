@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -47,6 +47,8 @@ public class ItemFragment extends Fragment implements Serializable,
 	 * 
 	 */
 	private static final long serialVersionUID = 9104738005805814331L;
+
+	private static final int REQUEST_CODE = 0;
 
 	private SharedPreferences mSharedPreferences;
 	private FragmentManager mFragmentManager;
@@ -88,9 +90,7 @@ public class ItemFragment extends Fragment implements Serializable,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onCreateView()");
-		}
+
 		setHasOptionsMenu(true);
 
 		mSharedPreferences = getActivity().getSharedPreferences(
@@ -102,6 +102,7 @@ public class ItemFragment extends Fragment implements Serializable,
 		mFragmentManager = getActivity().getSupportFragmentManager();
 
 		mItem = ItemStock.get(getActivity(), mUser).getItem(mItemId);
+
 		sItemType = mItem.getType().toString();
 	}
 
@@ -183,7 +184,7 @@ public class ItemFragment extends Fragment implements Serializable,
 		// R.layout.custom_spinner, R.id.tv_customSpinner_label,
 		// CustomSpinnerAdapter.getContent()));
 
-		updateItemDetails();
+		updateItemDetails(mItem);
 
 		mImageHome.setOnClickListener(this);
 		mImageSearch.setOnClickListener(this);
@@ -191,20 +192,6 @@ public class ItemFragment extends Fragment implements Serializable,
 		mImageLogout.setOnClickListener(this);
 
 		return view;
-	}
-
-	private void updateItemDetails() {
-		String itemContent = mItem.getContent();
-		String itemGenre = mItem.getGenre();
-		String itemOriginalTitle = mItem.getOriginalTitle();
-		String itemCountry = mItem.getCountry();
-		String itemYear = mItem.getYearPublished();
-
-		setTextIfNotNull(mTextItemContent, itemContent);
-		setTextIfNotNull(mTextItemGenre, itemGenre);
-		setTextIfNotNull(mTextItemOriginalTitle, itemOriginalTitle);
-		setTextIfNotNull(mTextItemCountry, itemCountry);
-		setTextIfNotNull(mTextItemYear, itemYear);
 	}
 
 	private void setTextIfNotNull(TextView view, String s) {
@@ -234,8 +221,7 @@ public class ItemFragment extends Fragment implements Serializable,
 			intent.putExtra(Constants.KEY_USER_TAG, mUser);
 			intent.putExtra(Constants.KEY_ITEM_UID, mItem.getUniqueId());
 			intent.putExtra(Constants.EXTRA_DETAILS_ITEM, mItem);
-
-			startActivityForResult(intent, 0);
+			startActivityForResult(intent, REQUEST_CODE);
 			return true;
 		case R.id.menu_deleteItem:
 			final String header = getActivity().getResources().getString(
@@ -252,6 +238,32 @@ public class ItemFragment extends Fragment implements Serializable,
 		}
 	}
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (resultCode != Activity.RESULT_OK) {
+			return;
+		}
+		mItem = (Item) data.getSerializableExtra(Constants.KEY_ITEM);
+		if (requestCode == REQUEST_CODE) {
+			updateItemDetails(mItem);
+		}
+	}
+
+	private void updateItemDetails(Item item) {
+		String itemContent = item.getContent();
+		String itemGenre = item.getGenre();
+		String itemOriginalTitle = item.getOriginalTitle();
+		String itemCountry = item.getCountry();
+		String itemYear = item.getYearPublished();
+
+		setTextIfNotNull(mTextItemContent, itemContent);
+		setTextIfNotNull(mTextItemGenre, itemGenre);
+		setTextIfNotNull(mTextItemOriginalTitle, itemOriginalTitle);
+		setTextIfNotNull(mTextItemCountry, itemCountry);
+		setTextIfNotNull(mTextItemYear, itemYear);
+	}
+
 	private void updateItem() {
 		ItemStock.get(getActivity(), mUser).updateItem(mItem);
 	}
@@ -263,17 +275,6 @@ public class ItemFragment extends Fragment implements Serializable,
 
 	@Override
 	public void onResume() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onResume()");
-		}
-		mItemId = (UUID) getArguments().getSerializable(Constants.KEY_ITEM_UID);
-		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
-
-		mItem = ItemStock.get(getActivity(), mUser).getItem(mItemId);
-		ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.viewPager);
-		viewPager.getAdapter().notifyDataSetChanged();
-		updateItemDetails();		
-
 		super.onResume();
 	}
 
@@ -345,7 +346,7 @@ public class ItemFragment extends Fragment implements Serializable,
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		updateItemDetails();
+		updateItemDetails(mItem);
 		updateItem();
 	}
 

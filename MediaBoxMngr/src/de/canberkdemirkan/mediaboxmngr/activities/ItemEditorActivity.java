@@ -3,7 +3,7 @@ package de.canberkdemirkan.mediaboxmngr.activities;
 import java.util.UUID;
 
 import android.support.v4.app.Fragment;
-import de.canberkdemirkan.mediaboxmngr.fragments.ItemEditor;
+import de.canberkdemirkan.mediaboxmngr.fragments.ItemEditorFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
@@ -20,7 +20,7 @@ public class ItemEditorActivity extends FragmentActivityBuilder {
 		Item item = (Item) getIntent().getSerializableExtra(
 				Constants.EXTRA_DETAILS_ITEM);
 
-		return new ItemEditor().newInstance(itemId, userTag, item);
+		return new ItemEditorFragment().newInstance(itemId, userTag, item);
 	}
 
 }

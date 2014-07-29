@@ -48,9 +48,6 @@ public class ItemStock {
 	}
 
 	public static ItemStock get(Context context, String user) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemStock - get()");
-		}
 		if (sItemStock == null || !user.equals(USER)) {
 			sItemStock = new ItemStock(context.getApplicationContext(), user);
 		}

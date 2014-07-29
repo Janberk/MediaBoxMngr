@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemFragment;
@@ -24,6 +26,10 @@ public class ItemPagerActivity extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemPagerActivity - onCreate()");
+		}
 
 		UUID itemId = (UUID) getIntent().getSerializableExtra(
 				Constants.KEY_ITEM_UID);
@@ -83,13 +89,12 @@ public class ItemPagerActivity extends FragmentActivity implements
 
 		@Override
 		public Fragment getItem(int pos) {
+			if (BuildConfig.DEBUG) {
+				Log.d(Constants.LOG_TAG, "ItemPagerActivity - getItem()");
+			}
 			Item item = mItemList.get(pos);
 			return ItemFragment.newInstance(item.getUniqueId(), mUser);
 		}
-	}
-
-	public ViewPager getmViewPager() {
-		return mViewPager;
 	}
 
 }

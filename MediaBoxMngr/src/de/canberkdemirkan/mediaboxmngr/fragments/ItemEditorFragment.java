@@ -2,9 +2,8 @@ package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import java.util.UUID;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import de.canberkdemirkan.mediaboxmngr.R;
-import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
@@ -27,10 +25,8 @@ import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
 import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
 
-public class ItemEditor extends Fragment implements TextWatcher {
+public class ItemEditorFragment extends Fragment implements TextWatcher {
 
-	private SharedPreferences mSharedPreferences;
-	private UUID mItemId;
 	private String mUser;
 	private Item mItem;
 
@@ -60,14 +56,14 @@ public class ItemEditor extends Fragment implements TextWatcher {
 	private EditText mEditItemFormat;
 	private EditText mEditItemTitleCount;
 
-	public static ItemEditor newInstance(UUID itemId, String userTag, Item item) {
+	public static ItemEditorFragment newInstance(UUID itemId, String userTag, Item item) {
 		Bundle args = new Bundle();
 
 		args.putSerializable(Constants.EXTRA_DETAILS_ITEM, item);
 		args.putSerializable(Constants.KEY_ITEM_UID, itemId);
 		args.putSerializable(Constants.KEY_USER_TAG, userTag);
 
-		ItemEditor fragment = new ItemEditor();
+		ItemEditorFragment fragment = new ItemEditorFragment();
 		fragment.setArguments(args);
 
 		return fragment;
@@ -79,10 +75,6 @@ public class ItemEditor extends Fragment implements TextWatcher {
 
 		setHasOptionsMenu(true);
 
-		mSharedPreferences = getActivity().getSharedPreferences(
-				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
-
-		mItemId = (UUID) getArguments().getSerializable(Constants.KEY_ITEM_UID);
 		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
 
 		Bundle bundle = getArguments();
@@ -234,14 +226,10 @@ public class ItemEditor extends Fragment implements TextWatcher {
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 		case android.R.id.home:
-			// if (NavUtils.getParentActivityName(getActivity()) != null) {
-			// NavUtils.navigateUpFromSameTask(getActivity());
-			// }
-			Intent intent = new Intent(getActivity(), ItemPagerActivity.class);
-			intent.putExtra(Constants.KEY_USER_TAG, mUser);
-			intent.putExtra(Constants.KEY_ITEM_UID, mItem.getUniqueId());
-
-			startActivityForResult(intent, 0);
+			Intent intent = new Intent();
+			intent.putExtra(Constants.KEY_ITEM, mItem);
+			getActivity().setResult(Activity.RESULT_OK, intent);
+			getActivity().finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
