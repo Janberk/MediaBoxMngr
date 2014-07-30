@@ -32,7 +32,7 @@
 
         <TextView
             style="@style/textViewDetails"
-            android:text="@string/details_genre" />
+            android:text="@string/details_genre_edition" />
 
         <TextView
             style="@style/textViewDetails"
@@ -40,7 +40,7 @@
 
         <TextView
             style="@style/textViewDetails"
-            android:text="@string/details_country" />
+            android:text="@string/details_country_year" />
 
         <TextView
             style="@style/textViewDetails"

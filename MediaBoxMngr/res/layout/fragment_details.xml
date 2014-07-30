@@ -3,32 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#000022" >
-
+    
     <include
         android:id="@+id/fragmentDetails_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="@dimen/custom_value_4dp"
-        layout="@layout/fragment_details_header" >
-    </include>
-
-    <include
-        android:id="@+id/fragmentDetails_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fragmentDetails_header"
-        android:layout_margin="@dimen/custom_value_4dp"
-        layout="@layout/fragment_details_content" >
-    </include>
-
-    <include
-        android:id="@+id/fragmentDetails_footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fragmentDetails_content"
-        android:layout_margin="@dimen/custom_value_4dp"
-        layout="@layout/fragment_details_footer" >
+        android:layout_alignParenttop="true"
+        layout="@layout/fragment_item" >
     </include>
 
     <include

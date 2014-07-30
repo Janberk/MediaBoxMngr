@@ -1,0 +1,124 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/custom_value_8dp" >
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_author" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemAuthor"
+            style="@style/textViewDetails.content"
+            android:text="Daniel Dafoe" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/gray" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_publisher" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemPublishingHouse"
+            style="@style/textViewDetails.content"
+            android:text="Manesse" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/gray" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_genre_edition" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemGenreEdition"
+            style="@style/textViewDetails.content"
+            android:text="Drama, 3. Edition" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/gray" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_country_year" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemCountryYear"
+            style="@style/textViewDetails.content"
+            android:text="GB, 1957" />
+    </TableRow>
+
+</TableLayout>
