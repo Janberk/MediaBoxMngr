@@ -43,11 +43,20 @@
     <string name="signup">Sign up</string>
     <string name="details_title">Title:</string>
     <string name="details_genre">Genre:</string>
+    <string name="details_country_year">Country, Year:</string>
     <string name="details_author">Author:</string>
     <string name="details_publisher_edition">Publisher, Edition:</string>
-    <string name="details_original_title">Orig. title:</string>
-    <string name="details_country_year">Country, Year:</string>
-    <string name="details_year">Year:</string>
+    <string name="details_isbn">ISBN:</string>
+    <string name="details_director">Director:</string>
+    <string name="details_length">Length:</string>
+    <string name="details_music">Music:</string>
+    <string name="details_cast">Cast:</string>
+    <string name="details_artist">Artist:</string>
+    <string name="details_label">Label:</string>
+    <string name="details_content_book">Content:</string>
+    <string name="details_content_movie">Story:</string>
+    <string name="details_content_music">Content/Track list:</string>
+    <string name="details_format_tracks">Format, Number o Tracks:</string>
 
     <string-array name="item_types">
         <item>Album</item>

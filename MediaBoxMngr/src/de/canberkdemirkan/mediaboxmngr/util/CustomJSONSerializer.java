@@ -21,7 +21,7 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
-import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
+import de.canberkdemirkan.mediaboxmngr.model.Music;
 
 public class CustomJSONSerializer {
 
@@ -58,7 +58,7 @@ public class CustomJSONSerializer {
 							.getString(Constants.TYPE));
 					switch (type) {
 					case Album:
-						itemList.add(0, new MusicAlbum(array.getJSONObject(i)));
+						itemList.add(0, new Music(array.getJSONObject(i)));
 						break;
 					case Book:
 						itemList.add(0, new Book(array.getJSONObject(i)));

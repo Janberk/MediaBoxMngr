@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        layout="@layout/fragment_edit_title" >
+        layout="@layout/fragment_create_item" >
     </include>
 
     <include
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        layout="@layout/fragment_menu_bar" >
+        layout="@layout/fragment_view_menu" >
     </include>
 
 </RelativeLayout>

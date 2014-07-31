@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/fragmentDetails_menuBar"
+        android:layout_alignParentTop="true"
+        android:background="@color/background_000022"
+        android:fillViewport="true" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <include
+                android:id="@+id/fragmentDetails_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                layout="@layout/fragment_view_title" >
+            </include>
+
+            <LinearLayout
+                android:id="@+id/infoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fragmentDetails_title"
+                android:layout_marginTop="@dimen/custom_value_16dp"
+                android:orientation="horizontal"
+                android:weightSum="5" >
+
+                <ImageView
+                    android:id="@+id/iv_fragmentDetails_itemCover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/custom_value_16dp"
+                    android:layout_marginLeft="@dimen/custom_value_16dp"
+                    android:layout_marginRight="@dimen/custom_value_8dp"
+                    android:layout_marginTop="@dimen/custom_value_4dp"
+                    android:layout_weight="2"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/item_cover_label"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/cover_placeholder" />
+
+                <include
+                    android:id="@+id/fragmentItem_book"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    layout="@layout/fragment_info_book" >
+                </include>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_itemContentLabel"
+                style="@style/textViewDetails"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/infoContainer"
+                android:layout_margin="@dimen/custom_value_8dp"
+                android:text="@string/details_content_book" />
+
+            <TextView
+                android:id="@+id/tv_fragmentDetails_itemContent"
+                style="@style/textViewDetails.content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/tv_itemContentLabel"
+                android:layout_margin="@dimen/custom_value_8dp"
+                android:text="" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/fragmentDetails_menuBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/fragment_view_menu" >
+    </include>
+
+</RelativeLayout>

@@ -20,7 +20,7 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
-import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
+import de.canberkdemirkan.mediaboxmngr.model.Music;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class DAOItem {
@@ -29,34 +29,27 @@ public class DAOItem {
 	public static int colSQLiteId;
 	public static int colUser;
 	public static int colSynced;
-	public static int colTitle;
 	public static int colType;
-	public static int colCover;
-	public static int colGenre;
 	public static int colFavorite;
 	public static int colCreationDate;
-	public static int colDeleted;
-	public static int colDeletionDate;
-	public static int colInPossession;
-	public static int colOriginalTitle;
+	public static int colTitle;
+	public static int colGenre;
 	public static int colCountry;
-	public static int colYearPublished;
+	public static int colYear;
 	public static int colContent;
 	public static int colRating;
-	public static int colProducer;
+	public static int colCover;
 	public static int colDirector;
-	public static int colScript;
-	public static int colActors;
+	public static int colCast;
 	public static int colMusic;
 	public static int colLength;
-	public static int colLabel;
-	public static int colStudio;
 	public static int colArtist;
+	public static int colLabel;
 	public static int colFormat;
 	public static int colTitleCount;
-	public static int colEdition;
-	public static int colPublishingHouse;
 	public static int colAuthor;
+	public static int colPublisher;
+	public static int colEdition;
 	public static int colIsbn;
 
 	private Context mAppContext;
@@ -289,7 +282,7 @@ public class DAOItem {
 	// json.put(Constants.IN_POSSESSION, item.isInPossession());
 	// json.put(Constants.ORIGINAL_TITLE, item.getOriginalTitle());
 	// json.put(Constants.COUNTRY, item.getCountry());
-	// json.put(Constants.YEAR_PUBLISHED, item.getYearPublished());
+	// json.put(Constants.YEAR_PUBLISHED, item.getYear());
 	// json.put(Constants.CONTENT, item.getContent());
 	// json.put(Constants.RATING, item.getRating());
 	// if (item instanceof Movie) {
@@ -299,26 +292,26 @@ public class DAOItem {
 	// json.put(Constants.DIRECTOR,
 	// ((Movie) item).getDirector());
 	// json.put(Constants.SCRIPT, ((Movie) item).getScript());
-	// json.put(Constants.ACTORS, ((Movie) item).getActors());
+	// json.put(Constants.CAST, ((Movie) item).getCast());
 	// json.put(Constants.MUSIC, ((Movie) item).getMusic());
 	// json.put(Constants.LENGTH, ((Movie) item).getLength());
 	// }
-	// if (item instanceof MusicAlbum) {
-	// json.put(Constants.LABEL, ((MusicAlbum) item).getLabel());
+	// if (item instanceof Music) {
+	// json.put(Constants.LABEL, ((Music) item).getLabel());
 	// json.put(Constants.STUDIO,
-	// ((MusicAlbum) item).getStudio());
+	// ((Music) item).getStudio());
 	// json.put(Constants.ARTIST,
-	// ((MusicAlbum) item).getArtist());
+	// ((Music) item).getArtist());
 	// json.put(Constants.FORMAT,
-	// ((MusicAlbum) item).getFormat());
+	// ((Music) item).getFormat());
 	// json.put(Constants.TITLE_COUNT,
-	// ((MusicAlbum) item).getTitleCount());
+	// ((Music) item).getTitleCount());
 	// }
 	// if (item instanceof Book) {
 	//
 	// json.put(Constants.EDITION, ((Book) item).getEdition());
-	// json.put(Constants.PUBLISHING_HOUSE,
-	// ((Book) item).getPublishingHouse());
+	// json.put(Constants.PUBLISHER,
+	// ((Book) item).getPublisher());
 	// json.put(Constants.AUTHOR, ((Book) item).getAuthor());
 	// json.put(Constants.ISBN, ((Book) item).getIsbn());
 	// }
@@ -368,41 +361,29 @@ public class DAOItem {
 					map.put(Constants.USER, cursor.getString(colUser));
 					// map.put(Constants.SYNCED,
 					// cursor.getString(colSynced));
-					map.put(Constants.TITLE, cursor.getString(colTitle));
 					map.put(Constants.TYPE, cursor.getString(colType));
-					map.put(Constants.COVER, cursor.getString(colCover));
-					map.put(Constants.GENRE, cursor.getString(colGenre));
 					map.put(Constants.FAVORITE, cursor.getString(colFavorite));
 					map.put(Constants.CREATION_DATE,
 							cursor.getString(colCreationDate));
-					map.put(Constants.DELETED, cursor.getString(colDeleted));
-					map.put(Constants.DELETION_DATE,
-							cursor.getString(colDeletionDate));
-					map.put(Constants.IN_POSSESSION,
-							cursor.getString(colInPossession));
-					map.put(Constants.ORIGINAL_TITLE,
-							cursor.getString(colOriginalTitle));
+					map.put(Constants.TITLE, cursor.getString(colTitle));
+					map.put(Constants.GENRE, cursor.getString(colGenre));
 					map.put(Constants.COUNTRY, cursor.getString(colCountry));
-					map.put(Constants.YEAR_PUBLISHED,
-							cursor.getString(colYearPublished));
+					map.put(Constants.YEAR, cursor.getString(colYear));
 					map.put(Constants.CONTENT, cursor.getString(colContent));
 					map.put(Constants.RATING, cursor.getString(colRating));
-					map.put(Constants.PRODUCER, cursor.getString(colProducer));
+					map.put(Constants.COVER, cursor.getString(colCover));
 					map.put(Constants.DIRECTOR, cursor.getString(colDirector));
-					map.put(Constants.SCRIPT, cursor.getString(colScript));
-					map.put(Constants.ACTORS, cursor.getString(colActors));
+					map.put(Constants.CAST, cursor.getString(colCast));
 					map.put(Constants.MUSIC, cursor.getString(colMusic));
 					map.put(Constants.LENGTH, cursor.getString(colLength));
-					map.put(Constants.LABEL, cursor.getString(colLabel));
-					map.put(Constants.STUDIO, cursor.getString(colStudio));
 					map.put(Constants.ARTIST, cursor.getString(colArtist));
+					map.put(Constants.LABEL, cursor.getString(colLabel));
 					map.put(Constants.FORMAT, cursor.getString(colFormat));
 					map.put(Constants.TITLE_COUNT,
 							cursor.getString(colTitleCount));
-					map.put(Constants.EDITION, cursor.getString(colEdition));
-					map.put(Constants.PUBLISHING_HOUSE,
-							cursor.getString(colPublishingHouse));
 					map.put(Constants.AUTHOR, cursor.getString(colAuthor));
+					map.put(Constants.PUBLISHER, cursor.getString(colPublisher));
+					map.put(Constants.EDITION, cursor.getString(colEdition));
 					map.put(Constants.ISBN, cursor.getString(colIsbn));
 					values.add(map);
 				}
@@ -428,9 +409,6 @@ public class DAOItem {
 
 		int synced = (Integer.parseInt(cursor.getString(colSynced)));
 		int favoriteAsInt = (Integer.parseInt(cursor.getString(colFavorite)));
-		int inPossessionAsInt = (Integer.parseInt(cursor
-				.getString(colInPossession)));
-		int deletedAsInt = (Integer.parseInt(cursor.getString(colDeleted)));
 
 		int id = Integer.parseInt(cursor.getString(colSQLiteId));
 		// byte[] bytes = cursor.getBlob(iCover);
@@ -439,50 +417,42 @@ public class DAOItem {
 		String user = cursor.getString(colUser);
 		String title = cursor.getString(colTitle);
 		String genre = cursor.getString(colGenre);
-		String originalTitle = cursor.getString(colOriginalTitle);
 		String country = cursor.getString(colCountry);
-		String yearPublished = cursor.getString(colYearPublished);
+		String year = cursor.getString(colYear);
 		String content = cursor.getString(colContent);
 		String rating = cursor.getString(colRating);
-		String producer = cursor.getString(colProducer);
 		String director = cursor.getString(colDirector);
-		String script = cursor.getString(colScript);
-		String actors = cursor.getString(colActors);
+		String cast = cursor.getString(colCast);
 		String music = cursor.getString(colMusic);
 		String length = cursor.getString(colLength);
-		String label = cursor.getString(colLabel);
-		String studio = cursor.getString(colStudio);
 		String artist = cursor.getString(colArtist);
+		String label = cursor.getString(colLabel);
 		String format = cursor.getString(colFormat);
 		String titleCount = cursor.getString(colTitleCount);
-		String edition = cursor.getString(colEdition);
-		String publishingHouse = cursor.getString(colPublishingHouse);
 		String author = cursor.getString(colAuthor);
+		String publisher = cursor.getString(colPublisher);
+		String edition = cursor.getString(colEdition);
 		String isbn = cursor.getString(colIsbn);
 
 		switch (type) {
 		case Album:
-			item = new MusicAlbum(id, user);
-			((MusicAlbum) item).setLabel(label);
-			((MusicAlbum) item).setStudio(studio);
-			((MusicAlbum) item).setProducer(producer);
-			((MusicAlbum) item).setArtist(artist);
-			((MusicAlbum) item).setFormat(format);
-			((MusicAlbum) item).setTitleCount(titleCount);
+			item = new Music(id, user);
+			((Music) item).setLabel(label);
+			((Music) item).setArtist(artist);
+			((Music) item).setFormat(format);
+			((Music) item).setTitleCount(titleCount);
 			break;
 		case Book:
 			item = new Book(id, user);
 			((Book) item).setEdition(edition);
-			((Book) item).setPublishingHouse(publishingHouse);
+			((Book) item).setPublisher(publisher);
 			((Book) item).setAuthor(author);
 			((Book) item).setIsbn(isbn);
 			break;
 		case Movie:
 			item = new Movie(id, user);
-			((Movie) item).setProducer(producer);
 			((Movie) item).setDirector(director);
-			((Movie) item).setScript(script);
-			((Movie) item).setActors(actors);
+			((Movie) item).setCast(cast);
 			((Movie) item).setMusic(music);
 			((Movie) item).setLength(length);
 
@@ -490,22 +460,18 @@ public class DAOItem {
 		default:
 			break;
 		}
-		// item.setCover(cover);
-		// item.setDeletionDate();
 		item.setSynced(UtilMethods.isTrue(synced));
-		item.setTitle(title);
 		item.setType(type);
-		item.setGenre(genre);
-		item.setCountry(country);
-		item.setContent(content);
-		item.setRating(rating);
-		item.setYearPublished(yearPublished);
-		item.setOriginalTitle(originalTitle);
 		item.setFavorite(UtilMethods.isTrue(favoriteAsInt));
 		item.setCreationDate(UtilMethods
 				.setCreationDateFromString(creationDate));
-		item.setInPossession(UtilMethods.isTrue(inPossessionAsInt));
-		item.setDeleted(UtilMethods.isTrue(deletedAsInt));
+		item.setTitle(title);
+		item.setGenre(genre);
+		item.setCountry(country);
+		item.setYear(year);
+		item.setContent(content);
+		item.setRating(rating);
+		// item.setCover(cover);
 
 		return item;
 	}
@@ -514,51 +480,36 @@ public class DAOItem {
 	public void putValues(Item item, ContentValues values) {
 		// byte[] bytes = CoverUtil.getByteArray(item.getCover());
 		// values.put(Constants.COVER, bytes);
-		values.put(Constants.SYNCED, UtilMethods.isTrueAsInt(item.isSynced()));
 		values.put(Constants.USER, item.getUser());
-		values.put(Constants.TITLE, item.getTitle());
+		values.put(Constants.SYNCED, UtilMethods.isTrueAsInt(item.isSynced()));
 		values.put(Constants.TYPE, item.getType().toString());
-		values.put(Constants.GENRE, item.getGenre());
-		values.put(Constants.IN_POSSESSION,
-				UtilMethods.isTrueAsInt(item.isInPossession()));
 		values.put(Constants.FAVORITE,
 				UtilMethods.isTrueAsInt(item.isFavorite()));
-		values.put(Constants.DELETED, UtilMethods.isTrueAsInt(item.isDeleted()));
-
-		if (item.getDeletionDate() != null) {
-			values.put(Constants.DELETION_DATE, UtilMethods
-					.dateToFormattedStringConverter(item.getDeletionDate()));
-		}
-
-		values.put(Constants.ORIGINAL_TITLE, item.getOriginalTitle());
+		values.put(Constants.TITLE, item.getTitle());
+		values.put(Constants.GENRE, item.getGenre());
 		values.put(Constants.COUNTRY, item.getCountry());
-		values.put(Constants.YEAR_PUBLISHED, item.getYearPublished());
+		values.put(Constants.YEAR, item.getYear());
 		values.put(Constants.CONTENT, item.getContent());
 		values.put(Constants.RATING, item.getRating());
 
 		if (item instanceof Movie) {
-			values.put(Constants.PRODUCER, ((Movie) item).getProducer());
 			values.put(Constants.DIRECTOR, ((Movie) item).getDirector());
-			values.put(Constants.SCRIPT, ((Movie) item).getScript());
-			values.put(Constants.ACTORS, ((Movie) item).getActors());
+			values.put(Constants.CAST, ((Movie) item).getCast());
 			values.put(Constants.MUSIC, ((Movie) item).getMusic());
 			values.put(Constants.LENGTH, ((Movie) item).getLength());
 		}
 
-		if (item instanceof MusicAlbum) {
-			values.put(Constants.LABEL, ((MusicAlbum) item).getLabel());
-			values.put(Constants.STUDIO, ((MusicAlbum) item).getStudio());
-			values.put(Constants.ARTIST, ((MusicAlbum) item).getArtist());
-			values.put(Constants.FORMAT, ((MusicAlbum) item).getFormat());
-			values.put(Constants.TITLE_COUNT,
-					((MusicAlbum) item).getTitleCount());
+		if (item instanceof Music) {
+			values.put(Constants.ARTIST, ((Music) item).getArtist());
+			values.put(Constants.LABEL, ((Music) item).getLabel());
+			values.put(Constants.FORMAT, ((Music) item).getFormat());
+			values.put(Constants.TITLE_COUNT, ((Music) item).getTitleCount());
 		}
 
 		if (item instanceof Book) {
-			values.put(Constants.EDITION, ((Book) item).getEdition());
-			values.put(Constants.PUBLISHING_HOUSE,
-					((Book) item).getPublishingHouse());
 			values.put(Constants.AUTHOR, ((Book) item).getAuthor());
+			values.put(Constants.PUBLISHER, ((Book) item).getPublisher());
+			values.put(Constants.EDITION, ((Book) item).getEdition());
 			values.put(Constants.ISBN, ((Book) item).getIsbn());
 		}
 
@@ -569,34 +520,27 @@ public class DAOItem {
 		colSQLiteId = cursor.getColumnIndex(Constants.ID);
 		colUser = cursor.getColumnIndex(Constants.USER);
 		colSynced = cursor.getColumnIndex(Constants.SYNCED);
-		colTitle = cursor.getColumnIndex(Constants.TITLE);
 		colType = cursor.getColumnIndex(Constants.TYPE);
-		colCover = cursor.getColumnIndex(Constants.COVER);
-		colGenre = cursor.getColumnIndex(Constants.GENRE);
 		colFavorite = cursor.getColumnIndex(Constants.FAVORITE);
 		colCreationDate = cursor.getColumnIndex(Constants.CREATION_DATE);
-		colDeleted = cursor.getColumnIndex(Constants.DELETED);
-		colDeletionDate = cursor.getColumnIndex(Constants.DELETION_DATE);
-		colInPossession = cursor.getColumnIndex(Constants.IN_POSSESSION);
-		colOriginalTitle = cursor.getColumnIndex(Constants.ORIGINAL_TITLE);
+		colTitle = cursor.getColumnIndex(Constants.TITLE);
+		colGenre = cursor.getColumnIndex(Constants.GENRE);
 		colCountry = cursor.getColumnIndex(Constants.COUNTRY);
-		colYearPublished = cursor.getColumnIndex(Constants.YEAR_PUBLISHED);
+		colYear = cursor.getColumnIndex(Constants.YEAR);
 		colContent = cursor.getColumnIndex(Constants.CONTENT);
 		colRating = cursor.getColumnIndex(Constants.RATING);
-		colProducer = cursor.getColumnIndex(Constants.PRODUCER);
+		colCover = cursor.getColumnIndex(Constants.COVER);
 		colDirector = cursor.getColumnIndex(Constants.DIRECTOR);
-		colScript = cursor.getColumnIndex(Constants.SCRIPT);
-		colActors = cursor.getColumnIndex(Constants.ACTORS);
+		colCast = cursor.getColumnIndex(Constants.CAST);
 		colMusic = cursor.getColumnIndex(Constants.MUSIC);
 		colLength = cursor.getColumnIndex(Constants.LENGTH);
-		colLabel = cursor.getColumnIndex(Constants.LABEL);
-		colStudio = cursor.getColumnIndex(Constants.STUDIO);
 		colArtist = cursor.getColumnIndex(Constants.ARTIST);
+		colLabel = cursor.getColumnIndex(Constants.LABEL);
 		colFormat = cursor.getColumnIndex(Constants.FORMAT);
 		colTitleCount = cursor.getColumnIndex(Constants.TITLE_COUNT);
-		colEdition = cursor.getColumnIndex(Constants.EDITION);
-		colPublishingHouse = cursor.getColumnIndex(Constants.PUBLISHING_HOUSE);
 		colAuthor = cursor.getColumnIndex(Constants.AUTHOR);
+		colPublisher = cursor.getColumnIndex(Constants.PUBLISHER);
+		colEdition = cursor.getColumnIndex(Constants.EDITION);
 		colIsbn = cursor.getColumnIndex(Constants.ISBN);
 	}
 
@@ -706,10 +650,6 @@ public class DAOItem {
 				int synced = (Integer.parseInt(cursor.getString(colSynced)));
 				int favoriteAsInt = (Integer.parseInt(cursor
 						.getString(colFavorite)));
-				int inPossessionAsInt = (Integer.parseInt(cursor
-						.getString(colInPossession)));
-				int deletedAsInt = (Integer.parseInt(cursor
-						.getString(colDeleted)));
 
 				int id = Integer.parseInt(cursor.getString(colSQLiteId));
 				// byte[] bytes = cursor.getBlob(iCover);
@@ -718,47 +658,39 @@ public class DAOItem {
 				String user = cursor.getString(colUser);
 				String title = cursor.getString(colTitle);
 				String genre = cursor.getString(colGenre);
-				String originalTitle = cursor.getString(colOriginalTitle);
 				String country = cursor.getString(colCountry);
-				String yearPublished = cursor.getString(colYearPublished);
+				String year = cursor.getString(colYear);
 				String content = cursor.getString(colContent);
 				String rating = cursor.getString(colRating);
-				String producer = cursor.getString(colProducer);
 				String director = cursor.getString(colDirector);
-				String script = cursor.getString(colScript);
-				String actors = cursor.getString(colActors);
+				String cast = cursor.getString(colCast);
 				String music = cursor.getString(colMusic);
 				String length = cursor.getString(colLength);
 				String label = cursor.getString(colLabel);
-				String studio = cursor.getString(colStudio);
 				String artist = cursor.getString(colArtist);
 				String format = cursor.getString(colFormat);
 				String titleCount = cursor.getString(colTitleCount);
 				String edition = cursor.getString(colEdition);
-				String publishingHouse = cursor.getString(colPublishingHouse);
+				String publisher = cursor.getString(colPublisher);
 				String author = cursor.getString(colAuthor);
 				String isbn = cursor.getString(colIsbn);
 
 				switch (type) {
 				case Album:
-					((MusicAlbum) item).setLabel(label);
-					((MusicAlbum) item).setStudio(studio);
-					((MusicAlbum) item).setProducer(producer);
-					((MusicAlbum) item).setArtist(artist);
-					((MusicAlbum) item).setFormat(format);
-					((MusicAlbum) item).setTitleCount(titleCount);
+					((Music) item).setArtist(artist);
+					((Music) item).setLabel(label);
+					((Music) item).setFormat(format);
+					((Music) item).setTitleCount(titleCount);
 					break;
 				case Book:
-					((Book) item).setEdition(edition);
-					((Book) item).setPublishingHouse(publishingHouse);
 					((Book) item).setAuthor(author);
+					((Book) item).setPublisher(publisher);
+					((Book) item).setEdition(edition);
 					((Book) item).setIsbn(isbn);
 					break;
 				case Movie:
-					((Movie) item).setProducer(producer);
 					((Movie) item).setDirector(director);
-					((Movie) item).setScript(script);
-					((Movie) item).setActors(actors);
+					((Movie) item).setCast(cast);
 					((Movie) item).setMusic(music);
 					((Movie) item).setLength(length);
 
@@ -766,23 +698,18 @@ public class DAOItem {
 				default:
 					break;
 				}
-				// item.setCover(cover);
-				// item.setDeletionDate();
 				item.setSynced(UtilMethods.isTrue(synced));
-				item.setTitle(title);
 				item.setType(type);
-				item.setGenre(genre);
-				item.setCountry(country);
-				item.setContent(content);
-				item.setRating(rating);
-				item.setYearPublished(yearPublished);
-				item.setOriginalTitle(originalTitle);
 				item.setFavorite(UtilMethods.isTrue(favoriteAsInt));
 				item.setCreationDate(UtilMethods
 						.setCreationDateFromString(creationDate));
-				item.setInPossession(UtilMethods.isTrue(inPossessionAsInt));
-				item.setDeleted(UtilMethods.isTrue(deletedAsInt));
-
+				item.setTitle(title);
+				item.setGenre(genre);
+				item.setCountry(country);
+				item.setYear(year);
+				item.setContent(content);
+				item.setRating(rating);
+				// item.setCover(cover);
 			}
 
 		} catch (Exception e) {

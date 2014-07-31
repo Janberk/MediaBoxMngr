@@ -23,7 +23,7 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
-import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
+import de.canberkdemirkan.mediaboxmngr.model.Music;
 
 public class ItemEditorFragment extends Fragment implements TextWatcher {
 
@@ -33,26 +33,21 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 	private EditText mEditItemContent;
 
 	private EditText mEditItemGenre;
-	private EditText mEditItemOriginalTitle;
 	private EditText mEditItemCountry;
 	private EditText mEditItemYear;
 
 	private EditText mEditItemAuthor;
-	private EditText mEditItemPublishingHouse;
+	private EditText mEditItemPublisher;
 	private EditText mEditItemEdition;
 	private EditText mEditItemIsbn;
 
-	private EditText mEditItemProducerMovie;
 	private EditText mEditItemDirector;
-	private EditText mEditItemScript;
-	private EditText mEditItemActors;
+	private EditText mEditItemCast;
 	private EditText mEditItemMusic;
 	private EditText mEditItemLength;
 
 	private EditText mEditItemArtist;
 	private EditText mEditItemLabel;
-	private EditText mEditItemStudio;
-	private EditText mEditItemProducerAlbum;
 	private EditText mEditItemFormat;
 	private EditText mEditItemTitleCount;
 
@@ -90,15 +85,15 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 		View view = null;
 
 		if (mItem instanceof Book) {
-			view = inflater.inflate(R.layout.fragment_details_book, container,
+			view = inflater.inflate(R.layout.fragment_edit_book, container,
 					false);
 		}
 		if (mItem instanceof Movie) {
-			view = inflater.inflate(R.layout.fragment_details_movie, container,
+			view = inflater.inflate(R.layout.fragment_edit_movie, container,
 					false);
 		}
-		if (mItem instanceof MusicAlbum) {
-			view = inflater.inflate(R.layout.fragment_details_album, container,
+		if (mItem instanceof Music) {
+			view = inflater.inflate(R.layout.fragment_edit_music, container,
 					false);
 		}
 
@@ -119,8 +114,6 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 				.findViewById(R.id.et_fragmentDetails_itemContent);
 		mEditItemGenre = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_genre);
-		mEditItemOriginalTitle = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_original);
 		mEditItemCountry = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_country);
 		mEditItemYear = (EditText) view
@@ -128,21 +121,17 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 
 		mEditItemAuthor = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_author);
-		mEditItemPublishingHouse = (EditText) view
+		mEditItemPublisher = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_publisher);
 		mEditItemEdition = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_edition);
 		mEditItemIsbn = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_isbn);
 
-		mEditItemProducerMovie = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_producer);
 		mEditItemDirector = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_director);
-		mEditItemScript = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_script);
-		mEditItemActors = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_actors);
+		mEditItemCast = (EditText) view
+				.findViewById(R.id.et_fragmentDetails_cast);
 		mEditItemMusic = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_music);
 		mEditItemLength = (EditText) view
@@ -152,10 +141,6 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 				.findViewById(R.id.et_fragmentDetails_artist);
 		mEditItemLabel = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_label);
-		mEditItemStudio = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_studio);
-		mEditItemProducerAlbum = (EditText) view
-				.findViewById(R.id.et_fragmentDetails_producer);
 		mEditItemFormat = (EditText) view
 				.findViewById(R.id.et_fragmentDetails_format);
 		mEditItemTitleCount = (EditText) view
@@ -164,13 +149,11 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 
 	private void configureTextFields() {
 		mEditItemGenre.setText(mItem.getGenre());
-		mEditItemOriginalTitle.setText(mItem.getOriginalTitle());
 		mEditItemCountry.setText(mItem.getCountry());
-		mEditItemYear.setText(mItem.getYearPublished());
+		mEditItemYear.setText(mItem.getYear());
 		mEditItemContent.setText(mItem.getContent());
 
 		mEditItemGenre.addTextChangedListener(this);
-		mEditItemOriginalTitle.addTextChangedListener(this);
 		mEditItemCountry.addTextChangedListener(this);
 		mEditItemYear.addTextChangedListener(this);
 		mEditItemContent.addTextChangedListener(this);
@@ -178,9 +161,8 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 		if (mItem instanceof Book) {
 			mEditItemAuthor.setText(((Book) mItem).getAuthor());
 			mEditItemAuthor.addTextChangedListener(this);
-			mEditItemPublishingHouse.setText(((Book) mItem)
-					.getPublishingHouse());
-			mEditItemPublishingHouse.addTextChangedListener(this);
+			mEditItemPublisher.setText(((Book) mItem).getPublisher());
+			mEditItemPublisher.addTextChangedListener(this);
 			mEditItemEdition.setText(((Book) mItem).getEdition());
 			mEditItemEdition.addTextChangedListener(this);
 			mEditItemIsbn.setText(((Book) mItem).getIsbn());
@@ -188,32 +170,24 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 		}
 
 		if (mItem instanceof Movie) {
-			mEditItemProducerMovie.setText(((Movie) mItem).getProducer());
-			mEditItemProducerMovie.addTextChangedListener(this);
 			mEditItemDirector.setText(((Movie) mItem).getDirector());
 			mEditItemDirector.addTextChangedListener(this);
-			mEditItemScript.setText(((Movie) mItem).getScript());
-			mEditItemScript.addTextChangedListener(this);
-			mEditItemActors.setText(((Movie) mItem).getActors());
-			mEditItemActors.addTextChangedListener(this);
+			mEditItemCast.setText(((Movie) mItem).getCast());
+			mEditItemCast.addTextChangedListener(this);
 			mEditItemMusic.setText(((Movie) mItem).getMusic());
 			mEditItemMusic.addTextChangedListener(this);
 			mEditItemLength.setText(((Movie) mItem).getLength());
 			mEditItemLength.addTextChangedListener(this);
 		}
 
-		if (mItem instanceof MusicAlbum) {
-			mEditItemArtist.setText(((MusicAlbum) mItem).getArtist());
+		if (mItem instanceof Music) {
+			mEditItemArtist.setText(((Music) mItem).getArtist());
 			mEditItemArtist.addTextChangedListener(this);
-			mEditItemLabel.setText(((MusicAlbum) mItem).getLabel());
+			mEditItemLabel.setText(((Music) mItem).getLabel());
 			mEditItemLabel.addTextChangedListener(this);
-			mEditItemStudio.setText(((MusicAlbum) mItem).getStudio());
-			mEditItemStudio.addTextChangedListener(this);
-			mEditItemProducerAlbum.setText(((MusicAlbum) mItem).getProducer());
-			mEditItemProducerAlbum.addTextChangedListener(this);
-			mEditItemFormat.setText(((MusicAlbum) mItem).getFormat());
+			mEditItemFormat.setText(((Music) mItem).getFormat());
 			mEditItemFormat.addTextChangedListener(this);
-			mEditItemTitleCount.setText(((MusicAlbum) mItem).getTitleCount());
+			mEditItemTitleCount.setText(((Music) mItem).getTitleCount());
 			mEditItemTitleCount.addTextChangedListener(this);
 		}
 	}
@@ -248,14 +222,11 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 		if (mEditItemGenre.getText().hashCode() == s.hashCode()) {
 			mItem.setGenre(s.toString());
 		}
-		if (mEditItemOriginalTitle.getText().hashCode() == s.hashCode()) {
-			mItem.setOriginalTitle(s.toString());
-		}
 		if (mEditItemCountry.getText().hashCode() == s.hashCode()) {
 			mItem.setCountry(s.toString());
 		}
 		if (mEditItemYear.getText().hashCode() == s.hashCode()) {
-			mItem.setYearPublished(s.toString());
+			mItem.setYear(s.toString());
 		}
 		if (mEditItemContent.getText().hashCode() == s.hashCode()) {
 			mItem.setContent(s.toString());
@@ -264,8 +235,8 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 			if (mEditItemAuthor.getText().hashCode() == s.hashCode()) {
 				((Book) mItem).setAuthor(s.toString());
 			}
-			if (mEditItemPublishingHouse.getText().hashCode() == s.hashCode()) {
-				((Book) mItem).setPublishingHouse(s.toString());
+			if (mEditItemPublisher.getText().hashCode() == s.hashCode()) {
+				((Book) mItem).setPublisher(s.toString());
 			}
 			if (mEditItemEdition.getText().hashCode() == s.hashCode()) {
 				((Book) mItem).setEdition(s.toString());
@@ -275,17 +246,11 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 			}
 		}
 		if (mItem instanceof Movie) {
-			if (mEditItemProducerMovie.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setProducer(s.toString());
-			}
 			if (mEditItemDirector.getText().hashCode() == s.hashCode()) {
 				((Movie) mItem).setDirector(s.toString());
 			}
-			if (mEditItemScript.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setScript(s.toString());
-			}
-			if (mEditItemActors.getText().hashCode() == s.hashCode()) {
-				((Movie) mItem).setActors(s.toString());
+			if (mEditItemCast.getText().hashCode() == s.hashCode()) {
+				((Movie) mItem).setCast(s.toString());
 			}
 			if (mEditItemMusic.getText().hashCode() == s.hashCode()) {
 				((Movie) mItem).setMusic(s.toString());
@@ -294,24 +259,18 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 				((Movie) mItem).setLength(s.toString());
 			}
 		}
-		if (mItem instanceof MusicAlbum) {
+		if (mItem instanceof Music) {
 			if (mEditItemArtist.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setArtist(s.toString());
+				((Music) mItem).setArtist(s.toString());
 			}
 			if (mEditItemLabel.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setLabel(s.toString());
-			}
-			if (mEditItemStudio.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setStudio(s.toString());
-			}
-			if (mEditItemProducerAlbum.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setProducer(s.toString());
+				((Music) mItem).setLabel(s.toString());
 			}
 			if (mEditItemFormat.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setFormat(s.toString());
+				((Music) mItem).setFormat(s.toString());
 			}
 			if (mEditItemTitleCount.getText().hashCode() == s.hashCode()) {
-				((MusicAlbum) mItem).setTitleCount(s.toString());
+				((Music) mItem).setTitleCount(s.toString());
 			}
 		}
 

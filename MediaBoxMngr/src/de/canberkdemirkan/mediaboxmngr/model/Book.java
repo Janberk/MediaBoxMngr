@@ -12,11 +12,12 @@ public class Book extends Item {
 	 */
 	private static final long serialVersionUID = -3888624184736706992L;
 
-	private String mEdition;
-	private String mPublishingHouse;
 	private String mAuthor;
+	private String mPublisher;
+	private String mEdition;
 	private String mIsbn;
-
+	
+	// constructors
 	public Book() {
 		super();
 	}
@@ -30,28 +31,28 @@ public class Book extends Item {
 	}
 
 	// getters and setters
-	public String getEdition() {
-		return mEdition;
-	}
-
-	public void setEdition(String edition) {
-		mEdition = edition;
-	}
-
-	public String getPublishingHouse() {
-		return mPublishingHouse;
-	}
-
-	public void setPublishingHouse(String publishingHouse) {
-		mPublishingHouse = publishingHouse;
-	}
-
 	public String getAuthor() {
 		return mAuthor;
 	}
 
 	public void setAuthor(String author) {
 		mAuthor = author;
+	}
+
+	public String getPublisher() {
+		return mPublisher;
+	}
+
+	public void setPublisher(String publisher) {
+		mPublisher = publisher;
+	}
+
+	public String getEdition() {
+		return mEdition;
+	}
+
+	public void setEdition(String edition) {
+		mEdition = edition;
 	}
 
 	public String getIsbn() {
@@ -62,14 +63,15 @@ public class Book extends Item {
 		mIsbn = isbn;
 	}
 
+	// overwritten methods
 	@Override
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 		json.put(JSON_UID, getUniqueId().toString());
 		json.put(JSON_ID, getId());
-		json.put(JSON_CREATION_DATE, getCreationDate().getTime());
 		json.put(JSON_TITLE, getTitle());
 		json.put(JSON_FAVORITE, isFavorite());
+		json.put(JSON_CREATION_DATE, getCreationDate().getTime());
 
 		return json;
 	}
@@ -79,33 +81,23 @@ public class Book extends Item {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append("ID: " + getId() + "\n");
+		sb.append("UID: " + getUniqueId() + "\n");
+		sb.append("Type: " + getType() + "\n");
+		sb.append("Created by: " + getUser() + "\n");
 		sb.append("Creation date: "
 				+ UtilMethods.dateToFormattedStringConverter(getCreationDate())
 				+ "\n");
-		sb.append("Created by: " + getUser() + "\n");
 		sb.append("Title: " + getTitle() + "\n");
-		sb.append("Original title: " + getOriginalTitle() + "\n");
-		sb.append("Type: " + getType() + "\n");
 		sb.append("Genre: " + getGenre() + "\n");
-		sb.append("Edition: " + getEdition() + "\n");
-		sb.append("Publishing house: " + getPublishingHouse() + "\n");
-		sb.append("Country: " + getCountry() + "\n");
-		sb.append("Year published: " + getYearPublished() + "\n");
 		sb.append("Author: " + getAuthor() + "\n");
+		sb.append("Publisher: " + getPublisher() + "\n");
+		sb.append("Edition: " + getEdition() + "\n");
 		sb.append("ISBN: " + getIsbn() + "\n");
+		sb.append("Country: " + getCountry() + "\n");
+		sb.append("Year: " + getYear() + "\n");
 		sb.append("Content: " + getContent() + "\n");
 		sb.append("Favorite?: " + isFavorite() + "\n");
 		sb.append("Rating: " + getRating() + "\n");
-		sb.append("In Possession?: " + isInPossession() + "\n");
-		sb.append("Deleted?: " + isDeleted() + "\n");
-		if (getDeletionDate() == null) {
-			sb.append("Deletion date:\n");
-		} else {
-			sb.append("Deletion date: "
-					+ UtilMethods
-					.dateToFormattedStringConverter(getDeletionDate())
-					+ "\n");
-		}
 
 		return sb.toString();
 	}

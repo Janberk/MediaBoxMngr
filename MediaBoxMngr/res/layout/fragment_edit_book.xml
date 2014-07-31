@@ -7,14 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/custom_value_16dp" >
-        
+
         <TextView
             android:id="@+id/tv_fragmentDetails_itemContent"
             style="@style/textViewDetails"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/custom_value_16dp"
             android:layout_marginBottom="@dimen/custom_value_8dp"
+            android:layout_marginTop="@dimen/custom_value_16dp"
             android:text="@string/item_content_label" />
 
         <EditText
@@ -44,24 +44,9 @@
             android:inputType="text" />
 
         <TextView
-            android:id="@+id/tv_fragmentDetails_original"
-            style="@style/textViewDetails"
-            android:layout_below="@+id/et_fragmentDetails_genre"
-            android:layout_centerHorizontal="true"
-            android:text="Orig. title" />
-
-        <EditText
-            android:id="@+id/et_fragmentDetails_original"
-            style="@style/editTextForm.textStyle.input"
-            android:layout_below="@+id/tv_fragmentDetails_original"
-            android:layout_centerHorizontal="true"
-            android:hint="Enter orig. title"
-            android:inputType="text" />
-
-        <TextView
             android:id="@+id/tv_fragmentDetails_country"
             style="@style/textViewDetails"
-            android:layout_below="@+id/et_fragmentDetails_original"
+            android:layout_below="@+id/et_fragmentDetails_genre"
             android:layout_centerHorizontal="true"
             android:text="Country" />
 
@@ -89,93 +74,63 @@
             android:inputType="text" />
 
         <TextView
-            android:id="@+id/tv_fragmentDetails_producer"
+            android:id="@+id/tv_fragmentDetails_author"
             style="@style/textViewDetails"
             android:layout_below="@+id/et_fragmentDetails_year"
             android:layout_centerHorizontal="true"
-            android:text="Producer" />
+            android:text="Author" />
 
         <EditText
-            android:id="@+id/et_fragmentDetails_producer"
+            android:id="@+id/et_fragmentDetails_author"
             style="@style/editTextForm.textStyle.input"
-            android:layout_below="@+id/tv_fragmentDetails_producer"
+            android:layout_below="@+id/tv_fragmentDetails_author"
             android:layout_centerHorizontal="true"
-            android:hint="Enter producer"
+            android:hint="Enter author"
             android:inputType="text" />
 
         <TextView
-            android:id="@+id/tv_fragmentDetails_director"
+            android:id="@+id/tv_fragmentDetails_publisher"
             style="@style/textViewDetails"
-            android:layout_below="@+id/et_fragmentDetails_producer"
+            android:layout_below="@+id/et_fragmentDetails_author"
             android:layout_centerHorizontal="true"
-            android:text="Director" />
+            android:text="Publisher" />
 
         <EditText
-            android:id="@+id/et_fragmentDetails_director"
+            android:id="@+id/et_fragmentDetails_publisher"
             style="@style/editTextForm.textStyle.input"
-            android:layout_below="@+id/tv_fragmentDetails_director"
+            android:layout_below="@+id/tv_fragmentDetails_publisher"
             android:layout_centerHorizontal="true"
-            android:hint="Enter director"
+            android:hint="Enter publisher"
             android:inputType="text" />
 
         <TextView
-            android:id="@+id/tv_fragmentDetails_script"
+            android:id="@+id/tv_fragmentDetails_edition"
             style="@style/textViewDetails"
-            android:layout_below="@+id/et_fragmentDetails_director"
+            android:layout_below="@+id/et_fragmentDetails_publisher"
             android:layout_centerHorizontal="true"
-            android:text="Script" />
+            android:text="Edition" />
 
         <EditText
-            android:id="@+id/et_fragmentDetails_script"
+            android:id="@+id/et_fragmentDetails_edition"
             style="@style/editTextForm.textStyle.input"
-            android:layout_below="@+id/tv_fragmentDetails_script"
+            android:layout_below="@+id/tv_fragmentDetails_edition"
             android:layout_centerHorizontal="true"
-            android:hint="Enter script"
+            android:hint="Enter edition"
             android:inputType="text" />
 
         <TextView
-            android:id="@+id/tv_fragmentDetails_actors"
+            android:id="@+id/tv_fragmentDetails_isbn"
             style="@style/textViewDetails"
-            android:layout_below="@+id/et_fragmentDetails_script"
+            android:layout_below="@+id/et_fragmentDetails_edition"
             android:layout_centerHorizontal="true"
-            android:text="Cast" />
+            android:text="ISBN" />
 
         <EditText
-            android:id="@+id/et_fragmentDetails_actors"
+            android:id="@+id/et_fragmentDetails_isbn"
             style="@style/editTextForm.textStyle.input"
-            android:layout_below="@+id/tv_fragmentDetails_actors"
+            android:layout_below="@+id/tv_fragmentDetails_isbn"
             android:layout_centerHorizontal="true"
-            android:hint="Enter cast"
-            android:inputType="text" />
-
-        <TextView
-            android:id="@+id/tv_fragmentDetails_music"
-            style="@style/textViewDetails"
-            android:layout_below="@+id/et_fragmentDetails_actors"
-            android:layout_centerHorizontal="true"
-            android:text="Music by" />
-
-        <EditText
-            android:id="@+id/et_fragmentDetails_music"
-            style="@style/editTextForm.textStyle.input"
-            android:layout_below="@+id/tv_fragmentDetails_music"
-            android:layout_centerHorizontal="true"
-            android:hint="Enter music composer"
-            android:inputType="text" />
-
-        <TextView
-            android:id="@+id/tv_fragmentDetails_length"
-            style="@style/textViewDetails"
-            android:layout_below="@+id/et_fragmentDetails_music"
-            android:layout_centerHorizontal="true"
-            android:text="Length" />
-
-        <EditText
-            android:id="@+id/et_fragmentDetails_length"
-            style="@style/editTextForm.textStyle.input"
-            android:layout_below="@+id/tv_fragmentDetails_length"
-            android:layout_centerHorizontal="true"
-            android:hint="Enter length"
+            android:hint="Enter ISBN"
             android:inputType="text" />
     </RelativeLayout>
 

@@ -14,7 +14,7 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
-import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
+import de.canberkdemirkan.mediaboxmngr.model.Music;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class JSONHandler {
@@ -54,7 +54,7 @@ public class JSONHandler {
 				Item newItem = null;
 				switch (type) {
 				case Album:
-					newItem = new MusicAlbum(id, user);
+					newItem = new Music(id, user);
 					break;
 				case Book:
 					newItem = new Book(id, user);

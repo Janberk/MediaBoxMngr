@@ -40,6 +40,8 @@ import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
+import de.canberkdemirkan.mediaboxmngr.model.Movie;
+import de.canberkdemirkan.mediaboxmngr.model.Music;
 
 public class ItemFragment extends Fragment implements Serializable,
 		View.OnClickListener, OnCheckedChangeListener, TextWatcher {
@@ -67,26 +69,20 @@ public class ItemFragment extends Fragment implements Serializable,
 	private EditText mEditItemTitle;
 	private TextView mTextItemContent;
 	private TextView mTextItemGenre;
-	private TextView mTextItemOriginalTitle;
 	private TextView mTextItemCountryYear;
 
 	private TextView mTextItemAuthor;
 	private TextView mTextItemPublisherEdition;
 	private TextView mTextItemIsbn;
 
-	private TextView mTextItemProducerMovie;
 	private TextView mTextItemDirector;
-	private TextView mTextItemScript;
-	private TextView mTextItemActors;
-	private TextView mTextItemMusic;
+	private TextView mTextItemCast;
 	private TextView mTextItemLength;
+	private TextView mTextItemMusic;
 
 	private TextView mTextItemArtist;
 	private TextView mTextItemLabel;
-	private TextView mTextItemStudio;
-	private TextView mTextItemProducerAlbum;
-	private TextView mTextItemFormat;
-	private TextView mTextItemTitleCount;
+	private TextView mTextItemFormatTitleCount;
 
 	private CheckBox mCheckBoxItemFavorite;
 
@@ -131,8 +127,6 @@ public class ItemFragment extends Fragment implements Serializable,
 				.findViewById(R.id.tv_fragmentDetails_itemContent);
 		mTextItemGenre = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemGenre);
-		mTextItemOriginalTitle = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemOriginalTitle);
 		mTextItemCountryYear = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemCountryYear);
 
@@ -141,33 +135,23 @@ public class ItemFragment extends Fragment implements Serializable,
 		mTextItemPublisherEdition = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemPublisherEdition);
 		mTextItemIsbn = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
+				.findViewById(R.id.tv_fragmentDetails_itemIsbn);
 
-		mTextItemProducerMovie = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
 		mTextItemDirector = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
-		mTextItemScript = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
-		mTextItemActors = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
+				.findViewById(R.id.tv_fragmentDetails_itemDirector);
+		// mTextItemCast = (TextView) view
+		// .findViewById(R.id.tv_fragmentDetails_itemCast);
 		mTextItemMusic = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
+				.findViewById(R.id.tv_fragmentDetails_itemMusic);
 		mTextItemLength = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
+				.findViewById(R.id.tv_fragmentDetails_itemLength);
 
 		mTextItemArtist = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
+				.findViewById(R.id.tv_fragmentDetails_itemArtist);
 		mTextItemLabel = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
-		mTextItemStudio = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
-		mTextItemProducerAlbum = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
-		mTextItemFormat = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
-		mTextItemTitleCount = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemYear);
+				.findViewById(R.id.tv_fragmentDetails_itemLabel);
+		mTextItemFormatTitleCount = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemFormatTracks);
 
 		mCheckBoxItemFavorite = (CheckBox) view
 				.findViewById(R.id.cb_fragmentDetails_itemFavorite);
@@ -200,16 +184,16 @@ public class ItemFragment extends Fragment implements Serializable,
 		View view = null;
 		switch (ItemType.valueOf(sItemType)) {
 		case Album:
-			view = inflater.inflate(R.layout.fragment_details_album_view,
-					container, false);
+			view = inflater.inflate(R.layout.fragment_view_music, container,
+					false);
 			break;
 		case Book:
-			view = inflater
-					.inflate(R.layout.fragment_details, container, false);
+			view = inflater.inflate(R.layout.fragment_view_book, container,
+					false);
 			break;
 		case Movie:
-			view = inflater.inflate(R.layout.fragment_details_movie_view,
-					container, false);
+			view = inflater.inflate(R.layout.fragment_view_movie, container,
+					false);
 			break;
 
 		default:
@@ -302,56 +286,65 @@ public class ItemFragment extends Fragment implements Serializable,
 
 	private void updateItemDetails(Item item) {
 		String itemContent = item.getContent();
-		String itemCountryYear = item.getCountry() + ", "
-				+ item.getYearPublished();
-		String itemOriginalTitle = item.getOriginalTitle();
+		String itemGenre = item.getGenre();
+		String itemCountryYear = item.getCountry() + ", " + item.getYear();
+
+		setTextIfNotNull(mTextItemContent, itemContent);
+		setTextIfNotNull(mTextItemGenre, itemGenre);
+		setTextIfNotNull(mTextItemCountryYear, itemCountryYear);
 
 		// Book
 		String itemAuthor = null;
 		String itemPublisherEdition = null;
-		String itemGenre = null;
 		String itemIsbn = null;
 		if (item instanceof Book) {
 			itemAuthor = ((Book) item).getAuthor();
-			itemPublisherEdition = ((Book) item).getPublishingHouse() + ", "
+			itemPublisherEdition = ((Book) item).getPublisher() + ", "
 					+ ((Book) item).getEdition();
-			itemGenre = ((Book) item).getGenre();
 			itemIsbn = ((Book) item).getIsbn();
+
+			setTextIfNotNull(mTextItemAuthor, itemAuthor);
+			setTextIfNotNull(mTextItemPublisherEdition, itemPublisherEdition);
+			setTextIfNotNull(mTextItemIsbn, itemIsbn);
 		}
-		// End Book
 
-		// setTextIfNotNull(mTextItemContent, itemContent);
-		setTextIfNotNull(mTextItemGenre, itemGenre);
-		// setTextIfNotNull(mTextItemOriginalTitle, itemOriginalTitle);
-		setTextIfNotNull(mTextItemCountryYear, itemCountryYear);
+		// Movie
+		String itemDirector = null;
+		// String itemCast = null;
+		String itemLength = null;
+		String itemMusic = null;
+		if (item instanceof Movie) {
+			itemDirector = ((Movie) item).getDirector();
+			// itemCast = ((Movie) item).getCast();
+			itemLength = ((Movie) item).getLength();
+			itemMusic = ((Movie) item).getMusic() + " min.";
 
-		setTextIfNotNull(mTextItemAuthor, itemAuthor);
-		setTextIfNotNull(mTextItemPublisherEdition, itemPublisherEdition);
-		// setTextIfNotNull(mTextItemIsbn, itemIsbn);
+			setTextIfNotNull(mTextItemDirector, itemDirector);
+			// setTextIfNotNull(mTextItemCast, itemCast);
+			setTextIfNotNull(mTextItemLength, itemLength);
+			setTextIfNotNull(mTextItemMusic, itemMusic);
+		}
 
-		// setTextIfNotNull(mTextItemProducerMovie, itemYear);
-		// setTextIfNotNull(mTextItemDirector, itemYear);
-		// setTextIfNotNull(mTextItemScript, itemYear);
-		// setTextIfNotNull(mTextItemActors, itemYear);
-		// setTextIfNotNull(mTextItemMusic, itemYear);
-		// setTextIfNotNull(mTextItemLength, itemYear);
-		//
-		// setTextIfNotNull(mTextItemArtist, itemYear);
-		// setTextIfNotNull(mTextItemLabel, itemYear);
-		// setTextIfNotNull(mTextItemStudio, itemYear);
-		// setTextIfNotNull(mTextItemProducerAlbum, itemYear);
-		// setTextIfNotNull(mTextItemFormat, itemYear);
-		// setTextIfNotNull(mTextItemTitleCount, itemYear);
+		// Music
+		String itemArtist = null;
+		String itemLabel = null;
+		String itemFormatTracks = null;
+		if (item instanceof Music) {
+			itemArtist = ((Music) item).getArtist();
+			itemLabel = ((Music) item).getLabel();
+			itemFormatTracks = ((Music) item).getFormat() + ", "
+					+ ((Music) item).getTitleCount();
+
+			setTextIfNotNull(mTextItemArtist, itemArtist);
+			setTextIfNotNull(mTextItemLabel, itemLabel);
+			setTextIfNotNull(mTextItemFormatTitleCount, itemFormatTracks);
+		}
+
 	}
 
 	private void updateItem() {
 		ItemStock.get(getActivity(), mUser).updateItem(mItem);
 	}
-
-	/*
-	 * 
-	 * Logging callback methods for debug purposes
-	 */
 
 	@Override
 	public void onResume() {

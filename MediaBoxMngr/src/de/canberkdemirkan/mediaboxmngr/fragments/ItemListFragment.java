@@ -63,7 +63,7 @@ import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
-import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
+import de.canberkdemirkan.mediaboxmngr.model.Music;
 import de.canberkdemirkan.mediaboxmngr.util.CustomItemAdapter;
 import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter;
 import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter.SpinnerTag;
@@ -291,7 +291,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		switch (type) {
 		case Album:
-			item = new MusicAlbum();
+			item = new Music();
 			break;
 		case Book:
 			item = new Book();

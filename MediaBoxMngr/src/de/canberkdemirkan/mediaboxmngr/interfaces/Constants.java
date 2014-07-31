@@ -44,7 +44,6 @@ public interface Constants {
 	String EXTRA_DETAILS_COUNTRY = "de.canberkdemirkan.mediaboxmngr.extra_details_country";
 	String EXTRA_DETAILS_YEAR = "de.canberkdemirkan.mediaboxmngr.extra_details_year";
 	
-	//String TAG_ALL = ItemType.All.name();
 	String TAG_ALBUM = ItemType.Album.name();
 	String TAG_BOOK = ItemType.Book.name();
 	String TAG_MOVIE = ItemType.Movie.name();
@@ -59,38 +58,31 @@ public interface Constants {
 	String ID = "_id";
 	String SQLITE_ID = "sqlite_id";
 	String SYNCED = "synced";
-	String TITLE = "title";
 	String USER = "created_by";
 	String TYPE = "type";
-	String COVER = "cover";
+	String TITLE = "title";
 	String GENRE = "genre";
 	String FAVORITE = "favorite";
-	String CREATION_DATE = "creation_date"; // also for user
-	String DELETED = "deleted"; // also for user
-	String DELETION_DATE = "deletion_date"; // also for user
-	String IN_POSSESSION = "in_possession";
-	String ORIGINAL_TITLE = "original_title";
+	String CREATION_DATE = "creation_date";
 	String COUNTRY = "country";
-	String YEAR_PUBLISHED = "year_published";
+	String YEAR = "year";
 	String CONTENT = "content";
 	String RATING = "rating";
+	String COVER = "cover";
 	// MOVIES
-	String PRODUCER = "producer"; // also for ALBUMS
 	String DIRECTOR = "director";
-	String SCRIPT = "script";
-	String ACTORS = "actors";
+	String CAST = "cast";
 	String MUSIC = "music";
 	String LENGTH = "length";
 	// ALBUMS
-	String LABEL = "label";
-	String STUDIO = "studio";
 	String ARTIST = "artist";
+	String LABEL = "label";
 	String FORMAT = "format";
 	String TITLE_COUNT = "title_count";
 	// books
-	String EDITION = "edition";
-	String PUBLISHING_HOUSE = "publishing_house";
 	String AUTHOR = "author";
+	String PUBLISHER = "publisher";
+	String EDITION = "edition";
 	String ISBN = "isbn";
 
 	// user table column names
@@ -109,34 +101,27 @@ public interface Constants {
 			+ ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ USER + " TEXT, "
 			+ SYNCED + " INTEGER, "
-			+ TITLE + " TEXT, "
 			+ TYPE + " TEXT, "
-			+ COVER + " BLOB, "
-			+ GENRE + " TEXT, "
 			+ FAVORITE + " INTEGER, "
 			+ CREATION_DATE + " TEXT, "
-			+ DELETED + " INTEGER, "
-			+ DELETION_DATE + " TEXT, "
-			+ IN_POSSESSION + " INTEGER, "
-			+ ORIGINAL_TITLE + " TEXT, "
+			+ TITLE + " TEXT, "
+			+ GENRE + " TEXT, "
 			+ COUNTRY + " TEXT, "
-			+ YEAR_PUBLISHED + " TEXT, "
+			+ YEAR + " TEXT, "
 			+ CONTENT + " TEXT, "
 			+ RATING + " TEXT, "
-			+ PRODUCER + " TEXT, "
+			+ COVER + " BLOB, "
 			+ DIRECTOR + " TEXT, "
-			+ SCRIPT + " TEXT, "
-			+ ACTORS + " TEXT, "
+			+ CAST + " TEXT, "
 			+ MUSIC + " TEXT, "
 			+ LENGTH + " TEXT, "
-			+ LABEL + " TEXT, "
-			+ STUDIO + " TEXT, "
 			+ ARTIST + " TEXT, "
+			+ LABEL + " TEXT, "
 			+ FORMAT + " TEXT, "
 			+ TITLE_COUNT + " TEXT, "
-			+ EDITION + " TEXT, "
-			+ PUBLISHING_HOUSE + " TEXT, "
 			+ AUTHOR + " TEXT, "
+			+ PUBLISHER + " TEXT, "
+			+ EDITION + " TEXT, "
 			+ ISBN + " TEXT"
 			+ ")";
 	
@@ -145,8 +130,6 @@ public interface Constants {
 			+ TABLE_USERS + "("
 			+ ID + " INTEGER PRIMARY KEY,"
 			+ CREATION_DATE + " TEXT,"
-			+ DELETED + " INTEGER,"
-			+ DELETION_DATE + " TEXT,"
 			+ FIRST_NAME + " TEXT,"
 			+ LAST_NAME + " TEXT,"
 			+ USER_NAME + " TEXT,"

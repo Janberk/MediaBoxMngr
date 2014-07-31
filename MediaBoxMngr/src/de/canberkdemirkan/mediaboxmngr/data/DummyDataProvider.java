@@ -6,7 +6,7 @@ import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
-import de.canberkdemirkan.mediaboxmngr.model.MusicAlbum;
+import de.canberkdemirkan.mediaboxmngr.model.Music;
 
 public class DummyDataProvider {
 
@@ -24,7 +24,7 @@ public class DummyDataProvider {
 
 		for (int i = 1; i <= 30; i++) {
 			if (i < 11) {
-				item = new MusicAlbum();
+				item = new Music();
 				item.setType(ItemType.Album);
 				item.setUser(mUser);
 				item.setTitle("Test item Nr. " + i);
@@ -32,9 +32,8 @@ public class DummyDataProvider {
 					item.setFavorite(true);
 				}
 				item.setGenre(i + " Action");
-				item.setOriginalTitle("OT Test item Nr. " + i);
 				item.setCountry(i + " USA");
-				item.setYearPublished(i + " 1981");
+				item.setYear(i + " 1981");
 				item.setContent(item.toString());
 			} else if (i < 21) {
 				item = new Book();
@@ -45,9 +44,8 @@ public class DummyDataProvider {
 					item.setFavorite(true);
 				}
 				item.setGenre(i + " Action");
-				item.setOriginalTitle("OT Test item Nr. " + i);
 				item.setCountry(i + " USA");
-				item.setYearPublished(i + " 1981");
+				item.setYear(i + " 1981");
 				item.setContent(item.toString());
 			} else if (i < 31) {
 				item = new Movie();
@@ -58,9 +56,8 @@ public class DummyDataProvider {
 					item.setFavorite(true);
 				}
 				item.setGenre(i + " Action");
-				item.setOriginalTitle("OT Test item Nr. " + i);
 				item.setCountry(i + " USA");
-				item.setYearPublished(i + " 1981");
+				item.setYear(i + " 1981");
 				item.setContent(item.toString());
 			}
 			list.add(item);
