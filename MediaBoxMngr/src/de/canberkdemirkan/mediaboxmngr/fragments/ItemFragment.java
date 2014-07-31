@@ -38,6 +38,7 @@ import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemFragment extends Fragment implements Serializable,
@@ -67,8 +68,25 @@ public class ItemFragment extends Fragment implements Serializable,
 	private TextView mTextItemContent;
 	private TextView mTextItemGenre;
 	private TextView mTextItemOriginalTitle;
-	private TextView mTextItemCountry;
-	private TextView mTextItemYear;
+	private TextView mTextItemCountryYear;
+
+	private TextView mTextItemAuthor;
+	private TextView mTextItemPublisherEdition;
+	private TextView mTextItemIsbn;
+
+	private TextView mTextItemProducerMovie;
+	private TextView mTextItemDirector;
+	private TextView mTextItemScript;
+	private TextView mTextItemActors;
+	private TextView mTextItemMusic;
+	private TextView mTextItemLength;
+
+	private TextView mTextItemArtist;
+	private TextView mTextItemLabel;
+	private TextView mTextItemStudio;
+	private TextView mTextItemProducerAlbum;
+	private TextView mTextItemFormat;
+	private TextView mTextItemTitleCount;
 
 	private CheckBox mCheckBoxItemFavorite;
 
@@ -115,10 +133,42 @@ public class ItemFragment extends Fragment implements Serializable,
 				.findViewById(R.id.tv_fragmentDetails_itemGenre);
 		mTextItemOriginalTitle = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemOriginalTitle);
-		mTextItemCountry = (TextView) view
-				.findViewById(R.id.tv_fragmentDetails_itemCountry);
-		mTextItemYear = (TextView) view
+		mTextItemCountryYear = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemCountryYear);
+
+		mTextItemAuthor = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemAuthor);
+		mTextItemPublisherEdition = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemPublisherEdition);
+		mTextItemIsbn = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemYear);
+
+		mTextItemProducerMovie = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemDirector = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemScript = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemActors = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemMusic = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemLength = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+
+		mTextItemArtist = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemLabel = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemStudio = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemProducerAlbum = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemFormat = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+		mTextItemTitleCount = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemYear);
+
 		mCheckBoxItemFavorite = (CheckBox) view
 				.findViewById(R.id.cb_fragmentDetails_itemFavorite);
 		// mCheckBoxGotIt = (CheckBox) view
@@ -154,8 +204,8 @@ public class ItemFragment extends Fragment implements Serializable,
 					container, false);
 			break;
 		case Book:
-			view = inflater.inflate(R.layout.fragment_details_book_view,
-					container, false);
+			view = inflater
+					.inflate(R.layout.fragment_details, container, false);
 			break;
 		case Movie:
 			view = inflater.inflate(R.layout.fragment_details_movie_view,
@@ -252,16 +302,46 @@ public class ItemFragment extends Fragment implements Serializable,
 
 	private void updateItemDetails(Item item) {
 		String itemContent = item.getContent();
-		String itemGenre = item.getGenre();
+		String itemCountryYear = item.getCountry() + ", "
+				+ item.getYearPublished();
 		String itemOriginalTitle = item.getOriginalTitle();
-		String itemCountry = item.getCountry();
-		String itemYear = item.getYearPublished();
 
-		setTextIfNotNull(mTextItemContent, itemContent);
+		// Book
+		String itemAuthor = null;
+		String itemPublisherEdition = null;
+		String itemGenre = null;
+		String itemIsbn = null;
+		if (item instanceof Book) {
+			itemAuthor = ((Book) item).getAuthor();
+			itemPublisherEdition = ((Book) item).getPublishingHouse() + ", "
+					+ ((Book) item).getEdition();
+			itemGenre = ((Book) item).getGenre();
+			itemIsbn = ((Book) item).getIsbn();
+		}
+		// End Book
+
+		// setTextIfNotNull(mTextItemContent, itemContent);
 		setTextIfNotNull(mTextItemGenre, itemGenre);
-		setTextIfNotNull(mTextItemOriginalTitle, itemOriginalTitle);
-		setTextIfNotNull(mTextItemCountry, itemCountry);
-		setTextIfNotNull(mTextItemYear, itemYear);
+		// setTextIfNotNull(mTextItemOriginalTitle, itemOriginalTitle);
+		setTextIfNotNull(mTextItemCountryYear, itemCountryYear);
+
+		setTextIfNotNull(mTextItemAuthor, itemAuthor);
+		setTextIfNotNull(mTextItemPublisherEdition, itemPublisherEdition);
+		// setTextIfNotNull(mTextItemIsbn, itemIsbn);
+
+		// setTextIfNotNull(mTextItemProducerMovie, itemYear);
+		// setTextIfNotNull(mTextItemDirector, itemYear);
+		// setTextIfNotNull(mTextItemScript, itemYear);
+		// setTextIfNotNull(mTextItemActors, itemYear);
+		// setTextIfNotNull(mTextItemMusic, itemYear);
+		// setTextIfNotNull(mTextItemLength, itemYear);
+		//
+		// setTextIfNotNull(mTextItemArtist, itemYear);
+		// setTextIfNotNull(mTextItemLabel, itemYear);
+		// setTextIfNotNull(mTextItemStudio, itemYear);
+		// setTextIfNotNull(mTextItemProducerAlbum, itemYear);
+		// setTextIfNotNull(mTextItemFormat, itemYear);
+		// setTextIfNotNull(mTextItemTitleCount, itemYear);
 	}
 
 	private void updateItem() {

@@ -56,7 +56,8 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 	private EditText mEditItemFormat;
 	private EditText mEditItemTitleCount;
 
-	public static ItemEditorFragment newInstance(UUID itemId, String userTag, Item item) {
+	public static ItemEditorFragment newInstance(UUID itemId, String userTag,
+			Item item) {
 		Bundle args = new Bundle();
 
 		args.putSerializable(Constants.EXTRA_DETAILS_ITEM, item);
@@ -244,7 +245,6 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-
 		if (mEditItemGenre.getText().hashCode() == s.hashCode()) {
 			mItem.setGenre(s.toString());
 		}

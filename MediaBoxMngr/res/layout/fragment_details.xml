@@ -3,12 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#000022" >
+	
+    <include
+        android:id="@+id/fragmentDetails_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/fragment_details_header" >
+    </include>
     
     <include
         android:id="@+id/fragmentDetails_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParenttop="true"
+        android:layout_below="@+id/fragmentDetails_title"
         layout="@layout/fragment_item" >
     </include>
 

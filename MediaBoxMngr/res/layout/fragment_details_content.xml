@@ -32,7 +32,7 @@
 
         <TextView
             style="@style/textViewDetails"
-            android:text="@string/details_genre_edition" />
+            android:text="@string/details_genre" />
 
         <TextView
             style="@style/textViewDetails"
