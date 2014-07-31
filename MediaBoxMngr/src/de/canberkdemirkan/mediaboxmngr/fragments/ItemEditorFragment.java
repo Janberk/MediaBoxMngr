@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -278,7 +279,25 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		ItemStock.get(getActivity(), mUser).updateItem(mItem);
+		new UpdateItemTask().execute();
+	}
+
+	public class UpdateItemTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			ItemStock.get(getActivity(), mUser).updateItem(mItem);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+		}
+
 	}
 
 }

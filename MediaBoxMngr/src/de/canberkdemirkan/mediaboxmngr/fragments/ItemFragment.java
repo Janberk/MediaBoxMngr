@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -416,7 +417,7 @@ public class ItemFragment extends Fragment implements Serializable,
 	@Override
 	public void afterTextChanged(Editable s) {
 		updateItemDetails(mItem);
-		updateItem();
+		new UpdateItemTask().execute();
 	}
 
 	// check box listener callback
@@ -424,12 +425,30 @@ public class ItemFragment extends Fragment implements Serializable,
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		if (buttonView == mCheckBoxItemFavorite) {
 			mItem.setFavorite(isChecked);
-			updateItem();
+			new UpdateItemTask().execute();
 		}
 	}
 
 	public String getUser() {
 		return mUser;
+	}
+
+	public class UpdateItemTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			updateItem();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+		}
+
 	}
 
 }
