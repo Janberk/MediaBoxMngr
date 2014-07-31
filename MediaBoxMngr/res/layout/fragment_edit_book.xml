@@ -21,12 +21,16 @@
             android:id="@+id/et_fragmentDetails_itemContent"
             style="@style/inputDetails"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/tv_fragmentDetails_itemContent"
             android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/custom_value_16dp"
             android:layout_marginBottom="@dimen/custom_value_8dp"
             android:hint="@string/item_content_hint"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:maxLength="2000"
+            android:maxLines="10"
+            android:minHeight="80dp" />
 
         <TextView
             android:id="@+id/tv_fragmentDetails_genre"
