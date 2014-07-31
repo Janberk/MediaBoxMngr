@@ -139,8 +139,8 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		mTextItemDirector = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemDirector);
-		// mTextItemCast = (TextView) view
-		// .findViewById(R.id.tv_fragmentDetails_itemCast);
+		mTextItemCast = (TextView) view
+				.findViewById(R.id.tv_fragmentDetails_itemCast);
 		mTextItemMusic = (TextView) view
 				.findViewById(R.id.tv_fragmentDetails_itemMusic);
 		mTextItemLength = (TextView) view
@@ -155,10 +155,6 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		mCheckBoxItemFavorite = (CheckBox) view
 				.findViewById(R.id.cb_fragmentDetails_itemFavorite);
-		// mCheckBoxGotIt = (CheckBox) view
-		// .findViewById(R.id.cb_fragmentBasics_gotIt);
-		// mCheckBoxWishList = (CheckBox) view
-		// .findViewById(R.id.cb_fragmentBasics_wishList);
 		// mSpinnerItemGenre = (Spinner) view
 		// .findViewById(R.id.sp_fragmentBasics_itemGenre);
 		// mSpinnerItemCountry = (Spinner) view
@@ -310,17 +306,17 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		// Movie
 		String itemDirector = null;
-		// String itemCast = null;
+		String itemCast = null;
 		String itemLength = null;
 		String itemMusic = null;
 		if (item instanceof Movie) {
 			itemDirector = ((Movie) item).getDirector();
-			// itemCast = ((Movie) item).getCast();
-			itemLength = ((Movie) item).getLength();
-			itemMusic = ((Movie) item).getMusic() + " min.";
+			itemCast = ((Movie) item).getCast();
+			itemLength = ((Movie) item).getLength() + " min.";
+			itemMusic = ((Movie) item).getMusic();
 
 			setTextIfNotNull(mTextItemDirector, itemDirector);
-			// setTextIfNotNull(mTextItemCast, itemCast);
+			setTextIfNotNull(mTextItemCast, itemCast);
 			setTextIfNotNull(mTextItemLength, itemLength);
 			setTextIfNotNull(mTextItemMusic, itemMusic);
 		}

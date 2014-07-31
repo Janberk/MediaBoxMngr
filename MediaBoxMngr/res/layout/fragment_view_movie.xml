@@ -55,10 +55,28 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_itemContentLabel"
+                android:id="@+id/tv_itemCastLabel"
                 style="@style/textViewDetails"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/infoContainer"
+                android:layout_margin="@dimen/custom_value_8dp"
+                android:text="@string/details_cast" />
+
+            <TextView
+                android:id="@+id/tv_fragmentDetails_itemCast"
+                style="@style/textViewDetails.content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/tv_itemCastLabel"
+                android:layout_margin="@dimen/custom_value_8dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/tv_itemContentLabel"
+                style="@style/textViewDetails"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/tv_fragmentDetails_itemCast"
                 android:layout_margin="@dimen/custom_value_8dp"
                 android:text="@string/details_content_movie" />
 
