@@ -29,6 +29,8 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
@@ -45,7 +47,8 @@ import de.canberkdemirkan.mediaboxmngr.model.Movie;
 import de.canberkdemirkan.mediaboxmngr.model.Music;
 
 public class ItemFragment extends Fragment implements Serializable,
-		View.OnClickListener, OnCheckedChangeListener, TextWatcher {
+		View.OnClickListener, OnCheckedChangeListener,
+		OnRatingBarChangeListener, TextWatcher {
 
 	/**
 	 * 
@@ -86,6 +89,7 @@ public class ItemFragment extends Fragment implements Serializable,
 	private TextView mTextItemFormatTitleCount;
 
 	private CheckBox mCheckBoxItemFavorite;
+	private RatingBar mRatingBarItemRating;
 
 	public static ItemFragment newInstance(UUID itemId, String userTag) {
 		if (BuildConfig.DEBUG) {
@@ -156,6 +160,8 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		mCheckBoxItemFavorite = (CheckBox) view
 				.findViewById(R.id.cb_fragmentDetails_itemFavorite);
+		mRatingBarItemRating = (RatingBar) view
+				.findViewById(R.id.rb_fragmentDetails_itemRating);
 		// mSpinnerItemGenre = (Spinner) view
 		// .findViewById(R.id.sp_fragmentBasics_itemGenre);
 		// mSpinnerItemCountry = (Spinner) view
@@ -210,6 +216,20 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		mCheckBoxItemFavorite.setChecked(mItem.isFavorite());
 		mCheckBoxItemFavorite.setOnCheckedChangeListener(this);
+
+		try {
+			String ratingString = mItem.getRating();
+			if (ratingString != null) {
+				Float rating = Float.valueOf(mItem.getRating());
+				mRatingBarItemRating.setRating(rating);
+			} else {
+				mRatingBarItemRating.setRating(0.0F);
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+
+		mRatingBarItemRating.setOnRatingBarChangeListener(this);
 
 		// mSpinnerItemGenre.setAdapter(new CustomSpinnerAdapter(getActivity(),
 		// R.layout.custom_spinner, R.id.tv_customSpinner_label,
@@ -449,6 +469,16 @@ public class ItemFragment extends Fragment implements Serializable,
 		protected void onPostExecute(Void result) {
 		}
 
+	}
+
+	// rating bar callback
+	@Override
+	public void onRatingChanged(RatingBar ratingBar, float rating,
+			boolean fromUser) {
+		if (ratingBar == mRatingBarItemRating) {
+			mItem.setRating(String.valueOf(rating));
+			new UpdateItemTask().execute();
+		}
 	}
 
 }
