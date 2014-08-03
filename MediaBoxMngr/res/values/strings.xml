@@ -56,6 +56,7 @@
     <string name="details_content_book">Content:</string>
     <string name="details_content_movie">Story:</string>
     <string name="details_content_music">Content/Track list:</string>
+    <string name="details_rating">Rating:</string>
     <string name="details_format_tracks">Format, Number o Tracks:</string>
 
     <string-array name="item_types">

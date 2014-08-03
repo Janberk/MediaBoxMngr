@@ -32,32 +32,19 @@
                 android:orientation="horizontal"
                 android:weightSum="5" >
 
-                <RelativeLayout
+                <ImageView
+                    android:id="@+id/iv_fragmentDetails_itemCover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/custom_value_16dp"
+                    android:layout_marginLeft="@dimen/custom_value_12dp"
+                    android:layout_marginRight="@dimen/custom_value_12dp"
+                    android:layout_marginTop="@dimen/custom_value_4dp"
                     android:layout_weight="2"
-                    android:orientation="vertical" >
-
-                    <ImageView
-                        android:id="@+id/iv_fragmentDetails_itemCover"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="@dimen/custom_value_16dp"
-                        android:layout_marginLeft="@dimen/custom_value_12dp"
-                        android:layout_marginRight="@dimen/custom_value_12dp"
-                        android:layout_marginTop="@dimen/custom_value_4dp"
-                        android:adjustViewBounds="true"
-                        android:contentDescription="@string/item_cover_label"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/cover_placeholder" />
-
-                    <RatingBar
-                        android:id="@+id/rb_fragmentDetails_itemRating"
-                        style="@style/ratingBar"
-                        android:layout_below="@+id/iv_fragmentDetails_itemCover" />
-                </RelativeLayout>
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/item_cover_label"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/cover_placeholder" />
 
                 <include
                     android:id="@+id/fragmentItem_movie"
@@ -69,10 +56,23 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_itemRatingLabel"
+                style="@style/textViewDetails"
+                android:layout_below="@+id/infoContainer"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/custom_value_16dp"
+                android:text="@string/details_rating" />
+
+            <RatingBar
+                android:id="@+id/rb_fragmentDetails_itemRating"
+                style="@style/ratingBar"
+                android:layout_below="@+id/tv_itemRatingLabel" />
+
+            <TextView
                 android:id="@+id/tv_itemCastLabel"
                 style="@style/textViewDetails"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/infoContainer"
+                android:layout_below="@+id/rb_fragmentDetails_itemRating"
                 android:layout_margin="@dimen/custom_value_8dp"
                 android:text="@string/details_cast" />
 
