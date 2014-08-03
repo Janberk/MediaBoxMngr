@@ -16,7 +16,7 @@ public class Music extends Item {
 	private String mLabel;
 	private String mFormat;
 	private String mTitleCount;
-	
+
 	// constructors
 	public Music() {
 		super();
@@ -74,6 +74,33 @@ public class Music extends Item {
 		json.put(JSON_CREATION_DATE, getCreationDate().getTime());
 
 		return json;
+	}
+
+	@Override
+	public int compareTo(Item another) {
+		try {
+			String thisRatingString = getRating();
+			String anotherRatingString = another.getRating();
+			Float thisRating = 0.0F;
+			Float anotherRating = 0.0F;
+			if (thisRatingString != null) {
+				thisRating = Float.valueOf(thisRatingString);
+			}
+			if (anotherRatingString != null) {
+				anotherRating = Float.valueOf(anotherRatingString);
+			}
+
+			if (thisRating < anotherRating) {
+				return -1;
+			} else if (thisRating > anotherRating) {
+				return 1;
+			} else if (thisRating == anotherRating) {
+				return 0;
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	@Override

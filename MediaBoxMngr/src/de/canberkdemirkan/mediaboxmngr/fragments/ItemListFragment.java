@@ -86,7 +86,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private FragmentManager mFragmentManager;
 	private ProgressDialog mProgressDialog;
 	private ActionBar mActionBar;
-	private ActionBar.Tab tabAll, tabAlbums, tabBooks, tabMovies, tabFavorites;
+	private ActionBar.Tab tabAll, tabMusic, tabBooks, tabMovies, tabFavorites,
+			tabTopRated;
 
 	private String mUser;
 	private String mJson;
@@ -258,32 +259,37 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private void addActionBarTabs() {
 		tabAll = mActionBar.newTab().setText(ListTag.ALL.name())
 				.setTag(ListTag.ALL);
-		tabAlbums = mActionBar.newTab().setText(ListTag.ALBUMS.name())
-				.setTag(ListTag.ALBUMS);
+		tabMusic = mActionBar.newTab().setText(ListTag.MUSIC.name())
+				.setTag(ListTag.MUSIC);
 		tabBooks = mActionBar.newTab().setText(ListTag.BOOKS.name())
 				.setTag(ListTag.BOOKS);
 		tabMovies = mActionBar.newTab().setText(ListTag.MOVIES.name())
 				.setTag(ListTag.MOVIES);
 		tabFavorites = mActionBar.newTab().setText(ListTag.FAVORITES.name())
 				.setTag(ListTag.FAVORITES);
+		tabTopRated = mActionBar.newTab().setText("Top Rated")
+				.setTag(ListTag.TOPRATED);
 
 		ItemListFragment fragment = (ItemListFragment) mFragmentManager
 				.findFragmentById(R.id.fragmentContainer);
 
 		tabAll.setTabListener(new CustomTabListener(getActivity(), fragment));
-		tabAlbums
+		tabMusic
 				.setTabListener(new CustomTabListener(getActivity(), fragment));
 		tabBooks.setTabListener(new CustomTabListener(getActivity(), fragment));
 		tabMovies
 				.setTabListener(new CustomTabListener(getActivity(), fragment));
 		tabFavorites.setTabListener(new CustomTabListener(getActivity(),
 				fragment));
+		tabTopRated.setTabListener(new CustomTabListener(getActivity(),
+				fragment));
 
 		mActionBar.addTab(tabAll);
-		mActionBar.addTab(tabAlbums);
 		mActionBar.addTab(tabBooks);
 		mActionBar.addTab(tabMovies);
+		mActionBar.addTab(tabMusic);
 		mActionBar.addTab(tabFavorites);
+		mActionBar.addTab(tabTopRated);
 	}
 
 	private Item createItem(ItemType type) {

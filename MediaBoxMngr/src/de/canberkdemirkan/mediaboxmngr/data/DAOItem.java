@@ -1,6 +1,7 @@
 package de.canberkdemirkan.mediaboxmngr.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -163,6 +164,13 @@ public class DAOItem {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - getFavoriteItems(): ");
 		}
+		return result;
+	}
+
+	public ArrayList<Item> getTopRatedItems(String user) {
+		ArrayList<Item> result = getAllItems(user);
+		Collections.sort(result);
+		Collections.reverse(result);
 		return result;
 	}
 

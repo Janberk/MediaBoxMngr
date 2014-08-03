@@ -11,7 +11,7 @@ import android.graphics.Bitmap;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
-public abstract class Item implements Serializable {
+public abstract class Item implements Serializable, Comparable<Item> {
 
 	/**
 	 * 

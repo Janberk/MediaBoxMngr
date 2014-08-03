@@ -137,8 +137,8 @@ public class UtilMethods {
 			result = ItemStock.get(context, user).getDAOItem()
 					.getAllItems(user);
 			break;
-		case ALBUMS:
-			ItemListFragment.sListTag = ListTag.ALBUMS;
+		case MUSIC:
+			ItemListFragment.sListTag = ListTag.MUSIC;
 			result = ItemStock.get(context, user).getDAOItem()
 					.getItemsByType(ItemType.Album, user);
 			break;
@@ -156,6 +156,11 @@ public class UtilMethods {
 			ItemListFragment.sListTag = ListTag.FAVORITES;
 			result = ItemStock.get(context, user).getDAOItem()
 					.getFavoriteItems(user);
+			break;
+		case TOPRATED:
+			ItemListFragment.sListTag = ListTag.TOPRATED;
+			result = ItemStock.get(context, user).getDAOItem()
+					.getTopRatedItems(user);
 			break;
 
 		default:

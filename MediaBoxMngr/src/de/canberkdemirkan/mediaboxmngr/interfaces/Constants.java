@@ -74,7 +74,7 @@ public interface Constants {
 	String CAST = "cast";
 	String MUSIC = "music";
 	String LENGTH = "length";
-	// ALBUMS
+	// MUSIC
 	String ARTIST = "artist";
 	String LABEL = "label";
 	String FORMAT = "format";

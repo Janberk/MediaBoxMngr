@@ -142,9 +142,9 @@ public class AlertDialogDeletion extends DialogFragment {
 				mItemList = UtilMethods.createListFromTag(getActivity(),
 						mItemListFragment.getUser(), ListTag.ALL);
 				break;
-			case ALBUMS:
+			case MUSIC:
 				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mItemListFragment.getUser(), ListTag.ALBUMS);
+						mItemListFragment.getUser(), ListTag.MUSIC);
 				break;
 			case BOOKS:
 				mItemList = UtilMethods.createListFromTag(getActivity(),
