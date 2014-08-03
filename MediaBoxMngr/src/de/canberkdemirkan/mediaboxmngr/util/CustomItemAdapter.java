@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
@@ -24,11 +25,10 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 	// TODO ViewHolder Pattern prevents list to mess up order while scrolling.
 	static class ViewHolder {
 		ImageView mImageItemIcon;
-		// ImageView mImageItemDelete;
 		TextView mTextItemTitle;
-		TextView mTextItemCreationDate;
+		TextView mTextItemGenre;
 		CheckBox mCheckBoxItemFavorite;
-		// CheckBox mCheckBoxConfirmItemDelete;
+		RatingBar mRatingBarItemRating;
 	}
 
 	private final Context mContext;
@@ -64,16 +64,14 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 			holder = new ViewHolder();
 			holder.mImageItemIcon = (ImageView) convertView
 					.findViewById(R.id.iv_listItem_itemIcon);
-			// holder.mImageItemDelete = (ImageView) convertView
-			// .findViewById(R.id.iv_listItem_itemDeleteSingle);
 			holder.mTextItemTitle = (TextView) convertView
 					.findViewById(R.id.tv_listItem_itemTitle);
-			holder.mTextItemCreationDate = (TextView) convertView
-					.findViewById(R.id.tv_listItem_itemCreationDate);
+			holder.mTextItemGenre = (TextView) convertView
+					.findViewById(R.id.tv_listItem_itemGenre);
 			holder.mCheckBoxItemFavorite = (CheckBox) convertView
 					.findViewById(R.id.cb_listItem_itemFavorite);
-			// holder.mCheckBoxConfirmItemDelete = (CheckBox) convertView
-			// .findViewById(R.id.cb_listItem_itemDelete);
+			holder.mRatingBarItemRating = (RatingBar) convertView
+					.findViewById(R.id.rb_listItem_itemRating);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -82,26 +80,30 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		// Configure the view for this Item
 		Item item = getItem(position);
 		ItemType type = (ItemType) mItemList.get(position).getType();
+		String ratingString = item.getRating();
 
 		holder.mTextItemTitle.setText(item.getTitle());
-		holder.mTextItemCreationDate.setText(item.getCreationDate().toString());
+		if (item.getGenre() != null) {
+			holder.mTextItemGenre.setText(item.getGenre());
+		} else {
+			String text = mContext.getResources().getString(
+					R.string.list_genre_label);
+			holder.mTextItemGenre.setText(text);
+		}
 		holder.mCheckBoxItemFavorite.setChecked(item.isFavorite());
-		// holder.mCheckBoxConfirmItemDelete.setChecked(false);
+		try {
+			if (ratingString != null) {
+				Float rating = Float.valueOf(ratingString);
+				holder.mRatingBarItemRating.setRating(rating);
+			} else {
+				holder.mRatingBarItemRating.setRating(0.0F);
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 		holder.mImageItemIcon.setFadingEdgeLength(2);
 		UtilMethods.setCustomIconToTypeOfMedia(holder.mImageItemIcon, type,
 				UtilMethods.ICON_DARK_TAG);
-
-		// if (ItemListFragment.sDeleteMode) {
-		// holder.mCheckBoxConfirmItemDelete.setVisibility(View.VISIBLE);
-		// holder.mImageItemDelete.setVisibility(View.VISIBLE);
-		// } else {
-		// holder.mCheckBoxConfirmItemDelete.setVisibility(View.GONE);
-		// holder.mImageItemDelete.setVisibility(View.GONE);
-		// }
-
-		// setClickListenerCheckBox(holder.mCheckBoxConfirmItemDelete, item,
-		// position);
-		// setClickListenerImageView(holder.mImageItemDelete, item, position);
 
 		return convertView;
 	}

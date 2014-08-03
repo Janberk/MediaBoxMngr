@@ -220,7 +220,7 @@ public class ItemFragment extends Fragment implements Serializable,
 		try {
 			String ratingString = mItem.getRating();
 			if (ratingString != null) {
-				Float rating = Float.valueOf(mItem.getRating());
+				Float rating = Float.valueOf(ratingString);
 				mRatingBarItemRating.setRating(rating);
 			} else {
 				mRatingBarItemRating.setRating(0.0F);
