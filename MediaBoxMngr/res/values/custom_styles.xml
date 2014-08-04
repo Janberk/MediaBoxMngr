@@ -8,6 +8,14 @@
         <item name="android:layout_marginBottom">@dimen/custom_value_8dp</item>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
+    
+    <style name="editTextForm.textStyle.input.search">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginTop">@dimen/custom_value_4dp</item>
+        <item name="android:layout_marginBottom">@dimen/custom_value_4dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        
+    </style>
 
     <style name="editTextForm.textStyle">
         <item name="android:textSize">16sp</item>

@@ -20,6 +20,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -71,7 +73,7 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 @SuppressLint("NewApi")
 public class ItemListFragment extends Fragment implements Serializable,
 		View.OnClickListener, AdapterView.OnItemClickListener,
-		OnItemSelectedListener, MultiChoiceModeListener {
+		OnItemSelectedListener, MultiChoiceModeListener, TextWatcher {
 
 	/**
 	 * 
@@ -109,6 +111,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private LinearLayout mMenuBar;
 
 	private EditText mEditEditTitle;
+	private EditText mEditSearch;
 	private Spinner mSpinnerItemType;
 	private Button mButtonSaveItem;
 	private ImageView mImageHome;
@@ -173,6 +176,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.fragmentItemList_listView);
 		mEditEditTitle = (EditText) view
 				.findViewById(R.id.et_fragmentEditTitle_editTitle);
+		mEditSearch = (EditText) view
+				.findViewById(R.id.et_fragmentItemlist_search);
 		mSpinnerItemType = (Spinner) view
 				.findViewById(R.id.sp_fragmentEditTitle_itemType);
 		mButtonSaveItem = (Button) view
@@ -203,6 +208,9 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		mEditor.setVisibility(View.GONE);
+
+		mEditSearch.addTextChangedListener(this);
+		mEditSearch.setVisibility(View.GONE);
 
 		mSpinnerItemType.setAdapter(new CustomSpinnerAdapter(getActivity(),
 				R.layout.custom_spinner, R.id.tv_customSpinner_label,
@@ -402,6 +410,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 			mListContainer.setVisibility(View.GONE);
 			// changeAlphaOfView(mListContainer, 1.0F, 0.2F);
 			mMenuBar.setVisibility(View.GONE);
+			mEditSearch.setVisibility(View.GONE);
+			mEditSearch.setText("");
 			mEditEditTitle.requestFocus();
 			mListView.setOnItemClickListener(null);
 			InputMethodManager imm = (InputMethodManager) getActivity()
@@ -694,7 +704,13 @@ public class ItemListFragment extends Fragment implements Serializable,
 		}
 		if (view == mImageSearch) {
 			// loadItemsFromRemoteDb();
-			Toast.makeText(getActivity(), "Search", Toast.LENGTH_LONG).show();
+			if (mEditSearch.getVisibility() == View.GONE) {
+				mEditSearch.setVisibility(View.VISIBLE);
+				mEditSearch.requestFocus();
+			} else if (mEditSearch.getVisibility() == View.VISIBLE) {
+				mEditSearch.setVisibility(View.GONE);
+				mEditSearch.setText("");
+			}
 		}
 		if (view == mImageSettings) {
 			Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG).show();
@@ -791,6 +807,25 @@ public class ItemListFragment extends Fragment implements Serializable,
 			mMenuBar.setVisibility(View.VISIBLE);
 		}
 		sCABSelectionCount = 0;
+	}
+
+	// text watcher callback methods
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+		if (mEditSearch.getText().hashCode() == s.hashCode()) {
+			mItemAdapter.getFilter().filter(s);
+		}
+		mItemAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
 	}
 
 }

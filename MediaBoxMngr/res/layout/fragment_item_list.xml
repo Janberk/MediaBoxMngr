@@ -15,7 +15,7 @@
         android:id="@+id/fragmentItemList_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fragmentItemList_editTitle"
+        android:layout_below="@+id/et_fragmentItemlist_search"
         layout="@layout/fragment_list_view" >
     </include>
 
@@ -26,5 +26,14 @@
         android:layout_alignParentBottom="true"
         layout="@layout/fragment_view_menu" >
     </include>
+
+    <EditText
+        android:id="@+id/et_fragmentItemlist_search"
+        style="@style/editTextForm.textStyle.input.search"
+        android:layout_below="@id/fragmentItemList_editTitle"
+        android:hint="@string/search" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>
