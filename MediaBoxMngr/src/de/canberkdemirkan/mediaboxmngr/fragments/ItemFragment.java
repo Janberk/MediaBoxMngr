@@ -5,10 +5,7 @@ import java.util.UUID;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,10 +33,10 @@ import android.widget.Toast;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemEditorActivity;
-import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
+import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
@@ -56,8 +53,6 @@ public class ItemFragment extends Fragment implements Serializable,
 	private static final long serialVersionUID = 9104738005805814331L;
 
 	private static final int REQUEST_CODE = 0;
-
-	private SharedPreferences mSharedPreferences;
 	private FragmentManager mFragmentManager;
 
 	private Item mItem;
@@ -111,9 +106,6 @@ public class ItemFragment extends Fragment implements Serializable,
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-
-		mSharedPreferences = getActivity().getSharedPreferences(
-				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 
 		mItemId = (UUID) getArguments().getSerializable(Constants.KEY_ITEM_UID);
 		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
@@ -363,40 +355,26 @@ public class ItemFragment extends Fragment implements Serializable,
 		ItemStock.get(getActivity(), mUser).updateItem(mItem);
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onPause()");
-		}
-		ItemStock.get(getActivity(), mUser).saveSerializedItems();
-		super.onPause();
-	}
-
-	private void logout() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - logout()");
-		}
-		Editor editor = mSharedPreferences.edit();
-		editor.remove(LoginFragment.KEY_EMAIL);
-		editor.remove(LoginFragment.KEY_PASSWORD);
-		editor.commit();
-		getActivity().finish();
-		Intent intent = new Intent(getActivity().getApplicationContext(),
-				LoginActivity.class);
-		startActivity(intent);
-	}
+	// @Override
+	// public void onResume() {
+	// super.onResume();
+	// }
+	//
+	// @Override
+	// public void onPause() {
+	// if (BuildConfig.DEBUG) {
+	// Log.d(Constants.LOG_TAG, "ItemFragment - onPause()");
+	// }
+	// ItemStock.get(getActivity(), mUser).saveSerializedItems();
+	// super.onPause();
+	// }
 
 	// click listeners
 	@Override
 	public void onClick(View view) {
 
 		if (view == mImageHome) {
-			Toast.makeText(getActivity(), "Home", Toast.LENGTH_LONG).show();
+			getActivity().finish();
 		}
 		if (view == mImageSearch) {
 			// loadItemsFromRemoteDb();
@@ -413,8 +391,9 @@ public class ItemFragment extends Fragment implements Serializable,
 			// }
 		}
 		if (view == mImageLogout) {
-			Toast.makeText(getActivity(), "Logout", Toast.LENGTH_LONG).show();
-			logout();
+			AlertDialogLogout dialog = AlertDialogLogout
+					.newInstance(getActivity());
+			dialog.show(mFragmentManager, "");
 		}
 
 	}

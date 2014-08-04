@@ -1,5 +1,6 @@
 package de.canberkdemirkan.mediaboxmngr.activities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -18,7 +19,12 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemPagerActivity extends FragmentActivity implements
-		ViewPager.OnPageChangeListener {
+		Serializable, ViewPager.OnPageChangeListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6272049898266569961L;
 
 	private ViewPager mViewPager;
 	private ArrayList<Item> mItemList;

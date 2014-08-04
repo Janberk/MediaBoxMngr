@@ -84,6 +84,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/tv_itemContentLabel"
                 android:layout_margin="@dimen/custom_value_8dp"
+                android:ellipsize="none"
+                android:singleLine="false"
                 android:text="" />
         </RelativeLayout>
     </ScrollView>

@@ -14,7 +14,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,7 +49,6 @@ import com.loopj.android.http.RequestParams;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
-import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.DummyDataProvider;
@@ -58,6 +56,7 @@ import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
 import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
+import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
@@ -274,8 +273,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findFragmentById(R.id.fragmentContainer);
 
 		tabAll.setTabListener(new CustomTabListener(getActivity(), fragment));
-		tabMusic
-				.setTabListener(new CustomTabListener(getActivity(), fragment));
+		tabMusic.setTabListener(new CustomTabListener(getActivity(), fragment));
 		tabBooks.setTabListener(new CustomTabListener(getActivity(), fragment));
 		tabMovies
 				.setTabListener(new CustomTabListener(getActivity(), fragment));
@@ -417,20 +415,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 			mListView.setOnItemClickListener(this);
 			sEditMode = false;
 		}
-	}
-
-	private void logout() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - logout()");
-		}
-		Editor editor = mSharedPreferences.edit();
-		editor.remove(LoginFragment.KEY_EMAIL);
-		editor.remove(LoginFragment.KEY_PASSWORD);
-		editor.commit();
-		getActivity().finish();
-		Intent intent = new Intent(getActivity().getApplicationContext(),
-				LoginActivity.class);
-		startActivity(intent);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -707,7 +691,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 			saveItem();
 		}
 		if (view == mImageHome) {
-			Toast.makeText(getActivity(), "Home", Toast.LENGTH_LONG).show();
 		}
 		if (view == mImageSearch) {
 			// loadItemsFromRemoteDb();
@@ -724,8 +707,9 @@ public class ItemListFragment extends Fragment implements Serializable,
 			// }
 		}
 		if (view == mImageLogout) {
-			Toast.makeText(getActivity(), "Logout", Toast.LENGTH_LONG).show();
-			logout();
+			AlertDialogLogout dialog = AlertDialogLogout
+					.newInstance(getActivity());
+			dialog.show(mFragmentManager, "");
 		}
 
 	}

@@ -7,6 +7,11 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class ItemListActivity extends FragmentActivityBuilder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3891006760403895847L;
+
 	@SuppressWarnings("static-access")
 	@Override
 	protected Fragment createFragment() {

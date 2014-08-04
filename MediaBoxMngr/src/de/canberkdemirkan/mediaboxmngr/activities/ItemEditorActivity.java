@@ -9,6 +9,11 @@ import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemEditorActivity extends FragmentActivityBuilder {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7169162793230559857L;
+
 	@SuppressWarnings("static-access")
 	@Override
 	protected Fragment createFragment() {
