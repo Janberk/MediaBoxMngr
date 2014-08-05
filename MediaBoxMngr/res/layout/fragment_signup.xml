@@ -86,12 +86,14 @@
                 android:hint="@string/password_hint"
                 android:inputType="textPassword" />
 
-            <!-- <EditText
+            <!--
+                 <EditText
                 android:id="@+id/et_fragmentSignup_confirmPassword"
                 style="@style/editTextForm.textStyle.input"
                 android:layout_below="@+id/et_fragmentSignup_password"
                 android:hint="@string/confirm_password_hint"
-                android:inputType="textPassword" /> -->
+                android:inputType="textPassword" />
+            -->
 
             <Button
                 android:id="@+id/btn_fragmentSignup_signup"

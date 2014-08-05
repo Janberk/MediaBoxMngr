@@ -22,6 +22,10 @@ public interface Constants {
 	int MOVIE = 2;
 	
 	// intent extra keys/tags
+	String KEY_EMAIL = "de.canberkdemirkan.mediaboxmngr.key_email";
+	String KEY_PASSWORD = "de.canberkdemirkan.mediaboxmngr.key_password";
+	String KEY_REMEMBER_EMAIL = "de.canberkdemirkan.mediaboxmngr.key_remember_email";
+	String KEY_REMEMBER_PASSWORD = "de.canberkdemirkan.mediaboxmngr.key_remember_password";
 	String KEY_MY_PREFERENCES = "de.canberkdemirkan.mediaboxmngr.app_prefs";
 	String KEY_ITEM = "de.canberkdemirkan.mediaboxmngr.item";
 	String KEY_ITEM_UID = "de.canberkdemirkan.mediaboxmngr.item_uid";

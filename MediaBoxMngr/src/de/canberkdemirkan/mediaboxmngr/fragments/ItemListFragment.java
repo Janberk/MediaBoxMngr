@@ -673,7 +673,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	}
 
 	public String getUserFromPrefs() {
-		String user = mSharedPreferences.getString(LoginFragment.KEY_EMAIL, "");
+		String user = mSharedPreferences.getString(Constants.KEY_EMAIL, "");
 		return user;
 	}
 

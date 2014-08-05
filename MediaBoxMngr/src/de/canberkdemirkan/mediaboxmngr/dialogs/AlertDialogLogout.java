@@ -14,7 +14,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
-import de.canberkdemirkan.mediaboxmngr.fragments.LoginFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 
 public class AlertDialogLogout extends DialogFragment {
@@ -45,8 +44,9 @@ public class AlertDialogLogout extends DialogFragment {
 		return new AlertDialog.Builder(getActivity())
 				.setView(view)
 				.setIcon(R.drawable.ic_dialog_warning_light)
-				.setTitle(mContext.getResources().getString(
-						R.string.dialog_header_logout))
+				.setTitle(
+						mContext.getResources().getString(
+								R.string.dialog_header_logout))
 				.setPositiveButton(android.R.string.ok,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
@@ -67,8 +67,8 @@ public class AlertDialogLogout extends DialogFragment {
 		SharedPreferences prefs = mContext.getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		editor.remove(LoginFragment.KEY_EMAIL);
-		editor.remove(LoginFragment.KEY_PASSWORD);
+		editor.remove(Constants.KEY_EMAIL);
+		editor.remove(Constants.KEY_PASSWORD);
 		editor.commit();
 		getActivity().finish();
 		Intent intent = new Intent(getActivity().getApplicationContext(),
