@@ -111,7 +111,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private LinearLayout mMenuBar;
 
 	private EditText mEditEditTitle;
-	private EditText mEditSearch;
+	//private EditText mEditSearch;
 	private Spinner mSpinnerItemType;
 	private Button mButtonSaveItem;
 	private ImageView mImageHome;
@@ -176,8 +176,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.fragmentItemList_listView);
 		mEditEditTitle = (EditText) view
 				.findViewById(R.id.et_fragmentEditTitle_editTitle);
-		mEditSearch = (EditText) view
-				.findViewById(R.id.et_fragmentItemlist_search);
+//		mEditSearch = (EditText) view
+//				.findViewById(R.id.et_fragmentItemlist_search);
 		mSpinnerItemType = (Spinner) view
 				.findViewById(R.id.sp_fragmentEditTitle_itemType);
 		mButtonSaveItem = (Button) view
@@ -209,8 +209,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		mEditor.setVisibility(View.GONE);
 
-		mEditSearch.addTextChangedListener(this);
-		mEditSearch.setVisibility(View.GONE);
+//		mEditSearch.addTextChangedListener(this);
+//		mEditSearch.setVisibility(View.GONE);
 
 		mSpinnerItemType.setAdapter(new CustomSpinnerAdapter(getActivity(),
 				R.layout.custom_spinner, R.id.tv_customSpinner_label,
@@ -410,8 +410,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 			mListContainer.setVisibility(View.GONE);
 			// changeAlphaOfView(mListContainer, 1.0F, 0.2F);
 			mMenuBar.setVisibility(View.GONE);
-			mEditSearch.setVisibility(View.GONE);
-			mEditSearch.setText("");
+//			mEditSearch.setVisibility(View.GONE);
+//			mEditSearch.setText("");
 			mEditEditTitle.requestFocus();
 			mListView.setOnItemClickListener(null);
 			InputMethodManager imm = (InputMethodManager) getActivity()
@@ -702,16 +702,16 @@ public class ItemListFragment extends Fragment implements Serializable,
 		}
 		if (view == mImageHome) {
 		}
-		if (view == mImageSearch) {
-			// loadItemsFromRemoteDb();
-			if (mEditSearch.getVisibility() == View.GONE) {
-				mEditSearch.setVisibility(View.VISIBLE);
-				mEditSearch.requestFocus();
-			} else if (mEditSearch.getVisibility() == View.VISIBLE) {
-				mEditSearch.setVisibility(View.GONE);
-				mEditSearch.setText("");
-			}
-		}
+//		if (view == mImageSearch) {
+//			// loadItemsFromRemoteDb();
+//			if (mEditSearch.getVisibility() == View.GONE) {
+//				mEditSearch.setVisibility(View.VISIBLE);
+//				mEditSearch.requestFocus();
+//			} else if (mEditSearch.getVisibility() == View.VISIBLE) {
+//				mEditSearch.setVisibility(View.GONE);
+//				mEditSearch.setText("");
+//			}
+//		}
 		if (view == mImageSettings) {
 			Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG).show();
 			// try {
@@ -818,9 +818,9 @@ public class ItemListFragment extends Fragment implements Serializable,
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-		if (mEditSearch.getText().hashCode() == s.hashCode()) {
-			mItemAdapter.getFilter().filter(s);
-		}
+//		if (mEditSearch.getText().hashCode() == s.hashCode()) {
+//			mItemAdapter.getFilter().filter(s);
+//		}
 		mItemAdapter.notifyDataSetChanged();
 	}
 
