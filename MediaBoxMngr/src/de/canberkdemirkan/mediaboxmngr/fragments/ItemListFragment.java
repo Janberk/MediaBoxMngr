@@ -51,6 +51,9 @@ import com.loopj.android.http.RequestParams;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
+import de.canberkdemirkan.mediaboxmngr.adapters.CustomItemAdapter;
+import de.canberkdemirkan.mediaboxmngr.adapters.CustomSpinnerAdapter;
+import de.canberkdemirkan.mediaboxmngr.adapters.CustomSpinnerAdapter.SpinnerTag;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.DummyDataProvider;
@@ -65,9 +68,6 @@ import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
 import de.canberkdemirkan.mediaboxmngr.model.Music;
-import de.canberkdemirkan.mediaboxmngr.util.CustomItemAdapter;
-import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter;
-import de.canberkdemirkan.mediaboxmngr.util.CustomSpinnerAdapter.SpinnerTag;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 @SuppressLint("NewApi")

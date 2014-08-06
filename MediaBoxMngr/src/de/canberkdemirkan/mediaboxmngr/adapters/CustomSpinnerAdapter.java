@@ -1,4 +1,4 @@
-package de.canberkdemirkan.mediaboxmngr.util;
+package de.canberkdemirkan.mediaboxmngr.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemGenre;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
+import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class CustomSpinnerAdapter extends ArrayAdapter<String> {
 

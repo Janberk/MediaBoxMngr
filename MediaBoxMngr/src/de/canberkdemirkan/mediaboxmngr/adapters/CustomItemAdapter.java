@@ -1,4 +1,4 @@
-package de.canberkdemirkan.mediaboxmngr.util;
+package de.canberkdemirkan.mediaboxmngr.adapters;
 
 import java.util.ArrayList;
 
@@ -19,6 +19,7 @@ import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
+import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class CustomItemAdapter extends ArrayAdapter<Item> {
 

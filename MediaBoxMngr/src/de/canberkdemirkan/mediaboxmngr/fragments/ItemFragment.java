@@ -265,6 +265,11 @@ public class ItemFragment extends Fragment implements Serializable,
 			intent.putExtra(Constants.KEY_ITEM_UID, mItem.getUniqueId());
 			intent.putExtra(Constants.EXTRA_DETAILS_ITEM, mItem);
 			startActivityForResult(intent, REQUEST_CODE);
+			// FragmentTransaction ft = mFragmentManager.beginTransaction();
+			// ItemEditorFragment itemEditor = ItemEditorFragment.newInstance(
+			// mItemId, mUser, mItem);
+			// ft.add(R.id.viewPager, itemEditor);
+			// ft.commit();
 			return true;
 		case R.id.menu_deleteItem:
 			final String header = getActivity().getResources().getString(
