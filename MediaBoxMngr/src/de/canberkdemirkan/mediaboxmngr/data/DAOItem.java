@@ -235,13 +235,6 @@ public class DAOItem {
 					.dateToFormattedStringConverter(item.getCreationDate()));
 			result = mSQLiteDB.insert(Constants.TABLE_ITEMS, null, values) > 0;
 		}
-		// for (Item item : itemList) {
-		// putValues(item, values);
-		// values.put(Constants.CREATION_DATE, UtilMethods
-		// .dateToFormattedStringConverter(item.getCreationDate()));
-		// result = mSQLiteDB.insert(Constants.TABLE_ITEMS, null,
-		// values) > 0;
-		// }
 		close();
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - updateTableWithNewList(): "

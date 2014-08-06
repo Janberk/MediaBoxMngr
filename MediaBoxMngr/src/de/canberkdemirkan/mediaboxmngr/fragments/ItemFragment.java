@@ -363,11 +363,6 @@ public class ItemFragment extends Fragment implements Serializable,
 	}
 
 	// @Override
-	// public void onResume() {
-	// super.onResume();
-	// }
-	//
-	// @Override
 	// public void onPause() {
 	// if (BuildConfig.DEBUG) {
 	// Log.d(Constants.LOG_TAG, "ItemFragment - onPause()");
