@@ -48,6 +48,8 @@ public interface Constants {
 	String EXTRA_DETAILS_ORIGINAL_TITLE = "de.canberkdemirkan.mediaboxmngr.extra_details_original_title";
 	String EXTRA_DETAILS_COUNTRY = "de.canberkdemirkan.mediaboxmngr.extra_details_country";
 	String EXTRA_DETAILS_YEAR = "de.canberkdemirkan.mediaboxmngr.extra_details_year";
+	String KEY_ITEMLIST_CONTEXT = "de.canberkdemirkan.mediaboxmngr.itemlist_context";
+	String KEY_ITEMLIST_USER = "de.canberkdemirkan.mediaboxmngr.itemlist_user";
 	
 	String TAG_ALBUM = ItemType.Album.name();
 	String TAG_BOOK = ItemType.Book.name();

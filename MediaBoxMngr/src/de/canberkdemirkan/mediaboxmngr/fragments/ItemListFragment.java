@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -30,18 +31,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -52,9 +46,6 @@ import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
 import de.canberkdemirkan.mediaboxmngr.adapters.CustomItemAdapter;
-import de.canberkdemirkan.mediaboxmngr.adapters.CustomSpinnerAdapter;
-import de.canberkdemirkan.mediaboxmngr.adapters.CustomSpinnerAdapter.SpinnerTag;
-import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.DummyDataProvider;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
@@ -64,16 +55,13 @@ import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
-import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
-import de.canberkdemirkan.mediaboxmngr.model.Movie;
-import de.canberkdemirkan.mediaboxmngr.model.Music;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 @SuppressLint("NewApi")
 public class ItemListFragment extends Fragment implements Serializable,
 		View.OnClickListener, AdapterView.OnItemClickListener,
-		OnItemSelectedListener, MultiChoiceModeListener, TextWatcher {
+		MultiChoiceModeListener, TextWatcher {
 
 	/**
 	 * 
@@ -92,12 +80,9 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	private String mUser;
 	private String mJson;
-	private String mTypeAsString;
 
-	private SpinnerTag mTypeSpinner = SpinnerTag.TypeSpinner;
 	public static ListTag sListTag;
-	public static boolean sEditMode;
-	public static boolean sDeleteMode;;
+	public static boolean sCreateMode;
 	private static int sCABSelectionCount = 0;
 
 	private ListView mListView;
@@ -105,19 +90,10 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private CustomItemAdapter mItemAdapter;
 
 	private ActionMode mActionMode;
-
-	private RelativeLayout mEditor;
-	private LinearLayout mListContainer;
 	private LinearLayout mMenuBar;
+	private ImageView mImageHome, mImageSearch, mImageSettings, mImageLogout;
 
-	private EditText mEditEditTitle;
-	//private EditText mEditSearch;
-	private Spinner mSpinnerItemType;
-	private Button mButtonSaveItem;
-	private ImageView mImageHome;
-	private ImageView mImageSearch;
-	private ImageView mImageSettings;
-	private ImageView mImageLogout;
+	// private EditText mEditSearch;
 
 	public static ItemListFragment newInstance(ListTag listTag) {
 
@@ -136,17 +112,12 @@ public class ItemListFragment extends Fragment implements Serializable,
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-		sDeleteMode = false;
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUserFromPrefs();
 		getActivity().setTitle(mUser);
 
 		mFragmentManager = getActivity().getSupportFragmentManager();
-
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate(): " + mUser);
-		}
 
 		Bundle bundle = getArguments();
 
@@ -170,18 +141,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.listView_fragmentItemList);
 		mMenuBar = (LinearLayout) view
 				.findViewById(R.id.fragmentItemList_menuBar);
-		mEditor = (RelativeLayout) view
-				.findViewById(R.id.fragmentItemList_editTitle);
-		mListContainer = (LinearLayout) view
-				.findViewById(R.id.fragmentItemList_listView);
-		mEditEditTitle = (EditText) view
-				.findViewById(R.id.et_fragmentEditTitle_editTitle);
-//		mEditSearch = (EditText) view
-//				.findViewById(R.id.et_fragmentItemlist_search);
-		mSpinnerItemType = (Spinner) view
-				.findViewById(R.id.sp_fragmentEditTitle_itemType);
-		mButtonSaveItem = (Button) view
-				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
+		// mEditSearch = (EditText) view
+		// .findViewById(R.id.et_fragmentItemlist_search);
 		mImageHome = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_home);
 		mImageSearch = (ImageView) view
@@ -192,7 +153,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
 
-	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -207,15 +167,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		mEditor.setVisibility(View.GONE);
-
-//		mEditSearch.addTextChangedListener(this);
-//		mEditSearch.setVisibility(View.GONE);
-
-		mSpinnerItemType.setAdapter(new CustomSpinnerAdapter(getActivity(),
-				R.layout.custom_spinner, R.id.tv_customSpinner_label,
-				CustomSpinnerAdapter.getContent(mTypeSpinner)));
-		mSpinnerItemType.setOnItemSelectedListener(this);
+		// mEditSearch.addTextChangedListener(this);
+		// mEditSearch.setVisibility(View.GONE);
 
 		// LOKAL_DB_VERSION = ItemStock.get(getActivity(),
 		// getUser()).getDAOItem()
@@ -254,7 +207,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		addActionBarTabs();
 
-		mButtonSaveItem.setOnClickListener(this);
 		mImageHome.setOnClickListener(this);
 		mImageSearch.setOnClickListener(this);
 		mImageSettings.setOnClickListener(this);
@@ -296,38 +248,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mActionBar.addTab(tabMusic);
 		mActionBar.addTab(tabFavorites);
 		mActionBar.addTab(tabTopRated);
-	}
-
-	private Item createItem(ItemType type) {
-		Item item = null;
-
-		switch (type) {
-		case Album:
-			item = new Music();
-			break;
-		case Book:
-			item = new Book();
-			break;
-		case Movie:
-			item = new Movie();
-			break;
-
-		default:
-			break;
-		}
-		item.setTitle(mEditEditTitle.getText().toString());
-		item.setType(type);
-		item.setUser(mUser);
-		return item;
-	}
-
-	private void saveItem() {
-		ItemType type = ItemType.valueOf(mTypeAsString);
-		Item newItem = createItem(type);
-		ItemStock.get(getActivity(), mUser).addItem(newItem);
-		mItemAdapter.refresh(ItemStock.get(getActivity(), mUser).getItemList());
-		mEditEditTitle.setText("");
-		switchEditMode();
 	}
 
 	private void deleteAllItems() {
@@ -395,35 +315,21 @@ public class ItemListFragment extends Fragment implements Serializable,
 		dialog.show(mFragmentManager, "");
 	}
 
-	// private void changeAlphaOfView(View view, float from, float to) {
-	// AlphaAnimation alpha = new AlphaAnimation(from, to);
-	// alpha.setDuration(0); // Make animation instant
-	// alpha.setFillAfter(true); // Tell it to persist after the animation ends
-	// view.startAnimation(alpha);
-	// }
-
 	private void switchEditMode() {
-		if (!sEditMode) {
-			sEditMode = true;
-			mSpinnerItemType.setSelection(0);
-			mEditor.setVisibility(View.VISIBLE);
-			mListContainer.setVisibility(View.GONE);
-			// changeAlphaOfView(mListContainer, 1.0F, 0.2F);
-			mMenuBar.setVisibility(View.GONE);
-//			mEditSearch.setVisibility(View.GONE);
-//			mEditSearch.setText("");
-			mEditEditTitle.requestFocus();
-			mListView.setOnItemClickListener(null);
-			InputMethodManager imm = (InputMethodManager) getActivity()
-					.getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.showSoftInput(mEditEditTitle, InputMethodManager.SHOW_IMPLICIT);
-		} else if (sEditMode) {
-			mEditor.setVisibility(View.GONE);
-			// changeAlphaOfView(mListContainer, 0.2F, 1.0F);
-			mListContainer.setVisibility(View.VISIBLE);
-			mMenuBar.setVisibility(View.VISIBLE);
-			mListView.setOnItemClickListener(this);
-			sEditMode = false;
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
+		CreateItemFragment createItem = CreateItemFragment.newInstance(mUser);
+		if (!sCreateMode) {
+			sCreateMode = true;
+			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+			ft.add(R.id.fragmentContainer, createItem);
+			ft.addToBackStack(null);
+			ft.commit();
+		} else if (sCreateMode) {
+			ft.replace(R.id.fragmentContainer, this);
+			ft.addToBackStack(null);
+			ft.commit();
+			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+			sCreateMode = false;
 		}
 	}
 
@@ -450,11 +356,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		}
 	}
-
-	/*
-	 * 
-	 * Options Menu
-	 */
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -490,26 +391,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
-		mTypeAsString = (String) parent.getItemAtPosition(position);
-		RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
-		((TextView) layout.findViewById(R.id.tv_customSpinner_label))
-				.setTextAppearance(getActivity(), R.style.spinnerTextStyle);
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
-	}
-
-	/*
-	 * 
-	 * End Options Menu
-	 */
-
-	@Override
 	public void onResume() {
-		sDeleteMode = false;
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onResume()");
 		}
@@ -517,15 +399,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 				sListTag);
 		mItemAdapter.refresh(mItemList);
 		super.onResume();
-	}
-
-	@Override
-	public void onPause() {
-		sDeleteMode = false;
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onPause()");
-		}
-		super.onPause();
 	}
 
 	public void loadItemsFromRemoteDb() {
@@ -697,21 +570,18 @@ public class ItemListFragment extends Fragment implements Serializable,
 	@Override
 	public void onClick(View view) {
 
-		if (view == mButtonSaveItem) {
-			saveItem();
-		}
 		if (view == mImageHome) {
 		}
-//		if (view == mImageSearch) {
-//			// loadItemsFromRemoteDb();
-//			if (mEditSearch.getVisibility() == View.GONE) {
-//				mEditSearch.setVisibility(View.VISIBLE);
-//				mEditSearch.requestFocus();
-//			} else if (mEditSearch.getVisibility() == View.VISIBLE) {
-//				mEditSearch.setVisibility(View.GONE);
-//				mEditSearch.setText("");
-//			}
-//		}
+		// if (view == mImageSearch) {
+		// // loadItemsFromRemoteDb();
+		// if (mEditSearch.getVisibility() == View.GONE) {
+		// mEditSearch.setVisibility(View.VISIBLE);
+		// mEditSearch.requestFocus();
+		// } else if (mEditSearch.getVisibility() == View.VISIBLE) {
+		// mEditSearch.setVisibility(View.GONE);
+		// mEditSearch.setText("");
+		// }
+		// }
 		if (view == mImageSettings) {
 			Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG).show();
 			// try {
@@ -818,9 +688,9 @@ public class ItemListFragment extends Fragment implements Serializable,
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-//		if (mEditSearch.getText().hashCode() == s.hashCode()) {
-//			mItemAdapter.getFilter().filter(s);
-//		}
+		// if (mEditSearch.getText().hashCode() == s.hashCode()) {
+		// mItemAdapter.getFilter().filter(s);
+		// }
 		mItemAdapter.notifyDataSetChanged();
 	}
 

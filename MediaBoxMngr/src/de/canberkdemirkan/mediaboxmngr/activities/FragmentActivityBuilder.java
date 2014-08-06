@@ -28,7 +28,8 @@ public abstract class FragmentActivityBuilder extends ActionBarActivity
 
 		if (fragment == null) {
 			fragment = createFragment();
-			fm.beginTransaction().add(R.id.fragmentContainer, fragment)
+			String tag = fragment.getClass().getName();
+			fm.beginTransaction().add(R.id.fragmentContainer, fragment, tag)
 					.commit();
 		}
 	}

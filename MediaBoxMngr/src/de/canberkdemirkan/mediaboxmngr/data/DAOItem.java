@@ -3,6 +3,7 @@ package de.canberkdemirkan.mediaboxmngr.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import android.content.ContentValues;
@@ -169,6 +170,19 @@ public class DAOItem {
 
 	public ArrayList<Item> getTopRatedItems(String user) {
 		ArrayList<Item> result = getAllItems(user);
+
+		for (Iterator<Item> it = result.iterator(); it.hasNext();) {
+			Item item = it.next();
+			String ratingString = item.getRating();
+			if (ratingString != null) {
+				Float rating = Float.valueOf(ratingString);
+				if (rating < 1.0F) {
+					it.remove();
+				}
+			} else {
+				it.remove();
+			}
+		}
 		Collections.sort(result);
 		Collections.reverse(result);
 		return result;
