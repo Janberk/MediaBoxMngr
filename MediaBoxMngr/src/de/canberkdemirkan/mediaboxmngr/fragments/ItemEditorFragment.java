@@ -56,9 +56,9 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 			Item item) {
 		Bundle args = new Bundle();
 
-		args.putSerializable(Constants.EXTRA_DETAILS_ITEM, item);
 		args.putSerializable(Constants.KEY_ITEM_UID, itemId);
 		args.putSerializable(Constants.KEY_USER_TAG, userTag);
+		args.putSerializable(Constants.EXTRA_DETAILS_ITEM, item);
 
 		ItemEditorFragment fragment = new ItemEditorFragment();
 		fragment.setArguments(args);
@@ -72,10 +72,10 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 
 		setHasOptionsMenu(true);
 
-		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
 
 		Bundle bundle = getArguments();
 
+		mUser = (String) bundle.get(Constants.KEY_USER_TAG);
 		mItem = (Item) bundle.get(Constants.EXTRA_DETAILS_ITEM);
 
 	}
