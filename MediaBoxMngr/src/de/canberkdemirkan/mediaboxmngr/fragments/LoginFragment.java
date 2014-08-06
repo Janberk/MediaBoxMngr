@@ -257,6 +257,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		FragmentTransaction ft = mFragmentManager.beginTransaction();
 		SignupFragment signupFragment = new SignupFragment();
 		ft.add(R.id.fragmentContainer, signupFragment);
+		ft.addToBackStack(null);
 		ft.commit();
 	}
 

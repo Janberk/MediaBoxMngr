@@ -268,7 +268,9 @@ public class ItemFragment extends Fragment implements Serializable,
 			// FragmentTransaction ft = mFragmentManager.beginTransaction();
 			// ItemEditorFragment itemEditor = ItemEditorFragment.newInstance(
 			// mItemId, mUser, mItem);
-			// ft.add(R.id.viewPager, itemEditor);
+			// itemEditor.getParentFragment();
+			// ft.add(R.id.fragmentContainer, itemEditor);
+			// ft.addToBackStack(null);
 			// ft.commit();
 			return true;
 		case R.id.menu_deleteItem:
