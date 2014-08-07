@@ -89,14 +89,7 @@ public class Movie extends Item {
 			if (anotherRatingString != null) {
 				anotherRating = Float.valueOf(anotherRatingString);
 			}
-
-			if (thisRating < anotherRating) {
-				return -1;
-			} else if (thisRating > anotherRating) {
-				return 1;
-			} else if (thisRating == anotherRating) {
-				return 0;
-			}
+			return Float.compare(thisRating, anotherRating);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}

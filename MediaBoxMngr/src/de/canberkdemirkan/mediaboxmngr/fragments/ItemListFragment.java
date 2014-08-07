@@ -83,7 +83,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	public static ListTag sListTag;
 	public static boolean sCreateMode;
-	private static int sCABSelectionCount = 0;
+	private int mCABSelectionCount = 0;
 
 	private ListView mListView;
 	private ArrayList<Item> mItemList;
@@ -619,9 +619,9 @@ public class ItemListFragment extends Fragment implements Serializable,
 	public void onItemCheckedStateChanged(ActionMode mode, int position,
 			long id, boolean checked) {
 		if (checked) {
-			sCABSelectionCount++;
+			mCABSelectionCount++;
 		} else {
-			sCABSelectionCount--;
+			mCABSelectionCount--;
 		}
 
 		mode.invalidate();
@@ -639,7 +639,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	@Override
 	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-		if (sCABSelectionCount < 2) {
+		if (mCABSelectionCount < 2) {
 			MenuItem item = menu.findItem(R.id.menu_editItem);
 			item.setVisible(true);
 			return true;
@@ -676,7 +676,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		if (mMenuBar != null) {
 			mMenuBar.setVisibility(View.VISIBLE);
 		}
-		sCABSelectionCount = 0;
+		mCABSelectionCount = 0;
 	}
 
 	// text watcher callback methods

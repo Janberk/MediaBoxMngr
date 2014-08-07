@@ -53,7 +53,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 	public static final int RESPONSE_CODE_INVALID_EMAIL = 3;
 	public static final int RESPONSE_CODE_NO_POST = 4;
 
-	public static boolean sRememberMe = false;
+	public boolean mRememberMe = false;
 
 	private SharedPreferences mSharedPreferences;
 	private FragmentManager mFragmentManager;
@@ -178,7 +178,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		String email = mEditEmail.getText().toString();
 		String password = mEditPassword.getText().toString();
 
-		if (sRememberMe) {
+		if (mRememberMe) {
 			saveUserToPrefs(email, password);
 		} else {
 			clearUser();
@@ -396,9 +396,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		if (buttonView == mCheckBoxRememberMe) {
 			if (isChecked) {
-				sRememberMe = true;
+				mRememberMe = true;
 			} else {
-				sRememberMe = false;
+				mRememberMe = false;
 			}
 		}
 	}

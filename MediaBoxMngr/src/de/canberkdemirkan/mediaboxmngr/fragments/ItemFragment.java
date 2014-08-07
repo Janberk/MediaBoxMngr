@@ -53,6 +53,7 @@ public class ItemFragment extends Fragment implements Serializable,
 	private static final long serialVersionUID = 9104738005805814331L;
 
 	private static final int REQUEST_CODE = 0;
+	
 	private FragmentManager mFragmentManager;
 
 	private Item mItem;
@@ -194,8 +195,9 @@ public class ItemFragment extends Fragment implements Serializable,
 		default:
 			break;
 		}
-
-		initViews(view);
+		if (view != null) {
+			initViews(view);
+		}
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (NavUtils.getParentActivityName(getActivity()) != null) {

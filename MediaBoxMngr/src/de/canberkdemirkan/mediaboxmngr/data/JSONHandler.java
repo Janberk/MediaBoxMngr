@@ -66,11 +66,13 @@ public class JSONHandler {
 				default:
 					break;
 				}
-				newItem.setTitle(title);
-				newItem.setType(type);
-				newItem.setCreationDate(UtilMethods
-						.setCreationDateFromString(creationDate));
-				itemList.add(0, newItem);
+				if (newItem != null) {
+					newItem.setTitle(title);
+					newItem.setType(type);
+					newItem.setCreationDate(UtilMethods
+							.setCreationDateFromString(creationDate));
+					itemList.add(0, newItem);
+				}
 			}
 		}
 		return itemList;

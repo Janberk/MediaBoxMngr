@@ -114,9 +114,11 @@ public class CreateItemFragment extends Fragment implements
 		default:
 			break;
 		}
-		item.setTitle(mEditEditTitle.getText().toString());
-		item.setType(type);
-		item.setUser(mUser);
+		if (item != null) {
+			item.setTitle(mEditEditTitle.getText().toString());
+			item.setType(type);
+			item.setUser(mUser);
+		}
 		return item;
 	}
 

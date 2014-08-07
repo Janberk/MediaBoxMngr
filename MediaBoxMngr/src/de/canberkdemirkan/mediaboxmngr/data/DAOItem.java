@@ -27,32 +27,32 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class DAOItem {
 
-	public static int colId;
-	public static int colSQLiteId;
-	public static int colUser;
-	public static int colSynced;
-	public static int colType;
-	public static int colFavorite;
-	public static int colCreationDate;
-	public static int colTitle;
-	public static int colGenre;
-	public static int colCountry;
-	public static int colYear;
-	public static int colContent;
-	public static int colRating;
-	public static int colCover;
-	public static int colDirector;
-	public static int colCast;
-	public static int colMusic;
-	public static int colLength;
-	public static int colArtist;
-	public static int colLabel;
-	public static int colFormat;
-	public static int colTitleCount;
-	public static int colAuthor;
-	public static int colPublisher;
-	public static int colEdition;
-	public static int colIsbn;
+	public int mColId;
+	public int mColSQLiteId;
+	public int mColUser;
+	public int mColSynced;
+	public int mColType;
+	public int mColFavorite;
+	public int mColCreationDate;
+	public int mColTitle;
+	public int mColGenre;
+	public int mColCountry;
+	public int mColYear;
+	public int mCContent;
+	public int mColRating;
+	public int mColCover;
+	public int mColDirector;
+	public int mColCast;
+	public int mColMusic;
+	public int mColLength;
+	public int mColArtist;
+	public int mColLabel;
+	public int mColFormat;
+	public int mColTitleCount;
+	public int mColAuthor;
+	public int mColPublisher;
+	public int mColEdition;
+	public int mColIsbn;
 
 	private Context mAppContext;
 	private SQLiteDatabase mSQLiteDB;
@@ -371,35 +371,36 @@ public class DAOItem {
 						.moveToNext()) {
 					HashMap<String, String> map = new LinkedHashMap<String, String>();
 
-					map.put(Constants.ID, cursor.getString(colId));
-					map.put(Constants.SQLITE_ID, cursor.getString(colSQLiteId));
-					map.put(Constants.USER, cursor.getString(colUser));
+					map.put(Constants.ID, cursor.getString(mColId));
+					map.put(Constants.SQLITE_ID, cursor.getString(mColSQLiteId));
+					map.put(Constants.USER, cursor.getString(mColUser));
 					// map.put(Constants.SYNCED,
-					// cursor.getString(colSynced));
-					map.put(Constants.TYPE, cursor.getString(colType));
-					map.put(Constants.FAVORITE, cursor.getString(colFavorite));
+					// cursor.getString(mColSynced));
+					map.put(Constants.TYPE, cursor.getString(mColType));
+					map.put(Constants.FAVORITE, cursor.getString(mColFavorite));
 					map.put(Constants.CREATION_DATE,
-							cursor.getString(colCreationDate));
-					map.put(Constants.TITLE, cursor.getString(colTitle));
-					map.put(Constants.GENRE, cursor.getString(colGenre));
-					map.put(Constants.COUNTRY, cursor.getString(colCountry));
-					map.put(Constants.YEAR, cursor.getString(colYear));
-					map.put(Constants.CONTENT, cursor.getString(colContent));
-					map.put(Constants.RATING, cursor.getString(colRating));
-					map.put(Constants.COVER, cursor.getString(colCover));
-					map.put(Constants.DIRECTOR, cursor.getString(colDirector));
-					map.put(Constants.CAST, cursor.getString(colCast));
-					map.put(Constants.MUSIC, cursor.getString(colMusic));
-					map.put(Constants.LENGTH, cursor.getString(colLength));
-					map.put(Constants.ARTIST, cursor.getString(colArtist));
-					map.put(Constants.LABEL, cursor.getString(colLabel));
-					map.put(Constants.FORMAT, cursor.getString(colFormat));
+							cursor.getString(mColCreationDate));
+					map.put(Constants.TITLE, cursor.getString(mColTitle));
+					map.put(Constants.GENRE, cursor.getString(mColGenre));
+					map.put(Constants.COUNTRY, cursor.getString(mColCountry));
+					map.put(Constants.YEAR, cursor.getString(mColYear));
+					map.put(Constants.CONTENT, cursor.getString(mCContent));
+					map.put(Constants.RATING, cursor.getString(mColRating));
+					map.put(Constants.COVER, cursor.getString(mColCover));
+					map.put(Constants.DIRECTOR, cursor.getString(mColDirector));
+					map.put(Constants.CAST, cursor.getString(mColCast));
+					map.put(Constants.MUSIC, cursor.getString(mColMusic));
+					map.put(Constants.LENGTH, cursor.getString(mColLength));
+					map.put(Constants.ARTIST, cursor.getString(mColArtist));
+					map.put(Constants.LABEL, cursor.getString(mColLabel));
+					map.put(Constants.FORMAT, cursor.getString(mColFormat));
 					map.put(Constants.TITLE_COUNT,
-							cursor.getString(colTitleCount));
-					map.put(Constants.AUTHOR, cursor.getString(colAuthor));
-					map.put(Constants.PUBLISHER, cursor.getString(colPublisher));
-					map.put(Constants.EDITION, cursor.getString(colEdition));
-					map.put(Constants.ISBN, cursor.getString(colIsbn));
+							cursor.getString(mColTitleCount));
+					map.put(Constants.AUTHOR, cursor.getString(mColAuthor));
+					map.put(Constants.PUBLISHER,
+							cursor.getString(mColPublisher));
+					map.put(Constants.EDITION, cursor.getString(mColEdition));
+					map.put(Constants.ISBN, cursor.getString(mColIsbn));
 					values.add(map);
 				}
 			}
@@ -420,34 +421,34 @@ public class DAOItem {
 		Item item = null;
 		getColumnIndices(cursor);
 
-		ItemType type = ItemType.valueOf(cursor.getString(colType));
+		ItemType type = ItemType.valueOf(cursor.getString(mColType));
 
-		int synced = (Integer.parseInt(cursor.getString(colSynced)));
-		int favoriteAsInt = (Integer.parseInt(cursor.getString(colFavorite)));
+		int synced = (Integer.parseInt(cursor.getString(mColSynced)));
+		int favoriteAsInt = (Integer.parseInt(cursor.getString(mColFavorite)));
 
-		int id = Integer.parseInt(cursor.getString(colSQLiteId));
+		int id = Integer.parseInt(cursor.getString(mColSQLiteId));
 		// byte[] bytes = cursor.getBlob(iCover);
 		// Bitmap cover = CoverUtil.getBitmap(bytes);
-		String creationDate = cursor.getString(colCreationDate);
-		String user = cursor.getString(colUser);
-		String title = cursor.getString(colTitle);
-		String genre = cursor.getString(colGenre);
-		String country = cursor.getString(colCountry);
-		String year = cursor.getString(colYear);
-		String content = cursor.getString(colContent);
-		String rating = cursor.getString(colRating);
-		String director = cursor.getString(colDirector);
-		String cast = cursor.getString(colCast);
-		String music = cursor.getString(colMusic);
-		String length = cursor.getString(colLength);
-		String artist = cursor.getString(colArtist);
-		String label = cursor.getString(colLabel);
-		String format = cursor.getString(colFormat);
-		String titleCount = cursor.getString(colTitleCount);
-		String author = cursor.getString(colAuthor);
-		String publisher = cursor.getString(colPublisher);
-		String edition = cursor.getString(colEdition);
-		String isbn = cursor.getString(colIsbn);
+		String creationDate = cursor.getString(mColCreationDate);
+		String user = cursor.getString(mColUser);
+		String title = cursor.getString(mColTitle);
+		String genre = cursor.getString(mColGenre);
+		String country = cursor.getString(mColCountry);
+		String year = cursor.getString(mColYear);
+		String content = cursor.getString(mCContent);
+		String rating = cursor.getString(mColRating);
+		String director = cursor.getString(mColDirector);
+		String cast = cursor.getString(mColCast);
+		String music = cursor.getString(mColMusic);
+		String length = cursor.getString(mColLength);
+		String artist = cursor.getString(mColArtist);
+		String label = cursor.getString(mColLabel);
+		String format = cursor.getString(mColFormat);
+		String titleCount = cursor.getString(mColTitleCount);
+		String author = cursor.getString(mColAuthor);
+		String publisher = cursor.getString(mColPublisher);
+		String edition = cursor.getString(mColEdition);
+		String isbn = cursor.getString(mColIsbn);
 
 		switch (type) {
 		case Album:
@@ -475,18 +476,20 @@ public class DAOItem {
 		default:
 			break;
 		}
-		item.setSynced(UtilMethods.isTrue(synced));
-		item.setType(type);
-		item.setFavorite(UtilMethods.isTrue(favoriteAsInt));
-		item.setCreationDate(UtilMethods
-				.setCreationDateFromString(creationDate));
-		item.setTitle(title);
-		item.setGenre(genre);
-		item.setCountry(country);
-		item.setYear(year);
-		item.setContent(content);
-		item.setRating(rating);
-		// item.setCover(cover);
+		if (item != null) {
+			item.setSynced(UtilMethods.isTrue(synced));
+			item.setType(type);
+			item.setFavorite(UtilMethods.isTrue(favoriteAsInt));
+			item.setCreationDate(UtilMethods
+					.setCreationDateFromString(creationDate));
+			item.setTitle(title);
+			item.setGenre(genre);
+			item.setCountry(country);
+			item.setYear(year);
+			item.setContent(content);
+			item.setRating(rating);
+			// item.setCover(cover);
+		}
 
 		return item;
 	}
@@ -532,31 +535,31 @@ public class DAOItem {
 
 	// return integer values of cursor query
 	public void getColumnIndices(Cursor cursor) {
-		colSQLiteId = cursor.getColumnIndex(Constants.ID);
-		colUser = cursor.getColumnIndex(Constants.USER);
-		colSynced = cursor.getColumnIndex(Constants.SYNCED);
-		colType = cursor.getColumnIndex(Constants.TYPE);
-		colFavorite = cursor.getColumnIndex(Constants.FAVORITE);
-		colCreationDate = cursor.getColumnIndex(Constants.CREATION_DATE);
-		colTitle = cursor.getColumnIndex(Constants.TITLE);
-		colGenre = cursor.getColumnIndex(Constants.GENRE);
-		colCountry = cursor.getColumnIndex(Constants.COUNTRY);
-		colYear = cursor.getColumnIndex(Constants.YEAR);
-		colContent = cursor.getColumnIndex(Constants.CONTENT);
-		colRating = cursor.getColumnIndex(Constants.RATING);
-		colCover = cursor.getColumnIndex(Constants.COVER);
-		colDirector = cursor.getColumnIndex(Constants.DIRECTOR);
-		colCast = cursor.getColumnIndex(Constants.CAST);
-		colMusic = cursor.getColumnIndex(Constants.MUSIC);
-		colLength = cursor.getColumnIndex(Constants.LENGTH);
-		colArtist = cursor.getColumnIndex(Constants.ARTIST);
-		colLabel = cursor.getColumnIndex(Constants.LABEL);
-		colFormat = cursor.getColumnIndex(Constants.FORMAT);
-		colTitleCount = cursor.getColumnIndex(Constants.TITLE_COUNT);
-		colAuthor = cursor.getColumnIndex(Constants.AUTHOR);
-		colPublisher = cursor.getColumnIndex(Constants.PUBLISHER);
-		colEdition = cursor.getColumnIndex(Constants.EDITION);
-		colIsbn = cursor.getColumnIndex(Constants.ISBN);
+		mColSQLiteId = cursor.getColumnIndex(Constants.ID);
+		mColUser = cursor.getColumnIndex(Constants.USER);
+		mColSynced = cursor.getColumnIndex(Constants.SYNCED);
+		mColType = cursor.getColumnIndex(Constants.TYPE);
+		mColFavorite = cursor.getColumnIndex(Constants.FAVORITE);
+		mColCreationDate = cursor.getColumnIndex(Constants.CREATION_DATE);
+		mColTitle = cursor.getColumnIndex(Constants.TITLE);
+		mColGenre = cursor.getColumnIndex(Constants.GENRE);
+		mColCountry = cursor.getColumnIndex(Constants.COUNTRY);
+		mColYear = cursor.getColumnIndex(Constants.YEAR);
+		mCContent = cursor.getColumnIndex(Constants.CONTENT);
+		mColRating = cursor.getColumnIndex(Constants.RATING);
+		mColCover = cursor.getColumnIndex(Constants.COVER);
+		mColDirector = cursor.getColumnIndex(Constants.DIRECTOR);
+		mColCast = cursor.getColumnIndex(Constants.CAST);
+		mColMusic = cursor.getColumnIndex(Constants.MUSIC);
+		mColLength = cursor.getColumnIndex(Constants.LENGTH);
+		mColArtist = cursor.getColumnIndex(Constants.ARTIST);
+		mColLabel = cursor.getColumnIndex(Constants.LABEL);
+		mColFormat = cursor.getColumnIndex(Constants.FORMAT);
+		mColTitleCount = cursor.getColumnIndex(Constants.TITLE_COUNT);
+		mColAuthor = cursor.getColumnIndex(Constants.AUTHOR);
+		mColPublisher = cursor.getColumnIndex(Constants.PUBLISHER);
+		mColEdition = cursor.getColumnIndex(Constants.EDITION);
+		mColIsbn = cursor.getColumnIndex(Constants.ISBN);
 	}
 
 	public int getCountOfSyncedItems() {
@@ -629,7 +632,7 @@ public class DAOItem {
 					new String[] { Constants.VERSION }, null, null, null, null,
 					null);
 
-			if (cursor.moveToFirst() && cursor != null) {
+			if (cursor.moveToFirst()) {
 				version = cursor.getInt(cursor
 						.getColumnIndex(Constants.VERSION));
 				return version;
@@ -662,33 +665,33 @@ public class DAOItem {
 
 				ItemType type = item.getType();
 
-				int synced = (Integer.parseInt(cursor.getString(colSynced)));
+				int synced = (Integer.parseInt(cursor.getString(mColSynced)));
 				int favoriteAsInt = (Integer.parseInt(cursor
-						.getString(colFavorite)));
+						.getString(mColFavorite)));
 
-				int id = Integer.parseInt(cursor.getString(colSQLiteId));
+				int id = Integer.parseInt(cursor.getString(mColSQLiteId));
 				// byte[] bytes = cursor.getBlob(iCover);
 				// Bitmap cover = CoverUtil.getBitmap(bytes);
-				String creationDate = cursor.getString(colCreationDate);
-				String user = cursor.getString(colUser);
-				String title = cursor.getString(colTitle);
-				String genre = cursor.getString(colGenre);
-				String country = cursor.getString(colCountry);
-				String year = cursor.getString(colYear);
-				String content = cursor.getString(colContent);
-				String rating = cursor.getString(colRating);
-				String director = cursor.getString(colDirector);
-				String cast = cursor.getString(colCast);
-				String music = cursor.getString(colMusic);
-				String length = cursor.getString(colLength);
-				String label = cursor.getString(colLabel);
-				String artist = cursor.getString(colArtist);
-				String format = cursor.getString(colFormat);
-				String titleCount = cursor.getString(colTitleCount);
-				String edition = cursor.getString(colEdition);
-				String publisher = cursor.getString(colPublisher);
-				String author = cursor.getString(colAuthor);
-				String isbn = cursor.getString(colIsbn);
+				String creationDate = cursor.getString(mColCreationDate);
+				String user = cursor.getString(mColUser);
+				String title = cursor.getString(mColTitle);
+				String genre = cursor.getString(mColGenre);
+				String country = cursor.getString(mColCountry);
+				String year = cursor.getString(mColYear);
+				String content = cursor.getString(mCContent);
+				String rating = cursor.getString(mColRating);
+				String director = cursor.getString(mColDirector);
+				String cast = cursor.getString(mColCast);
+				String music = cursor.getString(mColMusic);
+				String length = cursor.getString(mColLength);
+				String label = cursor.getString(mColLabel);
+				String artist = cursor.getString(mColArtist);
+				String format = cursor.getString(mColFormat);
+				String titleCount = cursor.getString(mColTitleCount);
+				String edition = cursor.getString(mColEdition);
+				String publisher = cursor.getString(mColPublisher);
+				String author = cursor.getString(mColAuthor);
+				String isbn = cursor.getString(mColIsbn);
 
 				switch (type) {
 				case Album:
