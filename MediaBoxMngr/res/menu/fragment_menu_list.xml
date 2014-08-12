@@ -1,20 +1,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
         android:id="@+id/menu_newItem"
         android:icon="@drawable/ic_menu_add_light"
         android:title="@string/new_item"
-        app:showAsAction="always"/>
+        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/ic_menu_search_light"
+        android:title="@string/search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:queryHint="@string/filter"
+        android:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="ifRoom|collapseActionView"/>
     <item
         android:id="@+id/menu_deleteAll"
         android:icon="@drawable/ic_menu_trash_light"
         android:title="@string/delete_all"
-        app:showAsAction="never"/>
+        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menu_dummyData"
         android:title="Create dummy data"
-        app:showAsAction="never"/>
+        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"/>
 
 </menu>

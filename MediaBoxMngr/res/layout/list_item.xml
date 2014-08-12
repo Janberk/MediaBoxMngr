@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeightLarge"
-    android:layout_margin="@dimen/custom_value_8dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/list_item_background"
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical"
@@ -19,7 +18,7 @@
     <ImageView
         android:id="@+id/iv_listItem_itemIcon"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:contentDescription="@string/item_cover_label"
         android:src="@drawable/ic_launcher" />

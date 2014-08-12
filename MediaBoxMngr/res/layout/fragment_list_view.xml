@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:choiceMode="multipleChoice"
         android:clipToPadding="false"
-        android:dividerHeight="@dimen/custom_value_2dp"
-        android:paddingBottom="@dimen/custom_value_48dp" />
+        android:padding="@dimen/custom_value_4dp"
+        android:dividerHeight="@dimen/custom_value_4dp" />
 
 </LinearLayout>
