@@ -91,9 +91,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	private ActionMode mActionMode;
 	private LinearLayout mMenuBar;
-	private ImageView mImageHome, mImageSearch, mImageSettings, mImageLogout;
-
-	// private EditText mEditSearch;
+	private ImageView mImageHome, mImageSettings, mImageLogout;
 
 	public static ItemListFragment newInstance(ListTag listTag) {
 
@@ -141,12 +139,10 @@ public class ItemListFragment extends Fragment implements Serializable,
 				.findViewById(R.id.listView_fragmentItemList);
 		mMenuBar = (LinearLayout) view
 				.findViewById(R.id.fragmentItemList_menuBar);
-		// mEditSearch = (EditText) view
-		// .findViewById(R.id.et_fragmentItemlist_search);
 		mImageHome = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_home);
-		mImageSearch = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_search);
+		// mImageSearch = (ImageView) view
+		// .findViewById(R.id.iv_fragmentMenuBar_search);
 		mImageSettings = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_settings);
 		mImageLogout = (ImageView) view
@@ -166,9 +162,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-		// mEditSearch.addTextChangedListener(this);
-		// mEditSearch.setVisibility(View.GONE);
 
 		// LOKAL_DB_VERSION = ItemStock.get(getActivity(),
 		// getUser()).getDAOItem()
@@ -202,13 +195,12 @@ public class ItemListFragment extends Fragment implements Serializable,
 		}
 
 		mListView.setOnItemClickListener(this);
-		// mListView.setOnItemLongClickListener(this);
 		mListView.setItemsCanFocus(false);
 
 		addActionBarTabs();
 
 		mImageHome.setOnClickListener(this);
-		mImageSearch.setOnClickListener(this);
+		// mImageSearch.setOnClickListener(this);
 		mImageSettings.setOnClickListener(this);
 		mImageLogout.setOnClickListener(this);
 

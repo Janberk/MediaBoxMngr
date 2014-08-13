@@ -7,13 +7,13 @@
         android:title="@string/new_item"
         android:showAsAction="ifRoom"
         app:showAsAction="ifRoom"/>
-    <item
+    <!-- <item
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_menu_search_light"
         android:title="@string/search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:showAsAction="ifRoom|collapseActionView"
-        app:showAsAction="ifRoom|collapseActionView"/>
+        app:showAsAction="ifRoom|collapseActionView"/> -->
     <item
         android:id="@+id/menu_deleteAll"
         android:icon="@drawable/ic_menu_trash_light"

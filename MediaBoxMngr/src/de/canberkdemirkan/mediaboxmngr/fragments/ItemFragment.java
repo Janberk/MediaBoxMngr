@@ -53,7 +53,7 @@ public class ItemFragment extends Fragment implements Serializable,
 	private static final long serialVersionUID = 9104738005805814331L;
 
 	private static final int REQUEST_CODE = 0;
-	
+
 	private FragmentManager mFragmentManager;
 
 	private Item mItem;
@@ -61,10 +61,7 @@ public class ItemFragment extends Fragment implements Serializable,
 	public static String sItemType;
 	private String mUser;
 
-	private ImageView mImageHome;
-	private ImageView mImageSearch;
-	private ImageView mImageSettings;
-	private ImageView mImageLogout;
+	private ImageView mImageHome, mImageSettings, mImageLogout;
 
 	private EditText mEditItemTitle;
 	private TextView mTextItemContent;
@@ -164,8 +161,6 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		mImageHome = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_home);
-		mImageSearch = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_search);
 		mImageSettings = (ImageView) view
 				.findViewById(R.id.iv_fragmentMenuBar_settings);
 		mImageLogout = (ImageView) view
@@ -232,7 +227,6 @@ public class ItemFragment extends Fragment implements Serializable,
 		updateItemDetails(mItem);
 
 		mImageHome.setOnClickListener(this);
-		mImageSearch.setOnClickListener(this);
 		mImageSettings.setOnClickListener(this);
 		mImageLogout.setOnClickListener(this);
 
@@ -379,10 +373,6 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		if (view == mImageHome) {
 			getActivity().finish();
-		}
-		if (view == mImageSearch) {
-			// loadItemsFromRemoteDb();
-			Toast.makeText(getActivity(), "Search", Toast.LENGTH_LONG).show();
 		}
 		if (view == mImageSettings) {
 			Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG).show();
