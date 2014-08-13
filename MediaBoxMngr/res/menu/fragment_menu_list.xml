@@ -12,7 +12,6 @@
         android:icon="@drawable/ic_menu_search_light"
         android:title="@string/search"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        app:queryHint="@string/filter"
         android:showAsAction="ifRoom|collapseActionView"
         app:showAsAction="ifRoom|collapseActionView"/>
     <item

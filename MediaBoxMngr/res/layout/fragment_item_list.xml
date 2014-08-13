@@ -3,20 +3,12 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true" >
 
-    <EditText
-        android:id="@+id/et_fragmentItemlist_search"
-        style="@style/editTextForm.textStyle.input.search"
-        android:layout_alignParentTop="true"
-        android:hint="@string/search" >
-
-        <requestFocus />
-    </EditText>
-
     <include
         android:id="@+id/fragmentItemList_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_fragmentItemlist_search"
+        android:layout_above="@+id/fragmentItemList_menuBar"
+        android:layout_alignParentTop="true"
         layout="@layout/fragment_list_view" >
     </include>
 

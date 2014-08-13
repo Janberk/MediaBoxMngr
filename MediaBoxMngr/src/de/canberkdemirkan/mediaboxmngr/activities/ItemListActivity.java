@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.adapters.CustomItemAdapter;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
@@ -62,6 +63,7 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 		CustomItemAdapter adapter = ((CustomItemAdapter) fragment.getListView()
 				.getAdapter());
 		adapter.refresh(list);
+		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	}
 
 }

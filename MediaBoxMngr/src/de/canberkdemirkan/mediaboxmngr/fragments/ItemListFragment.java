@@ -215,7 +215,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		return view;
 	}
 
-	private void addActionBarTabs() {
+	public void addActionBarTabs() {
 		tabAll = mActionBar.newTab().setText(ListTag.ALL.name())
 				.setTag(ListTag.ALL);
 		tabMusic = mActionBar.newTab().setText(ListTag.MUSIC.name())
