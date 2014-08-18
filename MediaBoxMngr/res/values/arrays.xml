@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="backgrounds">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    
+    <string-array name="test">
+        <item>one</item>
+        <item>two</item>
+        <item>three</item>
+    </string-array>
+
+</resources>

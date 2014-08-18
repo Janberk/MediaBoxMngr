@@ -2,6 +2,7 @@ package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -30,11 +31,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,6 +45,7 @@ import com.loopj.android.http.RequestParams;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
+import de.canberkdemirkan.mediaboxmngr.activities.SettingsActivity;
 import de.canberkdemirkan.mediaboxmngr.adapters.CustomItemAdapter;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.DummyDataProvider;
@@ -60,8 +61,7 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 @SuppressLint("NewApi")
 public class ItemListFragment extends Fragment implements Serializable,
-		View.OnClickListener, AdapterView.OnItemClickListener,
-		MultiChoiceModeListener, TextWatcher {
+		AdapterView.OnItemClickListener, MultiChoiceModeListener, TextWatcher {
 
 	/**
 	 * 
@@ -90,8 +90,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private CustomItemAdapter mItemAdapter;
 
 	private ActionMode mActionMode;
-	private LinearLayout mMenuBar;
-	private ImageView mImageHome, mImageSettings, mImageLogout;
 
 	public static ItemListFragment newInstance(ListTag listTag) {
 
@@ -110,6 +108,18 @@ public class ItemListFragment extends Fragment implements Serializable,
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
+		try {
+			ViewConfiguration config = ViewConfiguration.get(getActivity());
+			Field overflowMenu = ViewConfiguration.class
+					.getDeclaredField("sHasPermanentMenuKey");
+			if (overflowMenu != null) {
+				overflowMenu.setAccessible(true);
+				overflowMenu.setBoolean(config, false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUserFromPrefs();
@@ -137,16 +147,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private void initViews(View view) {
 		mListView = (ListView) view
 				.findViewById(R.id.listView_fragmentItemList);
-		mMenuBar = (LinearLayout) view
-				.findViewById(R.id.fragmentItemList_menuBar);
-		mImageHome = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_home);
-		// mImageSearch = (ImageView) view
-		// .findViewById(R.id.iv_fragmentMenuBar_search);
-		mImageSettings = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_settings);
-		mImageLogout = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
 
 	@Override
@@ -198,11 +198,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mListView.setItemsCanFocus(false);
 
 		addActionBarTabs();
-
-		mImageHome.setOnClickListener(this);
-		// mImageSearch.setOnClickListener(this);
-		mImageSettings.setOnClickListener(this);
-		mImageLogout.setOnClickListener(this);
 
 		return view;
 	}
@@ -342,10 +337,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 					sListTag);
 			mItemAdapter.refresh(mItemList);
 
-			if (mMenuBar != null) {
-				mMenuBar.setVisibility(View.VISIBLE);
-			}
-
 		}
 	}
 
@@ -366,6 +357,20 @@ public class ItemListFragment extends Fragment implements Serializable,
 			return true;
 		case R.id.menu_dummyData:
 			createDummyList();
+			return true;
+		case R.id.menu_settings:
+			Intent i = new Intent(getActivity(), SettingsActivity.class);
+			startActivity(i);
+			// FragmentTransaction ft = mFragmentManager.beginTransaction();
+			// ft.replace(R.id.fragmentContainer, new SettingsFragment());
+			// ft.addToBackStack(null);
+			// ft.commit();
+			return true;
+
+		case R.id.menu_logout:
+			AlertDialogLogout dialog = AlertDialogLogout
+					.newInstance(getActivity());
+			dialog.show(mFragmentManager, "");
 			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
@@ -560,39 +565,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	// click listeners
 	@Override
-	public void onClick(View view) {
-
-		if (view == mImageHome) {
-		}
-		// if (view == mImageSearch) {
-		// // loadItemsFromRemoteDb();
-		// if (mEditSearch.getVisibility() == View.GONE) {
-		// mEditSearch.setVisibility(View.VISIBLE);
-		// mEditSearch.requestFocus();
-		// } else if (mEditSearch.getVisibility() == View.VISIBLE) {
-		// mEditSearch.setVisibility(View.GONE);
-		// mEditSearch.setText("");
-		// }
-		// }
-		if (view == mImageSettings) {
-			Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG).show();
-			// try {
-			// syncWithRemoteDb();
-			// } catch (JSONException e) {
-			// e.printStackTrace();
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-		}
-		if (view == mImageLogout) {
-			AlertDialogLogout dialog = AlertDialogLogout
-					.newInstance(getActivity());
-			dialog.show(mFragmentManager, "");
-		}
-
-	}
-
-	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		if (parent == mListView) {
@@ -623,9 +595,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 		MenuInflater inflater = mode.getMenuInflater();
 		inflater.inflate(R.menu.fragment_menu_cab, menu);
-		if (mMenuBar != null) {
-			mMenuBar.setVisibility(View.GONE);
-		}
 		return true;
 	}
 
@@ -644,9 +613,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-		// int position =
-		// Integer.parseInt(mode.getTag().toString());
-
 		switch (item.getItemId()) {
 		case R.id.menu_editItem:
 			showItemDetails();
@@ -665,9 +631,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	@Override
 	public void onDestroyActionMode(ActionMode mode) {
-		if (mMenuBar != null) {
-			mMenuBar.setVisibility(View.VISIBLE);
-		}
 		mCABSelectionCount = 0;
 	}
 
@@ -679,10 +642,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-		// if (mEditSearch.getText().hashCode() == s.hashCode()) {
-		// mItemAdapter.getFilter().filter(s);
-		// }
 		mItemAdapter.notifyDataSetChanged();
 	}
 

@@ -35,11 +35,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		OnCheckedChangeListener {
 
 	// Emulator
-	public static final String LOGIN_URL = "http://10.0.2.2:80/development/mediaboxmngr_backend/users/log_in.php";
+	// public static final String LOGIN_URL =
+	// "http://10.0.2.2:80/development/mediaboxmngr_backend/users/log_in.php";
 
 	// PC
-	// public static final String LOGIN_URL =
-	// "http://192.168.1.50:80/development/mediaboxmngr_backend/users/log_in.php";
+	public static final String LOGIN_URL = "http://192.168.1.52:80/development/mediaboxmngr_backend/users/log_in.php";
 
 	// Laptop
 	// public static final String LOGIN_URL =

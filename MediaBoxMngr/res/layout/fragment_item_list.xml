@@ -7,17 +7,9 @@
         android:id="@+id/fragmentItemList_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fragmentItemList_menuBar"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         layout="@layout/fragment_list_view" >
-    </include>
-
-    <include
-        android:id="@+id/fragmentItemList_menuBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        layout="@layout/fragment_view_menu" >
     </include>
 
 </RelativeLayout>

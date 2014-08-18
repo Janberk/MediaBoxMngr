@@ -108,12 +108,4 @@
         </RelativeLayout>
     </ScrollView>
 
-    <include
-        android:id="@+id/fragmentDetails_menuBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        layout="@layout/fragment_view_menu" >
-    </include>
-
 </RelativeLayout>

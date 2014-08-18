@@ -1,6 +1,7 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.UUID;
 
 import android.annotation.TargetApi;
@@ -20,19 +21,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemEditorActivity;
+import de.canberkdemirkan.mediaboxmngr.activities.SettingsActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
@@ -44,8 +45,7 @@ import de.canberkdemirkan.mediaboxmngr.model.Movie;
 import de.canberkdemirkan.mediaboxmngr.model.Music;
 
 public class ItemFragment extends Fragment implements Serializable,
-		View.OnClickListener, OnCheckedChangeListener,
-		OnRatingBarChangeListener, TextWatcher {
+		OnCheckedChangeListener, OnRatingBarChangeListener, TextWatcher {
 
 	/**
 	 * 
@@ -60,8 +60,6 @@ public class ItemFragment extends Fragment implements Serializable,
 	private UUID mItemId;
 	public static String sItemType;
 	private String mUser;
-
-	private ImageView mImageHome, mImageSettings, mImageLogout;
 
 	private EditText mEditItemTitle;
 	private TextView mTextItemContent;
@@ -104,6 +102,17 @@ public class ItemFragment extends Fragment implements Serializable,
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
+		try {
+			ViewConfiguration config = ViewConfiguration.get(getActivity());
+			Field overflowMenu = ViewConfiguration.class
+					.getDeclaredField("sHasPermanentMenuKey");
+			if (overflowMenu != null) {
+				overflowMenu.setAccessible(true);
+				overflowMenu.setBoolean(config, false);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		mItemId = (UUID) getArguments().getSerializable(Constants.KEY_ITEM_UID);
 		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
@@ -158,13 +167,6 @@ public class ItemFragment extends Fragment implements Serializable,
 		// .findViewById(R.id.sp_fragmentBasics_itemCountry);
 		// mSpinnerItemYear = (Spinner) view
 		// .findViewById(R.id.sp_fragmentBasics_itemYear);
-
-		mImageHome = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_home);
-		mImageSettings = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_settings);
-		mImageLogout = (ImageView) view
-				.findViewById(R.id.iv_fragmentMenuBar_logout);
 	}
 
 	@TargetApi(11)
@@ -226,10 +228,6 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		updateItemDetails(mItem);
 
-		mImageHome.setOnClickListener(this);
-		mImageSettings.setOnClickListener(this);
-		mImageLogout.setOnClickListener(this);
-
 		return view;
 	}
 
@@ -272,13 +270,23 @@ public class ItemFragment extends Fragment implements Serializable,
 		case R.id.menu_deleteItem:
 			final String header = getActivity().getResources().getString(
 					R.string.dialog_header_delete);
-			AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
-					null, mItem, header,
+			AlertDialogDeletion dialogDelete = AlertDialogDeletion.newInstance(
+					this, null, mItem, header,
 					AlertDialogDeletion.DIALOG_TAG_DETAIL_SINGLE);
-			dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
-			dialog.show(mFragmentManager, "");
+			dialogDelete.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
+			dialogDelete.show(mFragmentManager, "");
 
 			return true;
+		case R.id.menu_settings:
+			Intent i = new Intent(getActivity(), SettingsActivity.class);
+			startActivity(i);
+			return true;
+		case R.id.menu_logout:
+			AlertDialogLogout dialogLogout = AlertDialogLogout
+					.newInstance(getActivity());
+			dialogLogout.show(mFragmentManager, "");
+			return true;
+
 		default:
 			return super.onOptionsItemSelected(menuItem);
 		}
@@ -366,31 +374,6 @@ public class ItemFragment extends Fragment implements Serializable,
 	// ItemStock.get(getActivity(), mUser).saveSerializedItems();
 	// super.onPause();
 	// }
-
-	// click listeners
-	@Override
-	public void onClick(View view) {
-
-		if (view == mImageHome) {
-			getActivity().finish();
-		}
-		if (view == mImageSettings) {
-			Toast.makeText(getActivity(), "Settings", Toast.LENGTH_LONG).show();
-			// try {
-			// syncWithRemoteDb();
-			// } catch (JSONException e) {
-			// e.printStackTrace();
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-		}
-		if (view == mImageLogout) {
-			AlertDialogLogout dialog = AlertDialogLogout
-					.newInstance(getActivity());
-			dialog.show(mFragmentManager, "");
-		}
-
-	}
 
 	// text watcher callback methods
 	@Override
