@@ -2,7 +2,6 @@ package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -31,7 +30,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
@@ -108,18 +106,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-		try {
-			ViewConfiguration config = ViewConfiguration.get(getActivity());
-			Field overflowMenu = ViewConfiguration.class
-					.getDeclaredField("sHasPermanentMenuKey");
-			if (overflowMenu != null) {
-				overflowMenu.setAccessible(true);
-				overflowMenu.setBoolean(config, false);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		mUser = getUserFromPrefs();

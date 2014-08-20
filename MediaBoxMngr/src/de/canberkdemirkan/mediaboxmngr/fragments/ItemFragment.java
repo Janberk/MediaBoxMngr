@@ -1,7 +1,6 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.UUID;
 
 import android.annotation.TargetApi;
@@ -21,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -102,17 +100,6 @@ public class ItemFragment extends Fragment implements Serializable,
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-		try {
-			ViewConfiguration config = ViewConfiguration.get(getActivity());
-			Field overflowMenu = ViewConfiguration.class
-					.getDeclaredField("sHasPermanentMenuKey");
-			if (overflowMenu != null) {
-				overflowMenu.setAccessible(true);
-				overflowMenu.setBoolean(config, false);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 		mItemId = (UUID) getArguments().getSerializable(Constants.KEY_ITEM_UID);
 		mUser = (String) getArguments().getSerializable(Constants.KEY_USER_TAG);
