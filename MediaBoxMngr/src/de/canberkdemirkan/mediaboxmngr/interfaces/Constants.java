@@ -2,7 +2,16 @@ package de.canberkdemirkan.mediaboxmngr.interfaces;
 
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 
-public interface Constants {	
+public interface Constants {
+	
+	// Emulator
+	// String LOGIN_URL = "http://10.0.2.2:80/development/mediaboxmngr_backend/users/log_in.php";
+
+	// PC
+	String LOGIN_URL = "http://192.168.1.52:80/development/mediaboxmngr_backend/users/log_in.php";
+
+	// Notebook
+	// String LOGIN_URL = "http://192.168.0.13:8080/development/mediaboxmngr_backend/users/log_in.php";
 	
 	// request URLs for MySQL Database
 	String BUILD_JSON_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/build_json.php";
@@ -19,13 +28,9 @@ public interface Constants {
 	// spinner indices
 	int ALBUM = 0;
 	int BOOK = 1;
-	int MOVIE = 2;
+	int MOVIE = 2;	
 	
 	// intent extra keys/tags
-	String KEY_EMAIL = "de.canberkdemirkan.mediaboxmngr.key_email";
-	String KEY_PASSWORD = "de.canberkdemirkan.mediaboxmngr.key_password";
-	String KEY_REMEMBER_EMAIL = "de.canberkdemirkan.mediaboxmngr.key_remember_email";
-	String KEY_REMEMBER_PASSWORD = "de.canberkdemirkan.mediaboxmngr.key_remember_password";
 	String KEY_MY_PREFERENCES = "de.canberkdemirkan.mediaboxmngr.app_prefs";
 	String KEY_ITEM = "de.canberkdemirkan.mediaboxmngr.item";
 	String KEY_ITEM_UID = "de.canberkdemirkan.mediaboxmngr.item_uid";
@@ -76,7 +81,7 @@ public interface Constants {
 	String CONTENT = "content";
 	String RATING = "rating";
 	String COVER = "cover";
-	// MOVIES
+	// MOVIE
 	String DIRECTOR = "director";
 	String CAST = "cast";
 	String MUSIC = "music";
@@ -86,7 +91,7 @@ public interface Constants {
 	String LABEL = "label";
 	String FORMAT = "format";
 	String TITLE_COUNT = "title_count";
-	// books
+	// BOOK
 	String AUTHOR = "author";
 	String PUBLISHER = "publisher";
 	String EDITION = "edition";

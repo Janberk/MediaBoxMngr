@@ -73,5 +73,12 @@
     <string name="item_wish_list_label">Wish list</string>
     <string name="item_original_title_hint">Enter original title.</string>
     <string name="hello_world">Hello world!</string>
+    
+    <string name="progress_dialog_text">Requesting user access. Please wait...</string>
+    <string name="response_code_success">User was saved successfully. Back to log in.</string>
+    <string name="response_code_empty_fields">Please fill in ALL required fields.</string>
+    <string name="response_code_invalid_data">You entered invalid data.\nPlease try again.</string>
+    <string name="response_code_invalid_email">The E-mail address you entered is not valid.</string>
+    <string name="response_code_no_post">ERROR while trying to connect to server!</string>
 
 </resources>

@@ -53,6 +53,7 @@ import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
@@ -530,7 +531,8 @@ public class ItemListFragment extends Fragment implements Serializable,
 	}
 
 	public String getUserFromPrefs() {
-		String user = mSharedPreferences.getString(Constants.KEY_EMAIL, "");
+		String user = mSharedPreferences.getString(
+				UserAuthenticationConstants.KEY_EMAIL, "");
 		return user;
 	}
 

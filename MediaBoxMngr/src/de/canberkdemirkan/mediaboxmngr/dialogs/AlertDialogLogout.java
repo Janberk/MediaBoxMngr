@@ -15,6 +15,7 @@ import android.view.View;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 
 public class AlertDialogLogout extends DialogFragment {
 
@@ -67,13 +68,15 @@ public class AlertDialogLogout extends DialogFragment {
 		SharedPreferences prefs = mContext.getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		Editor editor = prefs.edit();
-		editor.remove(Constants.KEY_EMAIL);
-		editor.remove(Constants.KEY_PASSWORD);
+		editor.remove(UserAuthenticationConstants.KEY_EMAIL);
+		editor.remove(UserAuthenticationConstants.KEY_PASSWORD);
 		editor.commit();
 		getActivity().finish();
 		Intent intent = new Intent(getActivity().getApplicationContext(),
 				LoginActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+				| Intent.FLAG_ACTIVITY_NEW_TASK
+				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		startActivity(intent);
 	}
 

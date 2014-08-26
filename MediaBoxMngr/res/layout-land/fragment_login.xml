@@ -62,7 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/cb_fragmentLogin_rememberMe"
             android:layout_centerHorizontal="true"
-            android:text="@string/sign_up_link_label" />
+            android:text="@string/sign_up_link_label"
+            android:layout_marginTop="@dimen/custom_value_0dp" />
     </RelativeLayout>
 
 </ScrollView>

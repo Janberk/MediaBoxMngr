@@ -22,8 +22,6 @@
         android:theme="@style/CustomActionBarTheme" >
         <activity
             android:name="de.canberkdemirkan.mediaboxmngr.activities.SplashScreenActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
             android:theme="@style/CustomActionBarTheme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,33 +31,22 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
-        <activity
-            android:name=".activities.SignupActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" >
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity
             android:name=".activities.ItemListActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".activities.ItemEditorActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -67,9 +54,7 @@
         </activity>
         <activity
             android:name=".activities.ItemPagerActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
