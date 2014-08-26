@@ -213,7 +213,16 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 	@Override
 	public void onClick(View view) {
 		if (view == mButtonSignup) {
-			requestSignup();
+			String passOne = mEditPassword.getText().toString();
+			String passTwo = mEditConfirmPassword.getText().toString();
+			if (passOne.equals(passTwo)) {
+				requestSignup();
+			} else {
+				String message = getResources().getString(
+						R.string.passwords_not_identical);
+				Toast.makeText(getActivity().getApplicationContext(), message,
+						Toast.LENGTH_LONG).show();
+			}
 		}
 		if (view == mTextLoginLink) {
 			onRemoveFragment(TAG_SIGNUP_FRAGMENT);

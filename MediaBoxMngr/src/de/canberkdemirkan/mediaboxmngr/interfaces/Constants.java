@@ -100,7 +100,6 @@ public interface Constants {
 	// user table column names
 	String FIRST_NAME = "firstname";
 	String LAST_NAME = "lastname";
-	String USER_NAME = "username";
 	String EMAIL = "email";
 	String PASSWORD = "password";
 	
@@ -144,7 +143,6 @@ public interface Constants {
 			+ CREATION_DATE + " TEXT,"
 			+ FIRST_NAME + " TEXT,"
 			+ LAST_NAME + " TEXT,"
-			+ USER_NAME + " TEXT,"
 			+ EMAIL + " TEXT UNIQUE,"
 			+ PASSWORD + " TEXT"
 			+ ")";
