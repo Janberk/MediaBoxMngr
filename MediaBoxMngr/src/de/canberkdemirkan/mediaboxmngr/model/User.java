@@ -13,7 +13,6 @@ public class User {
 
 	private String mFirstname;
 	private String mLastname;
-	private String mUsername;
 	private String mEmail;
 	private String mPassword;
 
@@ -66,14 +65,6 @@ public class User {
 		this.mLastname = lastname;
 	}
 
-	public String getUsername() {
-		return mUsername;
-	}
-
-	public void setUsername(String username) {
-		this.mUsername = username;
-	}
-
 	public String getEmail() {
 		return mEmail;
 	}
@@ -101,7 +92,6 @@ public class User {
 				+ "\n");
 		sb.append("First name: " + getFirstname() + "\n");
 		sb.append("Last name: " + getLastname() + "\n");
-		sb.append("User name: " + getUsername() + "\n");
 		sb.append("E-mail address: " + getEmail() + "\n");
 		sb.append("Password: " + getPassword() + "\n");
 

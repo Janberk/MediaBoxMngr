@@ -27,6 +27,8 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class DAOItem {
 
+	private static int sTableVersion = 0;
+
 	public int mColId;
 	public int mColSQLiteId;
 	public int mColUser;
@@ -597,17 +599,15 @@ public class DAOItem {
 		if (getCountOfSyncedItems() == 0) {
 			msg = "SQLite and Remote MySQL DBs are in Sync!";
 		} else {
-			msg = "DB Sync needed\n";
+			msg = "DB Sync needed!";
 		}
 		return msg;
 	}
 
-	private static int TABLE_VERSION = 0;
-
 	public void increaseTableVersion() {
 		open();
 		ContentValues values = new ContentValues();
-		values.put(Constants.VERSION, ++TABLE_VERSION);
+		values.put(Constants.VERSION, ++sTableVersion);
 
 		Cursor cursor = mSQLiteDB.query(Constants.VERSION,
 				new String[] { Constants.VERSION }, null, null, null, null,
@@ -635,8 +635,6 @@ public class DAOItem {
 			if (cursor.moveToFirst()) {
 				version = cursor.getInt(cursor
 						.getColumnIndex(Constants.VERSION));
-				return version;
-			} else {
 				return version;
 			}
 		} catch (Exception e) {

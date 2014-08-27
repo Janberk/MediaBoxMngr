@@ -12,7 +12,7 @@ import de.canberkdemirkan.mediaboxmngr.util.CustomJSONSerializer;
 
 public class ItemStock {
 
-	public static String USER = null;
+	public static String sUser = null;
 
 	private static final String TAG = "ItemStock";
 	private static final String FILE_NAME = "items.json";
@@ -22,20 +22,20 @@ public class ItemStock {
 	private CustomJSONSerializer mSerializer;
 
 	private static ItemStock sItemStock;
-	private Context mAppContext;
+	private Context mContext;
 
 	private DAOItem mDAOItem;
 
-	public ItemStock(Context appContext, String user) {
+	public ItemStock(Context context, String user) {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemStock - ItemStock()");
 		}
-		USER = user;
-		mAppContext = appContext;
+		sUser = user;
+		mContext = context;
 
-		mDAOItem = new DAOItem(mAppContext);
+		mDAOItem = new DAOItem(mContext);
 
-		mSerializer = new CustomJSONSerializer(mAppContext, FILE_NAME);
+		mSerializer = new CustomJSONSerializer(mContext, FILE_NAME);
 
 		try {
 			mSerializedItemList = mSerializer.loadItems();
@@ -48,7 +48,7 @@ public class ItemStock {
 	}
 
 	public static ItemStock get(Context context, String user) {
-		if (sItemStock == null || !user.equals(USER)) {
+		if (sItemStock == null || !user.equals(sUser)) {
 			sItemStock = new ItemStock(context.getApplicationContext(), user);
 		}
 		return sItemStock;

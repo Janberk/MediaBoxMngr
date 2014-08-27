@@ -18,21 +18,18 @@ public class SettingsFragment extends PreferenceFragment implements
 		addPreferencesFromResource(R.xml.preferences);
 		PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences,
 				false);
-		
-		SharedPreferences.OnSharedPreferenceChangeListener listener =
-			    new SharedPreferences.OnSharedPreferenceChangeListener() {
-			  public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-			    // listener implementation
-			  }
-			};
+
+		SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			public void onSharedPreferenceChanged(SharedPreferences prefs,
+					String key) {
+			}
+		};
 
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
