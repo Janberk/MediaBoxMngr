@@ -6,11 +6,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
-import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemFragment;
-import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -34,9 +31,6 @@ public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public Fragment getItem(int pos) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemPagerActivity - getItem()");
-		}
 		Item item = mItemList.get(pos);
 		return ItemFragment.newInstance(item.getUniqueId(), mUser);
 	}

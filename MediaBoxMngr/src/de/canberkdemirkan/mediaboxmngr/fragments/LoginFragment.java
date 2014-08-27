@@ -204,7 +204,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 
 					@Override
 					public void onSuccess(String response) {
-						mProgressDialog.hide();
+						mProgressDialog.dismiss();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onSuccess()\n" + response);
@@ -217,7 +217,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 
 					@Override
 					public void onFinish() {
-						mProgressDialog.hide();
+						mProgressDialog.dismiss();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onFinish()");
@@ -227,7 +227,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 					@Override
 					public void onFailure(int statusCode, Throwable error,
 							String content) {
-						mProgressDialog.hide();
+						mProgressDialog.dismiss();
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
 									"LoginFragment - onFailure(): " + content);

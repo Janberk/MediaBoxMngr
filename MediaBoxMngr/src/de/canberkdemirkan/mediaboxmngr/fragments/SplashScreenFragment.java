@@ -15,6 +15,10 @@ public class SplashScreenFragment extends Fragment {
 	// Splash screen timer
 	private static int SPLASH_TIME_OUT = 2000;
 
+	public static SplashScreenFragment newInstance() {
+		return new SplashScreenFragment();
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

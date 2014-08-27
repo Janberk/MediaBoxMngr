@@ -45,7 +45,7 @@ public interface Constants {
 	String KEY_DIALOG_ITEM = "de.canberkdemirkan.mediaboxmngr.dialog_item";
 	String KEY_DIALOG_TITLE = "de.canberkdemirkan.mediaboxmngr.dialog_title";
 	String KEY_DIALOG_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.dialog_fragment";
-	String KEY_DIALOG_CONTEXT = "de.canberkdemirkan.mediaboxmngr.dialog_context";
+	// String KEY_DIALOG_CONTEXT = "de.canberkdemirkan.mediaboxmngr.dialog_context";
 	String EXTRA_DIALOG_LIST = "de.canberkdemirkan.mediaboxmngr.extra_dialog_list";
 	String EXTRA_DETAILS_ITEM = "de.canberkdemirkan.mediaboxmngr.extra_details_item";
 	String EXTRA_DETAILS_CONTENT = "de.canberkdemirkan.mediaboxmngr.extra_details_content";

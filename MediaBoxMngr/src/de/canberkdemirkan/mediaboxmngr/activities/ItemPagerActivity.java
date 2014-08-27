@@ -1,6 +1,5 @@
 package de.canberkdemirkan.mediaboxmngr.activities;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -9,8 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.adapters.ScreenSlidePagerAdapter;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
@@ -19,12 +16,7 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemPagerActivity extends FragmentActivity implements
-		Serializable, ViewPager.OnPageChangeListener {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6272049898266569961L;
+		ViewPager.OnPageChangeListener {
 
 	private Context mContext;
 	private ViewPager mViewPager;
@@ -33,10 +25,6 @@ public class ItemPagerActivity extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemPagerActivity - onCreate()");
-		}
 
 		UUID itemId = (UUID) getIntent().getSerializableExtra(
 				Constants.KEY_ITEM_UID);

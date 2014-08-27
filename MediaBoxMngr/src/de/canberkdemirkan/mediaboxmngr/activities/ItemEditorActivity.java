@@ -9,12 +9,6 @@ import de.canberkdemirkan.mediaboxmngr.model.Item;
 
 public class ItemEditorActivity extends FragmentActivityBuilder {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7169162793230559857L;
-
-	@SuppressWarnings("static-access")
 	@Override
 	protected Fragment createFragment() {
 
@@ -25,7 +19,7 @@ public class ItemEditorActivity extends FragmentActivityBuilder {
 		Item item = (Item) getIntent().getSerializableExtra(
 				Constants.EXTRA_DETAILS_ITEM);
 
-		return new ItemEditorFragment().newInstance(itemId, userTag, item);
+		return ItemEditorFragment.newInstance(itemId, userTag, item);
 	}
 
 }

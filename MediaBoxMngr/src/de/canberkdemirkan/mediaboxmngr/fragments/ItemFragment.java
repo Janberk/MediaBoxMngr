@@ -269,8 +269,7 @@ public class ItemFragment extends Fragment implements Serializable,
 			startActivity(i);
 			return true;
 		case R.id.menu_logout:
-			AlertDialogLogout dialogLogout = AlertDialogLogout
-					.newInstance(getActivity());
+			AlertDialogLogout dialogLogout = AlertDialogLogout.newInstance();
 			dialogLogout.show(mFragmentManager, "");
 			return true;
 

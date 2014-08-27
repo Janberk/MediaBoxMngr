@@ -14,11 +14,6 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.OnRemoveFragmentListener;
 public class LoginActivity extends FragmentActivityBuilder implements
 		OnRemoveFragmentListener {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -485217608437205581L;
-
 	private FragmentManager mFragmentManager;
 
 	@Override
@@ -42,51 +37,6 @@ public class LoginActivity extends FragmentActivityBuilder implements
 					.findFragmentById(R.id.fragmentContainer);
 			mFragmentManager.beginTransaction().remove(fragment).commit();
 		}
-	}
-
-	/*
-	 * 
-	 * Logging callback methods for debug purposes
-	 */
-
-	@Override
-	public void onStart() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginActivity - onStart()");
-		}
-		super.onStart();
-	}
-
-	@Override
-	public void onResume() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginActivity - onResume()");
-		}
-		super.onResume();
-	}
-
-	@Override
-	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginActivity - onPause()");
-		}
-		super.onPause();
-	}
-
-	@Override
-	public void onStop() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginActivity - onStop()");
-		}
-		super.onStop();
-	}
-
-	@Override
-	public void onDestroy() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginActivity - onDestroy()");
-		}
-		super.onDestroy();
 	}
 
 }

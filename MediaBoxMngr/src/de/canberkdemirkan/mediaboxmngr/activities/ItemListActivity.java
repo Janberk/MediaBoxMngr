@@ -20,11 +20,6 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 public class ItemListActivity extends FragmentActivityBuilder implements
 		OnRemoveFragmentListener, OnItemCreatedListener {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3891006760403895847L;
-
 	private FragmentManager mFragmentManager;
 
 	@Override
@@ -33,16 +28,15 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 		mFragmentManager = getSupportFragmentManager();
 	}
 
-	@SuppressWarnings("static-access")
 	@Override
 	protected Fragment createFragment() {
 
 		ListTag listTag = (ListTag) getIntent().getSerializableExtra(
 				Constants.KEY_LIST_TAG);
 		if (listTag == null) {
-			return new ItemListFragment();
+			return ItemListFragment.newInstance(ListTag.ALL);
 		}
-		return new ItemListFragment().newInstance(listTag);
+		return ItemListFragment.newInstance(listTag);
 	}
 
 	@Override

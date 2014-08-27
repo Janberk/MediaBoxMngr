@@ -3,7 +3,6 @@ package de.canberkdemirkan.mediaboxmngr.dialogs;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -67,7 +66,6 @@ public class AlertDialogDeletion extends DialogFragment {
 
 	}
 
-	@SuppressLint("InflateParams")
 	@SuppressWarnings("unchecked")
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -75,6 +73,7 @@ public class AlertDialogDeletion extends DialogFragment {
 		if (getArguments().getSerializable(Constants.KEY_DIALOG_FRAGMENT) instanceof ItemListFragment) {
 			mItemListFragment = (ItemListFragment) getArguments()
 					.getSerializable(Constants.KEY_DIALOG_FRAGMENT);
+
 			try {
 				mItemList = (ArrayList<Item>) getArguments().getSerializable(
 						Constants.KEY_DIALOG_ITEM_LIST);
@@ -107,7 +106,7 @@ public class AlertDialogDeletion extends DialogFragment {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int which) {
-
+								dismiss();
 								if (mTag.equals(DIALOG_TAG_SINGLE)) {
 									deleteSelectedItem();
 								} else if (mTag
