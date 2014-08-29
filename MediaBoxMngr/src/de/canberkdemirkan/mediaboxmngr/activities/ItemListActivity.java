@@ -13,12 +13,14 @@ import de.canberkdemirkan.mediaboxmngr.fragments.CreateItemFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnItemCreatedListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnListAdapterRefreshedListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnRemoveFragmentListener;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class ItemListActivity extends FragmentActivityBuilder implements
-		OnRemoveFragmentListener, OnItemCreatedListener {
+		OnRemoveFragmentListener, OnItemCreatedListener,
+		OnListAdapterRefreshedListener {
 
 	private FragmentManager mFragmentManager;
 
@@ -54,10 +56,26 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 				.findFragmentByTag(ItemListFragment.class.getName());
 		ArrayList<Item> list = UtilMethods.createListFromTag(this, user,
 				ListTag.ALL);
+		int count = 0;
+		for (Item item : list) {
+			if (!item.isSynced()) {
+				count++;
+			}
+		}
 		CustomItemAdapter adapter = ((CustomItemAdapter) fragment.getListView()
 				.getAdapter());
 		adapter.refresh(list);
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		if (count > 0) {
+			fragment.showSyncStatus();
+		}
+	}
+
+	@Override
+	public void onListAdapterRefreshed(ArrayList<Item> itemList) {
+		ItemListFragment fragment = (ItemListFragment) mFragmentManager
+				.findFragmentByTag(ItemListFragment.class.getName());
+		fragment.getItemAdapter().refresh(itemList);
 	}
 
 }

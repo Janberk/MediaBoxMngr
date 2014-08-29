@@ -26,7 +26,7 @@ public class ItemStock {
 
 	private DAOItem mDAOItem;
 
-	public ItemStock(Context context, String user) {
+	private ItemStock(Context context, String user) {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemStock - ItemStock()");
 		}

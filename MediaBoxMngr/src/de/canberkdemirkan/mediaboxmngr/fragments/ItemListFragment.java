@@ -1,14 +1,8 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,11 +29,6 @@ import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
@@ -48,8 +37,6 @@ import de.canberkdemirkan.mediaboxmngr.adapters.CustomItemAdapter;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.DummyDataProvider;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
-import de.canberkdemirkan.mediaboxmngr.data.JSONHandler;
-import de.canberkdemirkan.mediaboxmngr.data.RemoteDbVersionProvider;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
@@ -58,7 +45,6 @@ import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
-@SuppressLint("NewApi")
 public class ItemListFragment extends Fragment implements Serializable,
 		AdapterView.OnItemClickListener, MultiChoiceModeListener, TextWatcher {
 
@@ -78,7 +64,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 			tabTopRated;
 
 	private String mUser;
-	private String mJson;
 
 	public static ListTag sListTag;
 	public static boolean sCreateMode;
@@ -105,6 +90,9 @@ public class ItemListFragment extends Fragment implements Serializable,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate()");
+		}
 
 		setHasOptionsMenu(true);
 
@@ -340,6 +328,16 @@ public class ItemListFragment extends Fragment implements Serializable,
 		case R.id.menu_newItem:
 			switchEditMode();
 			return true;
+		case R.id.menu_sync:
+			Toast.makeText(getActivity(), "Sync DB?", Toast.LENGTH_LONG).show();
+			// DatabaseSynchronizer dbSyncer = new DatabaseSynchronizer(
+			// getActivity(), mUser);
+			// try {
+			// dbSyncer.syncWithRemoteDb();
+			// } catch (JSONException | IOException e) {
+			// e.printStackTrace();
+			// }
+			return true;
 		case R.id.menu_deleteAll:
 			deleteAllItems();
 			return true;
@@ -383,150 +381,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 				sListTag);
 		mItemAdapter.refresh(mItemList);
 		super.onResume();
-	}
-
-	public void loadItemsFromRemoteDb() {
-		Toast.makeText(getActivity(), "All lists", Toast.LENGTH_LONG).show();
-		final JSONHandler handler = new JSONHandler(getActivity());
-		RequestParams params = new RequestParams();
-		params.put("user", mUser);
-		AsyncHttpClient client = new AsyncHttpClient();
-		client.post(Constants.BUILD_JSON_REQUEST, params,
-				new AsyncHttpResponseHandler() {
-
-					@Override
-					public void onStart() {
-						mProgressDialog.show();
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - loadItemsFromRemoteDb() - onStart()");
-						}
-					}
-
-					@Override
-					public void onSuccess(String response) {
-						mProgressDialog.hide();
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - loadItemsFromRemoteDb() - onSuccess()\n"
-											+ response);
-						}
-						try {
-							ArrayList<Item> createdList = handler
-									.loadItemsFromJSONArray(response);
-							handler.setRemoteList(createdList);
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-						mItemList.clear();
-						for (int i = 0; i < handler.getRemoteList().size(); i++) {
-							Item item = handler.getRemoteList().get(i);
-
-							mItemList.add(i, item);
-						}
-						ItemStock.get(getActivity(), mUser).getDAOItem()
-								.updateTableWithNewList(mItemList);
-					}
-
-					@Override
-					public void onFinish() {
-						mProgressDialog.hide();
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - loadItemsFromRemoteDb() - onFinish()");
-						}
-						mItemAdapter.refresh(mItemList);
-					}
-
-					@Override
-					public void onFailure(int statusCode, Throwable error,
-							String content) {
-						mProgressDialog.hide();
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - loadItemsFromRemoteDb() - onFailure()\n"
-											+ content);
-						}
-					}
-
-				});
-	}
-
-	private void syncWithRemoteDb() throws JSONException, IOException {
-		final ItemStock itemStock = ItemStock.get(getActivity(), mUser);
-		mJson = itemStock.getSQLiteAsJSON(mUser);
-
-		AsyncHttpClient client = new AsyncHttpClient();
-		RequestParams params = new RequestParams();
-
-		params.put("items", mJson);
-		client.post(Constants.INSERT_ITEMS_REQUEST, params,
-				new AsyncHttpResponseHandler() {
-					@Override
-					public void onSuccess(String response) {
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - syncWithRemoteDb() - onSuccess()\n"
-											+ response);
-						}
-						try {
-							JSONArray jsonArray = new JSONArray(response);
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - syncWithRemoteDb() - onSuccess(): \n"
-											+ jsonArray.length());
-							for (int i = 0; i < jsonArray.length(); i++) {
-								JSONObject jsonObject = (JSONObject) jsonArray
-										.get(i);
-
-								String jsonId = jsonObject.getString("_id");
-								String jsonSynced = jsonObject
-										.getString("synced");
-
-								long id = Long.valueOf(jsonId).longValue();
-								int synced = Integer.valueOf(jsonSynced)
-										.intValue();
-								itemStock.getDAOItem().updateSyncStatus(id,
-										synced);
-							}
-							Toast.makeText(getActivity(), "DB Sync completed!",
-									Toast.LENGTH_LONG).show();
-						} catch (JSONException e) {
-							Toast.makeText(getActivity(),
-									"Error! JSON response might be invalid!",
-									Toast.LENGTH_LONG).show();
-							e.printStackTrace();
-						}
-					}
-
-					@Override
-					public void onFailure(int statusCode, Throwable error,
-							String content) {
-						if (BuildConfig.DEBUG) {
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - syncWithRemoteDb() - onFailure()\n"
-											+ content);
-						}
-						if (statusCode == 404) {
-							Toast.makeText(getActivity(),
-									"404 - Resource not found.",
-									Toast.LENGTH_LONG).show();
-						} else if (statusCode == 500) {
-							Toast.makeText(getActivity(),
-									"505 - Server Error.", Toast.LENGTH_LONG)
-									.show();
-						} else {
-							Toast.makeText(
-									getActivity(),
-									"Unexpected Error! Please check your network connection.",
-									Toast.LENGTH_LONG).show();
-						}
-					}
-				});
-	}
-
-	private static int getRemoteDbVersion() {
-		RemoteDbVersionProvider provider = new RemoteDbVersionProvider();
-		return provider.getVersion();
 	}
 
 	public String getUserFromPrefs() {
@@ -635,6 +489,57 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	@Override
 	public void afterTextChanged(Editable s) {
+	}
+
+	/*
+	 * 
+	 * Logging callback methods for debug purposes
+	 */
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onActivityCreated()");
+		}
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onStart() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onStart()");
+		}
+		int count = 0;
+		for (Item item : mItemList) {
+			if (!item.isSynced()) {
+				count++;
+			}
+		}
+		if (count > 0) {
+			showSyncStatus();
+		}
+		super.onStart();
+	}
+
+	public void showSyncStatus() {
+		Toast.makeText(getActivity(), "DB out of sync!", Toast.LENGTH_LONG)
+				.show();
+	}
+
+	@Override
+	public void onPause() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onPause()");
+		}
+		super.onPause();
+	}
+
+	@Override
+	public void onStop() {
+		if (BuildConfig.DEBUG) {
+			Log.d(Constants.LOG_TAG, "ItemListFragment - onStop()");
+		}
+		super.onStop();
 	}
 
 }

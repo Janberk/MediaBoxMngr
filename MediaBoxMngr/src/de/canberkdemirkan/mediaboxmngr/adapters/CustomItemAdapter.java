@@ -93,11 +93,11 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		}
 		holder.mCheckBoxItemFavorite.setChecked(item.isFavorite());
 		try {
-			if (ratingString != null) {
-				Float rating = Float.valueOf(ratingString);
-				holder.mRatingBarItemRating.setRating(rating);
-			} else {
+			if (ratingString == null || ratingString.equals("")) {
 				holder.mRatingBarItemRating.setRating(0.0F);
+			} else {
+				Float rating = Float.parseFloat(ratingString);
+				holder.mRatingBarItemRating.setRating(rating);
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();

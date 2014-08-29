@@ -56,14 +56,14 @@ public class DAOItem {
 	public int mColEdition;
 	public int mColIsbn;
 
-	private Context mAppContext;
+	private Context mContext;
 	private SQLiteDatabase mSQLiteDB;
 	private DatabaseHelper mDBHelper;
 
 	// constructor
 	public DAOItem(Context context) {
-		this.mAppContext = context;
-		mDBHelper = DatabaseHelper.getInstance(mAppContext);
+		mContext = context;
+		mDBHelper = DatabaseHelper.getInstance(mContext);
 		open();
 	}
 
@@ -335,7 +335,7 @@ public class DAOItem {
 	// jsonArray.put(json);
 	// Writer writer = null;
 	// try {
-	// OutputStream out = mAppContext.openFileOutput(mFileName,
+	// OutputStream out = mContext.openFileOutput(mFileName,
 	// Context.MODE_PRIVATE);
 	// writer = new OutputStreamWriter(out);
 	// writer.write(jsonArray.toString());

@@ -60,11 +60,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity" />
         </activity>
-
-        <provider
-            android:name=".data.MediaBoxMngrContentProvider"
-            android:authorities="de.canberkdemirkan.provider.mediaboxmngr"
-            android:exported="false" />
     </application>
 
 </manifest>

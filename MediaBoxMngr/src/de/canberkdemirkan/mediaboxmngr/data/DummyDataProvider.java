@@ -30,8 +30,8 @@ public class DummyDataProvider {
 				+ "10 Around The World\n" + "11 Circles\n" + "12 Best Of Me\n"
 				+ "13 Just A Fool with Blake Shelton\n";
 
-		for (int i = 1; i <= 30; i++) {
-			if (i < 11) {
+		for (int i = 1; i <= 18; i++) {
+			if (i < 7) {
 				item = new Music();
 				item.setType(ItemType.Album);
 				item.setUser(mUser);
@@ -47,7 +47,7 @@ public class DummyDataProvider {
 				((Music) item).setLabel("Livity Sound");
 				((Music) item).setFormat("CD");
 				((Music) item).setTitleCount("12");
-			} else if (i < 21) {
+			} else if (i < 13) {
 				item = new Book();
 				item.setType(ItemType.Book);
 				item.setUser(mUser);
@@ -77,7 +77,7 @@ public class DummyDataProvider {
 				((Book) item).setPublisher("Manesse");
 				((Book) item).setEdition("2. Edition");
 				((Book) item).setIsbn("978-3899961454");
-			} else if (i < 31) {
+			} else if (i < 19) {
 				item = new Movie();
 				item.setType(ItemType.Movie);
 				item.setUser(mUser);
