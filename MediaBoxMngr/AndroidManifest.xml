@@ -37,17 +37,17 @@
         <activity
             android:name=".activities.ItemListActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity
             android:name=".activities.ItemEditorActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustResize|stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity" />
@@ -55,7 +55,7 @@
         <activity
             android:name=".activities.ItemPagerActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustResize|stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity" />
