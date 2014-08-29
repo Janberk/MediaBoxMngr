@@ -16,6 +16,7 @@ public interface Constants {
 	// request URLs for MySQL Database
 	String BUILD_JSON_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/build_json.php";
 	String INSERT_ITEMS_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/insert_items.php";
+	String DELETE_ACCOUNT_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/users/delete_account.php";
 	String RETURN_DB_VERSION_REQUEST = "http://10.0.2.2:80/development/mediaboxmngr_backend/items/return_db_version.php";
 	
 	// log tag used for debugging purposes

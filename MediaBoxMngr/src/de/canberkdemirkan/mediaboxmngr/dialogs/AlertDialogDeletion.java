@@ -18,7 +18,7 @@ import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
-import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 

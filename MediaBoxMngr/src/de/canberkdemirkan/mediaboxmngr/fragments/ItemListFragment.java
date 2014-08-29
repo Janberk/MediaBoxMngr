@@ -40,8 +40,8 @@ import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
-import de.canberkdemirkan.mediaboxmngr.listeners.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 

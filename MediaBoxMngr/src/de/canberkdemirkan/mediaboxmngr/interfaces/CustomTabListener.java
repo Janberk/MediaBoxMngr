@@ -1,4 +1,4 @@
-package de.canberkdemirkan.mediaboxmngr.listeners;
+package de.canberkdemirkan.mediaboxmngr.interfaces;
 
 import android.annotation.SuppressLint;
 import android.support.v4.app.FragmentActivity;

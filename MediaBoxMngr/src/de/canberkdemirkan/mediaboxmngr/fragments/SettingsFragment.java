@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.preference.PreferenceFragment;
 import android.widget.Toast;
 import de.canberkdemirkan.mediaboxmngr.R;
+import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeleteAccount;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener, Preference.OnPreferenceClickListener {
@@ -59,8 +60,11 @@ public class SettingsFragment extends PreferenceFragment implements
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
 		if (preference == mButtonDeleteAccount) {
-			Toast.makeText(getActivity().getApplicationContext(),
-					"Delete account?", Toast.LENGTH_LONG).show();
+			String header = getResources().getString(
+					R.string.dialog_header_delete_account);
+			AlertDialogDeleteAccount alertDialog = AlertDialogDeleteAccount
+					.newInstance(getActivity(), header);
+			alertDialog.show(getActivity().getSupportFragmentManager(), "");
 			return true;
 		}
 		return false;

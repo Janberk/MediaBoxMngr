@@ -12,9 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,7 +29,6 @@ import com.loopj.android.http.RequestParams;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity;
-import de.canberkdemirkan.mediaboxmngr.activities.SettingsActivity;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 
@@ -67,7 +63,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "LoginFragment - onCreate()");
 		}
-		setHasOptionsMenu(true);
 		// if (savedInstanceState != null) {
 		// sEmailState = savedInstanceState
 		// .getString(Constants.KEY_EMAIL_STATE);
@@ -305,25 +300,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		} else {
 			mEditEmail.setText("");
 			mEditPassword.setText("");
-		}
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.fragment_menu_login, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem) {
-		switch (menuItem.getItemId()) {
-		case R.id.menu_settings:
-			Intent i = new Intent(getActivity(), SettingsActivity.class);
-			startActivity(i);
-			return true;
-
-		default:
-			return super.onOptionsItemSelected(menuItem);
 		}
 	}
 
