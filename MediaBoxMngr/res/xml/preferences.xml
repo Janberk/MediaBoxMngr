@@ -3,9 +3,14 @@
 
     <ListPreference
         android:dialogTitle="Select Background"
-        android:key="pref_background"
         android:entries="@array/backgrounds"
         android:entryValues="@array/test"
+        android:key="changeBackground"
         android:title="Choose Background" />
+
+    <Preference
+        android:key="deleteAccount"
+        android:summary="This will delete your account."
+        android:title="Delete account?" />
 
 </PreferenceScreen>

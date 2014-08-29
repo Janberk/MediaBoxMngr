@@ -72,7 +72,6 @@ public class ItemEditorFragment extends Fragment implements TextWatcher {
 
 		setHasOptionsMenu(true);
 
-
 		Bundle bundle = getArguments();
 
 		mUser = (String) bundle.get(Constants.KEY_USER_TAG);

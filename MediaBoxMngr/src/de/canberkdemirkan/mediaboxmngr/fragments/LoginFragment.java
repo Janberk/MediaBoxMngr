@@ -32,6 +32,7 @@ import com.loopj.android.http.RequestParams;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity;
+import de.canberkdemirkan.mediaboxmngr.activities.SettingsActivity;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 
@@ -317,8 +318,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 		case R.id.menu_settings:
-			Toast.makeText(getActivity().getApplicationContext(), "Settings",
-					Toast.LENGTH_LONG).show();
+			Intent i = new Intent(getActivity(), SettingsActivity.class);
+			startActivity(i);
 			return true;
 
 		default:
