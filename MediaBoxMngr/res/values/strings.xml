@@ -5,14 +5,13 @@
     <string name="welcome">Welcome</string>
     <string name="action_settings">Settings</string>
     <string name="itemList_header">Items</string>
-    <string name="datePicker_header">Creation date:</string>
     <string name="firstname_hint">First name</string>
     <string name="lastname_hint">Last name</string>
     <string name="email_hint">E-mail</string>
     <string name="password_hint">Password</string>
     <string name="confirm_password_hint">Confirm password</string>
     <string name="item_title_hint">Enter a title.</string>
-    <string name="item_content_hint">Enter item content.</string>
+    <string name="item_content_hint">Describe the content of this item.</string>
     <string name="item_title_label">Title</string>
     <string name="item_content_label">Content</string>
     <string name="item_cover_label">Cover</string>
@@ -62,15 +61,11 @@
     <string name="details_format_tracks">Format, Number o Tracks:</string>
 
     <string-array name="item_types">
-        <item>Album</item>
+        <item>Music</item>
         <item>Book</item>
         <item>Movie</item>
     </string-array>
-
-    <string name="item_got_it_label">Got it!</string>
-    <string name="item_wish_list_label">Wish list</string>
-    <string name="item_original_title_hint">Enter original title.</string>
-    <string name="hello_world">Hello world!</string>
+    
     <string name="progress_dialog_text">Requesting user access. Please wait...</string>
     <string name="progress_dialog_delete">Deleting account. Please wait...</string>
     <string name="passwords_not_identical">Passwords do not match.\nPlease confirm your password.</string>

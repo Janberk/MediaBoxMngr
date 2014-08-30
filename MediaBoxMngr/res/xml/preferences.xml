@@ -2,11 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ListPreference
-        android:dialogTitle="Select Background"
-        android:entries="@array/backgrounds"
-        android:entryValues="@array/test"
-        android:key="changeBackground"
-        android:title="Choose Background" />
+        android:dialogTitle="Select Language"
+        android:entries="@array/language"
+        android:entryValues="@array/values"        
+        android:defaultValue="en_US"
+        android:key="l10n"
+        android:title="Select Language" />
 
     <Preference
         android:key="deleteAccount"

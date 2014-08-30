@@ -15,12 +15,6 @@
         android:title="@string/delete_item"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/menu_settings"
-        android:icon="@drawable/ic_menu_settings_light"
-        android:showAsAction="ifRoom"
-        android:title="Settings"
-        app:showAsAction="ifRoom"/>
-    <item
         android:id="@+id/menu_logout"
         android:icon="@drawable/ic_menu_logout_light"
         android:showAsAction="ifRoom"

@@ -31,7 +31,6 @@ import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemEditorActivity;
-import de.canberkdemirkan.mediaboxmngr.activities.SettingsActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
@@ -263,10 +262,6 @@ public class ItemFragment extends Fragment implements Serializable,
 			dialogDelete.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
 			dialogDelete.show(mFragmentManager, "");
 
-			return true;
-		case R.id.menu_settings:
-			Intent i = new Intent(getActivity(), SettingsActivity.class);
-			startActivity(i);
 			return true;
 		case R.id.menu_logout:
 			AlertDialogLogout dialogLogout = AlertDialogLogout.newInstance();
