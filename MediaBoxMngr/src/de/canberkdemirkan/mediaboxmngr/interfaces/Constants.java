@@ -5,10 +5,10 @@ import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 public interface Constants {
 	
 	// Emulator
-	// String LOGIN_URL = "http://10.0.2.2:80/development/mediaboxmngr_backend/users/log_in.php";
+	String LOGIN_URL = "http://10.0.2.2:80/development/mediaboxmngr_backend/users/log_in.php";
 
 	// PC
-	String LOGIN_URL = "http://192.168.1.52:80/development/mediaboxmngr_backend/users/log_in.php";
+	// String LOGIN_URL = "http://192.168.1.52:80/development/mediaboxmngr_backend/users/log_in.php";
 
 	// Notebook
 	// String LOGIN_URL = "http://192.168.0.13:8080/development/mediaboxmngr_backend/users/log_in.php";

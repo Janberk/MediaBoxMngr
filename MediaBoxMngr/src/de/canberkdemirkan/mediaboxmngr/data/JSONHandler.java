@@ -36,7 +36,7 @@ public class JSONHandler {
 
 			long id = item.getLong(Constants.SQLITE_ID);
 			String user = item.getString(Constants.USER);
-
+			int synced = (Integer.parseInt(item.getString(Constants.SYNCED)));
 			ItemType type = ItemType.valueOf(item.getString(Constants.TYPE));
 			int favoriteAsInt = (Integer.parseInt(item
 					.getString(Constants.FAVORITE)));
@@ -47,7 +47,7 @@ public class JSONHandler {
 			String year = item.getString(Constants.YEAR);
 			String content = item.getString(Constants.CONTENT);
 			String rating = item.getString(Constants.RATING);
-			String cover = item.getString(Constants.COVER);
+			// String cover = item.getString(Constants.COVER);
 			String director = item.getString(Constants.DIRECTOR);
 			String cast = item.getString(Constants.CAST);
 			String music = item.getString(Constants.MUSIC);
@@ -60,8 +60,6 @@ public class JSONHandler {
 			String publisher = item.getString(Constants.PUBLISHER);
 			String edition = item.getString(Constants.EDITION);
 			String isbn = item.getString(Constants.ISBN);
-			// int synced =
-			// (Integer.parseInt(item.getString(Constants.SYNCED)));
 
 			Item newItem = null;
 			switch (type) {
@@ -91,7 +89,7 @@ public class JSONHandler {
 				break;
 			}
 			if (newItem != null) {
-				// newItem.setSynced(UtilMethods.isTrue(synced));
+				newItem.setSynced(UtilMethods.isTrue(synced));
 				newItem.setType(type);
 				newItem.setFavorite(UtilMethods.isTrue(favoriteAsInt));
 				newItem.setCreationDate(UtilMethods

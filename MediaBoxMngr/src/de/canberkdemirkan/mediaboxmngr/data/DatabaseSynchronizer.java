@@ -51,19 +51,18 @@ public class DatabaseSynchronizer implements OnListAdapterRefreshedListener {
 
 		params.put("items", mJson);
 		client.post(Constants.INSERT_ITEMS_REQUEST, params,
+		// client.post("http://10.0.2.2:80/development/mediaboxmngr_backend/items/insert_items2.php",
+		// params,
 				new AsyncHttpResponseHandler() {
 					@Override
 					public void onSuccess(String response) {
 						if (BuildConfig.DEBUG) {
 							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - syncWithRemoteDb() - onSuccess()\n"
+									"DatabaseSynchronizer - syncWithRemoteDb() - onSuccess()\n"
 											+ response);
 						}
 						try {
 							JSONArray jsonArray = new JSONArray(response);
-							Log.d(Constants.LOG_TAG,
-									"ItemListFragment - syncWithRemoteDb() - onSuccess(): \n"
-											+ jsonArray.length());
 							for (int i = 0; i < jsonArray.length(); i++) {
 								JSONObject jsonObject = (JSONObject) jsonArray
 										.get(i);
@@ -114,7 +113,7 @@ public class DatabaseSynchronizer implements OnListAdapterRefreshedListener {
 	}
 
 	public ArrayList<Item> loadItemsFromRemoteDb() {
-		Toast.makeText(mContext, "All lists", Toast.LENGTH_LONG).show();
+		ItemStock.get(mContext, mUser).getDAOItem().deleteAllItems(mUser);
 		final JSONHandler handler = new JSONHandler();
 		final ArrayList<Item> itemList = new ArrayList<Item>();
 		RequestParams params = new RequestParams();
@@ -147,11 +146,11 @@ public class DatabaseSynchronizer implements OnListAdapterRefreshedListener {
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
-						for (int i = 0; i < handler.getRemoteList().size(); i++) {
+						for (int i = handler.getRemoteList().size() - 1; i >= 0; i--) {
 							Item item = handler.getRemoteList().get(i);
 							ItemStock.get(mContext, mUser).getDAOItem()
 									.insertItem(item);
-							itemList.add(i, item);
+							itemList.add(item);
 						}
 					}
 
