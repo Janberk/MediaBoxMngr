@@ -2,9 +2,7 @@ package de.canberkdemirkan.mediaboxmngr.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,10 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
@@ -91,7 +85,6 @@ public class DAOItem {
 			Log.d(Constants.LOG_TAG,
 					"DAOItem - insertItem(): \n" + item.toString());
 		}
-		increaseTableVersion();
 		return item;
 	}
 
@@ -133,7 +126,6 @@ public class DAOItem {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - updateItem(): " + result);
 		}
-		increaseTableVersion();
 		return result;
 	}
 
@@ -199,7 +191,6 @@ public class DAOItem {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - deleteItem(): " + result);
 		}
-		increaseTableVersion();
 		return result;
 	}
 
@@ -212,7 +203,6 @@ public class DAOItem {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "DAOItem - deleteAllItems(): " + result);
 		}
-		increaseTableVersion();
 		return result;
 	}
 
@@ -242,7 +232,6 @@ public class DAOItem {
 			Log.d(Constants.LOG_TAG, "DAOItem - updateTableWithNewList(): "
 					+ result);
 		}
-		increaseTableVersion();
 		return result;
 	}
 
@@ -278,144 +267,6 @@ public class DAOItem {
 			close();
 		}
 		return itemList;
-	}
-
-	// public String buildJSONfromSQLiteTest(String user) throws JSONException,
-	// IOException {
-	// ArrayList<Item> itemListFromDb = getAllItems(user);
-	// JSONArray jsonArray = new JSONArray();
-	// for (Item item : itemListFromDb) {
-	// JSONObject json = new JSONObject();
-	// json.put(Constants.ID, item.getId());
-	// json.put(Constants.USER, item.getUser());
-	// json.put(Constants.TITLE, item.getTitle());
-	// json.put(Constants.TYPE, item.getType());
-	// json.put(Constants.COVER, item.getCover());
-	// json.put(Constants.GENRE, item.getGenre());
-	// json.put(Constants.FAVORITE, item.isFavorite());
-	// json.put(Constants.CREATION_DATE, item.getCreationDate());
-	// json.put(Constants.DELETED, item.isDeleted());
-	// json.put(Constants.DELETION_DATE, item.getDeletionDate());
-	// json.put(Constants.IN_POSSESSION, item.isInPossession());
-	// json.put(Constants.ORIGINAL_TITLE, item.getOriginalTitle());
-	// json.put(Constants.COUNTRY, item.getCountry());
-	// json.put(Constants.YEAR_PUBLISHED, item.getYear());
-	// json.put(Constants.CONTENT, item.getContent());
-	// json.put(Constants.RATING, item.getRating());
-	// if (item instanceof Movie) {
-	//
-	// json.put(Constants.PRODUCER,
-	// ((Movie) item).getProducer());
-	// json.put(Constants.DIRECTOR,
-	// ((Movie) item).getDirector());
-	// json.put(Constants.SCRIPT, ((Movie) item).getScript());
-	// json.put(Constants.CAST, ((Movie) item).getCast());
-	// json.put(Constants.MUSIC, ((Movie) item).getMusic());
-	// json.put(Constants.LENGTH, ((Movie) item).getLength());
-	// }
-	// if (item instanceof Music) {
-	// json.put(Constants.LABEL, ((Music) item).getLabel());
-	// json.put(Constants.STUDIO,
-	// ((Music) item).getStudio());
-	// json.put(Constants.ARTIST,
-	// ((Music) item).getArtist());
-	// json.put(Constants.FORMAT,
-	// ((Music) item).getFormat());
-	// json.put(Constants.TITLE_COUNT,
-	// ((Music) item).getTitleCount());
-	// }
-	// if (item instanceof Book) {
-	//
-	// json.put(Constants.EDITION, ((Book) item).getEdition());
-	// json.put(Constants.PUBLISHER,
-	// ((Book) item).getPublisher());
-	// json.put(Constants.AUTHOR, ((Book) item).getAuthor());
-	// json.put(Constants.ISBN, ((Book) item).getIsbn());
-	// }
-	// jsonArray.put(json);
-	// Writer writer = null;
-	// try {
-	// OutputStream out = mContext.openFileOutput(mFileName,
-	// Context.MODE_PRIVATE);
-	// writer = new OutputStreamWriter(out);
-	// writer.write(jsonArray.toString());
-	// System.out.println(writer.toString());
-	// } finally {
-	// if (writer != null)
-	// writer.close();
-	// }
-	// }
-	// System.out.println(jsonArray.toString(2));
-	// return jsonArray.toString();
-	// }
-
-	// build JSONString from SQLite database values
-	public String buildJSONfromSQLite(String user) {
-		open();
-		ArrayList<HashMap<String, String>> values = new ArrayList<HashMap<String, String>>();
-		Cursor cursor = null;
-		String selectQuery = "SELECT * FROM " + Constants.TABLE_ITEMS
-				+ " WHERE " + Constants.USER + " = " + '"' + user + '"'
-				+ " AND " + Constants.SYNCED + " = " + 0;
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "DAOItem - buildJSONfromSQLite(): \n"
-					+ selectQuery);
-		}
-		Gson gson = new GsonBuilder().create();
-
-		try {
-			cursor = mSQLiteDB.rawQuery(selectQuery, null);
-
-			if (cursor != null) {
-
-				getColumnIndices(cursor);
-				for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
-						.moveToNext()) {
-					HashMap<String, String> map = new LinkedHashMap<String, String>();
-
-					map.put(Constants.ID, cursor.getString(mColId));
-					map.put(Constants.SQLITE_ID, cursor.getString(mColSQLiteId));
-					map.put(Constants.USER, cursor.getString(mColUser));
-					// map.put(Constants.SYNCED,
-					// cursor.getString(mColSynced));
-					map.put(Constants.TYPE, cursor.getString(mColType));
-					map.put(Constants.FAVORITE, cursor.getString(mColFavorite));
-					map.put(Constants.CREATION_DATE,
-							cursor.getString(mColCreationDate));
-					map.put(Constants.TITLE, cursor.getString(mColTitle));
-					map.put(Constants.GENRE, cursor.getString(mColGenre));
-					map.put(Constants.COUNTRY, cursor.getString(mColCountry));
-					map.put(Constants.YEAR, cursor.getString(mColYear));
-					map.put(Constants.CONTENT, cursor.getString(mCContent));
-					map.put(Constants.RATING, cursor.getString(mColRating));
-					map.put(Constants.COVER, cursor.getString(mColCover));
-					map.put(Constants.DIRECTOR, cursor.getString(mColDirector));
-					map.put(Constants.CAST, cursor.getString(mColCast));
-					map.put(Constants.MUSIC, cursor.getString(mColMusic));
-					map.put(Constants.LENGTH, cursor.getString(mColLength));
-					map.put(Constants.ARTIST, cursor.getString(mColArtist));
-					map.put(Constants.LABEL, cursor.getString(mColLabel));
-					map.put(Constants.FORMAT, cursor.getString(mColFormat));
-					map.put(Constants.TITLE_COUNT,
-							cursor.getString(mColTitleCount));
-					map.put(Constants.AUTHOR, cursor.getString(mColAuthor));
-					map.put(Constants.PUBLISHER,
-							cursor.getString(mColPublisher));
-					map.put(Constants.EDITION, cursor.getString(mColEdition));
-					map.put(Constants.ISBN, cursor.getString(mColIsbn));
-					values.add(map);
-				}
-			}
-		} catch (Exception e) {
-			values = new ArrayList<HashMap<String, String>>();
-		} finally {
-			if (cursor != null) {
-				cursor.close();
-			}
-			close();
-		}
-
-		return gson.toJson(values);
 	}
 
 	// create items from SQLite table values
@@ -562,90 +413,6 @@ public class DAOItem {
 		mColPublisher = cursor.getColumnIndex(Constants.PUBLISHER);
 		mColEdition = cursor.getColumnIndex(Constants.EDITION);
 		mColIsbn = cursor.getColumnIndex(Constants.ISBN);
-	}
-
-	public int getCountOfSyncedItems() {
-		int count = 0;
-		Cursor cursor = null;
-		open();
-		String selectQuery = "SELECT * FROM " + Constants.TABLE_ITEMS
-				+ " WHERE " + Constants.SYNCED + "=" + 0;
-		cursor = mSQLiteDB.rawQuery(selectQuery, null);
-		count = cursor.getCount();
-		close();
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "DAOItem - getCountOfSyncedItems(): "
-					+ count);
-		}
-		return count;
-	}
-
-	public void updateSyncStatus(long id, int status) {
-		open();
-		String updateQuery = "UPDATE " + Constants.TABLE_ITEMS + " SET "
-				+ Constants.SYNCED + " = " + status + " WHERE " + Constants.ID
-				+ " = " + id;
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "DAOItem - updateSyncStatus(): \n"
-					+ updateQuery);
-		}
-		mSQLiteDB.execSQL(updateQuery);
-		close();
-		// increaseTableVersion();
-	}
-
-	public String getSyncStatus() {
-		String msg = null;
-		if (getCountOfSyncedItems() == 0) {
-			msg = "SQLite and Remote MySQL DBs are in Sync!";
-		} else {
-			msg = "DB Sync needed!";
-		}
-		return msg;
-	}
-
-	public void increaseTableVersion() {
-		open();
-		ContentValues values = new ContentValues();
-		values.put(Constants.VERSION, ++sTableVersion);
-
-		Cursor cursor = mSQLiteDB.query(Constants.VERSION,
-				new String[] { Constants.VERSION }, null, null, null, null,
-				null);
-
-		if (!cursor.moveToFirst()) {
-			mSQLiteDB.insert(Constants.TABLE_VERSION, null, values);
-		} else {
-			mSQLiteDB.update(Constants.TABLE_VERSION, values, null, null);
-		}
-		cursor.close();
-		close();
-	}
-
-	public int getTableVersion(String tableName) {
-		open();
-		int version = 0;
-		Cursor cursor = null;
-
-		try {
-			cursor = mSQLiteDB.query(tableName,
-					new String[] { Constants.VERSION }, null, null, null, null,
-					null);
-
-			if (cursor.moveToFirst()) {
-				version = cursor.getInt(cursor
-						.getColumnIndex(Constants.VERSION));
-				return version;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (cursor != null) {
-				cursor.close();
-			}
-			close();
-		}
-		return version;
 	}
 
 	// create items from SQLite table values
