@@ -8,8 +8,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,12 +28,14 @@ import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnShowFragmentListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 
 public class LoginFragment extends Fragment implements View.OnClickListener,
-		OnCheckedChangeListener {
+		OnCheckedChangeListener, OnShowFragmentListener {
 
-	private FragmentManager mFragmentManager;
+	public static final String TAG_LOGIN_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.tag_login_fragment";
+
 	private SharedPreferences mSharedPreferences;
 	private ProgressDialog mProgressDialog;
 
@@ -46,6 +46,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 	private TextView mTextSignupLink;
 
 	public boolean mRememberMe = false;
+
+	private OnShowFragmentListener mShowFragmentListener;
 
 	// public static String sEmailState = null;
 	// public static String sPasswordState = null;
@@ -73,7 +75,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		mProgressDialog.setMessage(getResources().getText(
 				R.string.progress_dialog_text).toString());
 		mProgressDialog.setCancelable(false);
-		mFragmentManager = getActivity().getSupportFragmentManager();
 	}
 
 	@Override
@@ -130,17 +131,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 			Toast.makeText(getActivity().getApplicationContext(), message,
 					Toast.LENGTH_LONG).show();
 			break;
-		case UserAuthenticationConstants.RESPONSE_CODE_INVALID_EMAIL:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"LoginFragment - checkHttpRequestResult(): " + key
-								+ ": INVALID EMAIL");
-			}
-			message = getResources().getText(
-					R.string.response_code_invalid_email).toString();
-			Toast.makeText(getActivity().getApplicationContext(), message,
-					Toast.LENGTH_LONG).show();
-			break;
 		case UserAuthenticationConstants.RESPONSE_CODE_INVALID_DATA:
 			if (BuildConfig.DEBUG) {
 				Log.d(Constants.LOG_TAG,
@@ -149,6 +139,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 			}
 			message = getResources().getText(
 					R.string.response_code_invalid_data).toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			break;
+		case UserAuthenticationConstants.RESPONSE_CODE_INVALID_EMAIL:
+			if (BuildConfig.DEBUG) {
+				Log.d(Constants.LOG_TAG,
+						"LoginFragment - checkHttpRequestResult(): " + key
+								+ ": INVALID EMAIL");
+			}
+			message = getResources().getText(
+					R.string.response_code_invalid_email).toString();
 			Toast.makeText(getActivity().getApplicationContext(), message,
 					Toast.LENGTH_LONG).show();
 			break;
@@ -249,14 +250,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		startActivity(intent);
 	}
 
-	private void signup() {
-		FragmentTransaction ft = mFragmentManager.beginTransaction();
-		SignupFragment signupFragment = SignupFragment.newInstance();
-		ft.add(R.id.fragmentContainer, signupFragment);
-		ft.addToBackStack(null);
-		ft.commit();
-	}
-
 	private void saveUserToPrefs(String email, String password) {
 		Editor editor = mSharedPreferences.edit();
 		editor.putString(UserAuthenticationConstants.KEY_REMEMBER_EMAIL, email);
@@ -325,6 +318,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 	public void onAttach(Activity activity) {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "LoginFragment - onAttach()");
+		}
+		try {
+			mShowFragmentListener = (OnShowFragmentListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(getActivity().getClass()
+					.getSimpleName() + " must implement OnShowFragmentListener");
 		}
 		super.onAttach(activity);
 	}
@@ -434,8 +433,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 			requestLogin();
 		}
 		if (view == mTextSignupLink) {
-			signup();
+			onShowFragment(TAG_LOGIN_FRAGMENT);
 		}
+	}
+
+	@Override
+	public void onShowFragment(String tag) {
+		mShowFragmentListener.onShowFragment(tag);
 	}
 
 }

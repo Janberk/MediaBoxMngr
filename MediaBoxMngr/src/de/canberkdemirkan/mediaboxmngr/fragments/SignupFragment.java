@@ -48,15 +48,6 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onCreate()");
-		}
-		setHasOptionsMenu(true);
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -246,11 +237,6 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 		}
 	}
 
-	/*
-	 * 
-	 * Logging callback methods for debug purposes
-	 */
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -267,26 +253,11 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onActivityCreated()");
-		}
-		super.onActivityCreated(savedInstanceState);
-	}
-
-	@Override
-	public void onStart() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onStart()");
-		}
-		super.onStart();
-	}
-
-	@Override
 	public void onResume() {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "SignupFragment - onResume()");
 		}
+		setHasOptionsMenu(true);
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		super.onResume();
 	}
@@ -298,38 +269,6 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 		}
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		super.onPause();
-	}
-
-	@Override
-	public void onStop() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onStop()");
-		}
-		super.onStop();
-	}
-
-	@Override
-	public void onDestroyView() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onDestroyView()");
-		}
-		super.onDestroyView();
-	}
-
-	@Override
-	public void onDestroy() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onDestroy()");
-		}
-		super.onDestroy();
-	}
-
-	@Override
-	public void onDetach() {//
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onDetach()");
-		}
-		super.onDetach();
 	}
 
 }
