@@ -328,8 +328,9 @@ public class ItemListFragment extends Fragment implements Serializable,
 		case R.id.menu_newItem:
 			switchEditMode();
 			return true;
-		case R.id.menu_sync:
-			Toast.makeText(getActivity(), "Sync DB?", Toast.LENGTH_LONG).show();
+			// case R.id.menu_sync:
+			// Toast.makeText(getActivity(), "Sync DB?",
+			// Toast.LENGTH_LONG).show();
 			// DatabaseSynchronizer dbSyncer = new DatabaseSynchronizer(
 			// getActivity(), mUser);
 			// try {
@@ -337,7 +338,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 			// } catch (JSONException | IOException e) {
 			// e.printStackTrace();
 			// }
-			return true;
+			// return true;
 		case R.id.menu_deleteAll:
 			deleteAllItems();
 			return true;

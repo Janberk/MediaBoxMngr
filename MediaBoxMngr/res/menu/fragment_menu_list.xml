@@ -7,13 +7,13 @@
         android:showAsAction="ifRoom"
         android:title="@string/new_item"
         app:showAsAction="ifRoom"/>
+    <!--
     <item
         android:id="@+id/menu_sync"
         android:icon="@drawable/ic_menu_sync_light"
         android:showAsAction="ifRoom"
         android:title="@string/new_item"
         app:showAsAction="ifRoom"/>
-    <!--
          <item
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_menu_search_light"

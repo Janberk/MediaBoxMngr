@@ -119,10 +119,6 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 						}
 						if (response != null && response.matches("-?\\d+")) {
 							int key = Integer.valueOf(response);
-							Toast.makeText(
-									getActivity().getApplicationContext(),
-									"Response Code: " + key, Toast.LENGTH_LONG)
-									.show();
 							checkHttpRequestResult(key);
 						}
 					}
