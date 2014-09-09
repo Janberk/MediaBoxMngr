@@ -29,8 +29,10 @@ public class SplashScreenFragment extends Fragment {
 
 			@Override
 			public void run() {
-				Intent i = new Intent(getActivity(), LoginActivity.class);
-				startActivity(i);
+				Intent intent = new Intent(getActivity(), LoginActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+						| Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 				getActivity().finish();
 			}
 		}, SPLASH_TIME_OUT);

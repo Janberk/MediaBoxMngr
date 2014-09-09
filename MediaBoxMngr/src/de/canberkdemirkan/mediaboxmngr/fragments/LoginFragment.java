@@ -28,13 +28,15 @@ import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
-import de.canberkdemirkan.mediaboxmngr.interfaces.OnShowFragmentListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 
 public class LoginFragment extends Fragment implements View.OnClickListener,
-		OnCheckedChangeListener, OnShowFragmentListener {
+		OnCheckedChangeListener, OnFragmentTransactionListener {
 
 	public static final String TAG_LOGIN_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.tag_login_fragment";
+
+	private OnFragmentTransactionListener mFragmentTransactionListener;
 
 	private SharedPreferences mSharedPreferences;
 	private ProgressDialog mProgressDialog;
@@ -47,15 +49,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 
 	public boolean mRememberMe = false;
 
-	private OnShowFragmentListener mShowFragmentListener;
-
 	// public static String sEmailState = null;
 	// public static String sPasswordState = null;
 
 	public static LoginFragment newInstance() {
-		Bundle args = new Bundle();
 		LoginFragment newInstance = new LoginFragment();
-		newInstance.setArguments(args);
 		return newInstance;
 	}
 
@@ -92,8 +90,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 
 		mButtonLogin.setOnClickListener(this);
 		mTextSignupLink.setOnClickListener(this);
-		mCheckBoxRememberMe.setChecked(false);
 		mCheckBoxRememberMe.setOnCheckedChangeListener(this);
+		mCheckBoxRememberMe.setChecked(false);
 
 		return view;
 	}
@@ -166,7 +164,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 			break;
 		default:
 			break;
-
 		}
 	}
 
@@ -296,11 +293,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		}
 	}
 
-	/*
-	 * 
-	 * Logging callback methods for debug purposes
-	 */
-
 	// @Override
 	// public void onSaveInstanceState(Bundle savedInstanceState) {
 	// if (BuildConfig.DEBUG) {
@@ -320,10 +312,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 			Log.d(Constants.LOG_TAG, "LoginFragment - onAttach()");
 		}
 		try {
-			mShowFragmentListener = (OnShowFragmentListener) activity;
+			mFragmentTransactionListener = (OnFragmentTransactionListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(getActivity().getClass()
-					.getSimpleName() + " must implement OnShowFragmentListener");
+					.getSimpleName()
+					+ " must implement OnFragmentTransactionListener.");
 		}
 		super.onAttach(activity);
 	}
@@ -342,14 +335,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		// }
 		// }
 		super.onActivityCreated(savedInstanceState);
-	}
-
-	@Override
-	public void onStart() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onStart()");
-		}
-		super.onStart();
 	}
 
 	@Override
@@ -375,46 +360,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		super.onResume();
 	}
 
-	@Override
-	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onPause()");
-		}
-		super.onPause();
-	}
-
-	@Override
-	public void onStop() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onStop()");
-		}
-		super.onStop();
-	}
-
-	@Override
-	public void onDestroyView() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onDestroyView()");
-		}
-		super.onDestroyView();
-	}
-
-	@Override
-	public void onDestroy() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onDestroy()");
-		}
-		super.onDestroy();
-	}
-
-	@Override
-	public void onDetach() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onDetach()");
-		}
-		super.onDetach();
-	}
-
 	// listener callback methods
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -433,13 +378,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 			requestLogin();
 		}
 		if (view == mTextSignupLink) {
-			onShowFragment(TAG_LOGIN_FRAGMENT);
+			onFragmentTransaction(TAG_LOGIN_FRAGMENT);
 		}
 	}
 
 	@Override
-	public void onShowFragment(String tag) {
-		mShowFragmentListener.onShowFragment(tag);
+	public void onFragmentTransaction(String tag) {
+		mFragmentTransactionListener.onFragmentTransaction(tag);
 	}
 
 }

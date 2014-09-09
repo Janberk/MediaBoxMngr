@@ -10,11 +10,10 @@ import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.fragments.LoginFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.SignupFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
-import de.canberkdemirkan.mediaboxmngr.interfaces.OnRemoveFragmentListener;
-import de.canberkdemirkan.mediaboxmngr.interfaces.OnShowFragmentListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 
 public class LoginActivity extends FragmentActivityBuilder implements
-		OnShowFragmentListener, OnRemoveFragmentListener {
+		OnFragmentTransactionListener {
 
 	private FragmentManager mFragmentManager;
 
@@ -33,22 +32,44 @@ public class LoginActivity extends FragmentActivityBuilder implements
 	}
 
 	@Override
-	public void onShowFragment(String tag) {
+	public void onFragmentTransaction(String tag) {
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
 		if (tag.equals(LoginFragment.TAG_LOGIN_FRAGMENT)) {
-			FragmentTransaction ft = mFragmentManager.beginTransaction();
-			SignupFragment signupFragment = SignupFragment.newInstance();
-			ft.add(R.id.fragmentContainer, signupFragment);
-			ft.addToBackStack(null);
-			ft.commit();
+			SignupFragment fragment = (SignupFragment) mFragmentManager
+					.findFragmentByTag(SignupFragment.class.getName());
+			if (fragment == null) {
+				fragment = SignupFragment.newInstance();
+			}
+			String backStateName = fragment.getClass().getName();
+			boolean fragmentPopped = mFragmentManager.popBackStackImmediate(
+					backStateName, 0);
+			if (!fragmentPopped) {
+				ft.replace(R.id.fragmentContainer, fragment, backStateName);
+				ft.addToBackStack(null);
+				ft.commit();
+			}
 		}
+		if (tag.equals(SignupFragment.TAG_SIGNUP_FRAGMENT)) {
+			LoginFragment fragment = (LoginFragment) mFragmentManager
+					.findFragmentByTag(LoginFragment.class.getName());
+			String backStateName = fragment.getClass().getName();
+			boolean fragmentPopped = mFragmentManager.popBackStackImmediate(
+					backStateName, 0);
+			if (!fragmentPopped) {
+				ft.replace(R.id.fragmentContainer, fragment, backStateName);
+				ft.addToBackStack(null);
+				ft.commit();
+			}
+		}
+
 	}
 
 	@Override
-	public void onRemoveFragment(String tag) {
-		if (tag.equals(SignupFragment.TAG_SIGNUP_FRAGMENT)) {
-			SignupFragment fragment = (SignupFragment) mFragmentManager
-					.findFragmentById(R.id.fragmentContainer);
-			mFragmentManager.beginTransaction().remove(fragment).commit();
+	public void onBackPressed() {
+		if (mFragmentManager.getBackStackEntryCount() > 1) {
+			finish();
+		} else {
+			super.onBackPressed();
 		}
 	}
 

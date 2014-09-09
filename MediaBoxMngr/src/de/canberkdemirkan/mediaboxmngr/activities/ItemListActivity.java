@@ -12,14 +12,14 @@ import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.fragments.CreateItemFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnItemCreatedListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnListAdapterRefreshedListener;
-import de.canberkdemirkan.mediaboxmngr.interfaces.OnRemoveFragmentListener;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class ItemListActivity extends FragmentActivityBuilder implements
-		OnRemoveFragmentListener, OnItemCreatedListener,
+		OnFragmentTransactionListener, OnItemCreatedListener,
 		OnListAdapterRefreshedListener {
 
 	private FragmentManager mFragmentManager;
@@ -42,7 +42,7 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 	}
 
 	@Override
-	public void onRemoveFragment(String tag) {
+	public void onFragmentTransaction(String tag) {
 		if (tag.equals(CreateItemFragment.TAG_CREATE_ITEM_FRAGMENT)) {
 			CreateItemFragment fragment = (CreateItemFragment) mFragmentManager
 					.findFragmentById(R.id.fragmentContainer);

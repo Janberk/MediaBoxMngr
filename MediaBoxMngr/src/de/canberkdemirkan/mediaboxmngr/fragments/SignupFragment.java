@@ -22,13 +22,15 @@ import com.loopj.android.http.RequestParams;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
-import de.canberkdemirkan.mediaboxmngr.interfaces.OnRemoveFragmentListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 
 public class SignupFragment extends Fragment implements View.OnClickListener,
-		OnRemoveFragmentListener {
+		OnFragmentTransactionListener {
 
 	public static final String TAG_SIGNUP_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.tag_signup_fragment";
+
+	private OnFragmentTransactionListener mFragmentTransactionListener;
 
 	private EditText mEditFirstname;
 	private EditText mEditLastname;
@@ -38,12 +40,8 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 	private Button mButtonSignup;
 	private TextView mTextLoginLink;
 
-	private OnRemoveFragmentListener mRemoveFragmentListener;
-
 	public static SignupFragment newInstance() {
-		Bundle args = new Bundle();
 		SignupFragment newInstance = new SignupFragment();
-		newInstance.setArguments(args);
 		return newInstance;
 	}
 
@@ -159,7 +157,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 					.toString();
 			Toast.makeText(getActivity().getApplicationContext(), message,
 					Toast.LENGTH_LONG).show();
-			onRemoveFragment(TAG_SIGNUP_FRAGMENT);
+			onFragmentTransaction(TAG_SIGNUP_FRAGMENT);
 			break;
 		case UserAuthenticationConstants.RESPONSE_CODE_EMPTY_FIELDS:
 			if (BuildConfig.DEBUG) {
@@ -216,22 +214,16 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 			}
 		}
 		if (view == mTextLoginLink) {
-			onRemoveFragment(TAG_SIGNUP_FRAGMENT);
+			onFragmentTransaction(TAG_SIGNUP_FRAGMENT);
 		}
-	}
-
-	@Override
-	public void onRemoveFragment(String tag) {
-		mRemoveFragmentListener.onRemoveFragment(tag);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 		case android.R.id.home:
-			onRemoveFragment(TAG_SIGNUP_FRAGMENT);
+			onFragmentTransaction(TAG_SIGNUP_FRAGMENT);
 			return true;
-
 		default:
 			return super.onOptionsItemSelected(menuItem);
 		}
@@ -244,11 +236,11 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 			Log.d(Constants.LOG_TAG, "SignupFragment - onAttach()");
 		}
 		try {
-			mRemoveFragmentListener = (OnRemoveFragmentListener) activity;
+			mFragmentTransactionListener = (OnFragmentTransactionListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(getActivity().getClass()
 					.getSimpleName()
-					+ " must implement OnRemoveFragmentListener");
+					+ " must implement OnFragmentTransactionListener.");
 		}
 	}
 
@@ -269,6 +261,11 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 		}
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		super.onPause();
+	}
+
+	@Override
+	public void onFragmentTransaction(String tag) {
+		mFragmentTransactionListener.onFragmentTransaction(tag);
 	}
 
 }

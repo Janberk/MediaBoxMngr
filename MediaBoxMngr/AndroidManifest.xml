@@ -31,7 +31,8 @@
         <activity
             android:name=".activities.LoginActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name=".activities.ItemListActivity"

@@ -21,21 +21,21 @@ import de.canberkdemirkan.mediaboxmngr.adapters.CustomSpinnerAdapter.SpinnerTag;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnItemCreatedListener;
-import de.canberkdemirkan.mediaboxmngr.interfaces.OnRemoveFragmentListener;
 import de.canberkdemirkan.mediaboxmngr.model.Book;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.model.Movie;
 import de.canberkdemirkan.mediaboxmngr.model.Music;
 
 public class CreateItemFragment extends Fragment implements
-		View.OnClickListener, OnItemSelectedListener, OnRemoveFragmentListener,
-		OnItemCreatedListener {
+		View.OnClickListener, OnItemSelectedListener,
+		OnFragmentTransactionListener, OnItemCreatedListener {
 
 	public static final String TAG_CREATE_ITEM_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.tag_create_item_fragment";
 
-	private OnRemoveFragmentListener mRemoveFragmentListener;
 	private OnItemCreatedListener mOnItemCreatedListener;
+	private OnFragmentTransactionListener mOnFragmentTransactionListener;
 
 	private String mUser;
 
@@ -133,7 +133,7 @@ public class CreateItemFragment extends Fragment implements
 	public void onClick(View view) {
 		if (view == mButtonSaveItem) {
 			saveItem();
-			onRemoveFragment(TAG_CREATE_ITEM_FRAGMENT);
+			onFragmentTransaction(TAG_CREATE_ITEM_FRAGMENT);
 			onItemCreated(mUser);
 			ItemListFragment.sCreateMode = false;
 		}
@@ -156,18 +156,18 @@ public class CreateItemFragment extends Fragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
-			mRemoveFragmentListener = (OnRemoveFragmentListener) activity;
+			mOnFragmentTransactionListener = (OnFragmentTransactionListener) activity;
 			mOnItemCreatedListener = (OnItemCreatedListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(
 					getActivity().getClass().getSimpleName()
-							+ " must implement OnRemoveFragmentListener and OnItemCreatedListener");
+							+ " must implement OnFragmentTransactionListener and OnItemCreatedListener.");
 		}
 	}
 
 	@Override
-	public void onRemoveFragment(String tag) {
-		mRemoveFragmentListener.onRemoveFragment(tag);
+	public void onFragmentTransaction(String tag) {
+		mOnFragmentTransactionListener.onFragmentTransaction(tag);
 	}
 
 	@Override
