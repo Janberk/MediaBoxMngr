@@ -78,4 +78,14 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 		fragment.getItemAdapter().refresh(itemList);
 	}
 
+	@Override
+	public void onBackPressed() {
+		int count = mFragmentManager.getBackStackEntryCount();
+		if (count == 0) {
+			finish();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
 }

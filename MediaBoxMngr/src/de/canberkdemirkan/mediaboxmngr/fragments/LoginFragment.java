@@ -30,6 +30,7 @@ import de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
+import de.canberkdemirkan.mediaboxmngr.util.EmailValidator;
 
 public class LoginFragment extends Fragment implements View.OnClickListener,
 		OnCheckedChangeListener, OnFragmentTransactionListener {
@@ -49,8 +50,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 
 	public boolean mRememberMe = false;
 
-	// public static String sEmailState = null;
-	// public static String sPasswordState = null;
+	private EmailValidator mEmailValidator;
 
 	public static LoginFragment newInstance() {
 		LoginFragment newInstance = new LoginFragment();
@@ -60,15 +60,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onCreate()");
-		}
-		// if (savedInstanceState != null) {
-		// sEmailState = savedInstanceState
-		// .getString(Constants.KEY_EMAIL_STATE);
-		// sPasswordState = savedInstanceState
-		// .getString(Constants.KEY_PASSWORD_STATE);
-		// }
 		mProgressDialog = new ProgressDialog(getActivity());
 		mProgressDialog.setMessage(getResources().getText(
 				R.string.progress_dialog_text).toString());
@@ -79,10 +70,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onCreateView()");
-		}
-
 		View view = inflater.inflate(R.layout.fragment_login, null);
 		initViews(view);
 
@@ -91,7 +78,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		mButtonLogin.setOnClickListener(this);
 		mTextSignupLink.setOnClickListener(this);
 		mCheckBoxRememberMe.setOnCheckedChangeListener(this);
-		mCheckBoxRememberMe.setChecked(false);
 
 		return view;
 	}
@@ -111,57 +97,21 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		String message = null;
 		switch (key) {
 		case UserAuthenticationConstants.RESPONSE_CODE_SUCCESS:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"LoginFragment - checkHttpRequestResult(): " + key
-								+ ": SUCCESS");
-			}
 			login();
 			break;
-		case UserAuthenticationConstants.RESPONSE_CODE_EMPTY_FIELDS:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"LoginFragment - checkHttpRequestResult(): " + key
-								+ ": EMPTY FIELDS");
-			}
-			message = getResources().getText(
-					R.string.response_code_empty_fields).toString();
-			Toast.makeText(getActivity().getApplicationContext(), message,
-					Toast.LENGTH_LONG).show();
-			break;
-		case UserAuthenticationConstants.RESPONSE_CODE_INVALID_DATA:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"LoginFragment - checkHttpRequestResult(): " + key
-								+ ": INVALID DATA");
-			}
-			message = getResources().getText(
-					R.string.response_code_invalid_data).toString();
-			Toast.makeText(getActivity().getApplicationContext(), message,
-					Toast.LENGTH_LONG).show();
-			break;
-		case UserAuthenticationConstants.RESPONSE_CODE_INVALID_EMAIL:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"LoginFragment - checkHttpRequestResult(): " + key
-								+ ": INVALID EMAIL");
-			}
-			message = getResources().getText(
-					R.string.response_code_invalid_email).toString();
-			Toast.makeText(getActivity().getApplicationContext(), message,
-					Toast.LENGTH_LONG).show();
-			break;
 		case UserAuthenticationConstants.RESPONSE_CODE_NO_POST:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"LoginFragment - checkHttpRequestResult(): " + key
-								+ ": NO POST");
-			}
 			message = getResources().getText(R.string.response_code_no_post)
 					.toString();
 			Toast.makeText(getActivity().getApplicationContext(), message,
 					Toast.LENGTH_LONG).show();
 			break;
+		case UserAuthenticationConstants.RESPONSE_CODE_INVALID_DATA:
+			message = getResources().getText(
+					R.string.response_code_invalid_data).toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			break;
+
 		default:
 			break;
 		}
@@ -231,6 +181,43 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 				});
 	}
 
+	private boolean formIsFilled() {
+		String email = mEditEmail.getText().toString();
+		String password = mEditPassword.getText().toString();
+		if (email.equals("") || password.equals("")) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean emailIsValid() {
+		String email = mEditEmail.getText().toString();
+		if (!mEmailValidator.validate(email)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private boolean clearForRequest() {
+		String message = null;
+		if (!formIsFilled()) {
+			message = getResources().getText(
+					R.string.response_code_empty_fields).toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+		if (!emailIsValid()) {
+			message = getResources().getText(
+					R.string.response_code_invalid_email).toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+		return true;
+	}
+
 	private void login() {
 		Editor editor = mSharedPreferences.edit();
 		if (mSharedPreferences.contains(UserAuthenticationConstants.KEY_EMAIL)) {
@@ -293,24 +280,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 		}
 	}
 
-	// @Override
-	// public void onSaveInstanceState(Bundle savedInstanceState) {
-	// if (BuildConfig.DEBUG) {
-	// Log.d(Constants.LOG_TAG, "LoginFragment - onSaveInstanceState()");
-	// }
-	// savedInstanceState.putString(Constants.KEY_EMAIL_STATE, mEditEmail
-	// .getText().toString());
-	//
-	// savedInstanceState.putString(Constants.KEY_PASSWORD_STATE,
-	// mEditPassword.getText().toString());
-	// super.onSaveInstanceState(savedInstanceState);
-	// }
-
 	@Override
 	public void onAttach(Activity activity) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onAttach()");
-		}
 		try {
 			mFragmentTransactionListener = (OnFragmentTransactionListener) activity;
 		} catch (ClassCastException e) {
@@ -323,25 +294,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onActivityCreated()");
-		}
-		// if (savedInstanceState != null) {
-		// if (sEmailState != null) {
-		// mEditEmail.setText(sEmailState);
-		// }
-		// if (sPasswordState != null) {
-		// mEditPassword.setText(sPasswordState);
-		// }
-		// }
+		mEmailValidator = new EmailValidator();
 		super.onActivityCreated(savedInstanceState);
 	}
 
 	@Override
 	public void onResume() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginFragment - onResume()");
-		}
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
 		if (mSharedPreferences.contains(UserAuthenticationConstants.KEY_EMAIL)) {
@@ -356,11 +314,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 			mEditEmail.setText("");
 			mEditPassword.setText("");
 		}
+		mCheckBoxRememberMe.setChecked(false);
 		rememberUser();
 		super.onResume();
 	}
 
-	// listener callback methods
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		if (buttonView == mCheckBoxRememberMe) {
@@ -375,7 +333,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener,
 	@Override
 	public void onClick(View view) {
 		if (view == mButtonLogin) {
-			requestLogin();
+			if (clearForRequest()) {
+				requestLogin();
+			}
 		}
 		if (view == mTextSignupLink) {
 			onFragmentTransaction(TAG_LOGIN_FRAGMENT);

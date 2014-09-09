@@ -24,6 +24,7 @@ import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
+import de.canberkdemirkan.mediaboxmngr.util.EmailValidator;
 
 public class SignupFragment extends Fragment implements View.OnClickListener,
 		OnFragmentTransactionListener {
@@ -31,6 +32,8 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 	public static final String TAG_SIGNUP_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.tag_signup_fragment";
 
 	private OnFragmentTransactionListener mFragmentTransactionListener;
+
+	private EmailValidator mEmailValidator;
 
 	private EditText mEditFirstname;
 	private EditText mEditLastname;
@@ -48,10 +51,6 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onCreateView()");
-		}
 
 		View view = inflater.inflate(R.layout.fragment_signup, null);
 		initViews(view);
@@ -120,6 +119,10 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 						}
 						if (response != null && response.matches("-?\\d+")) {
 							int key = Integer.valueOf(response);
+							Toast.makeText(
+									getActivity().getApplicationContext(),
+									"Response Code: " + key, Toast.LENGTH_LONG)
+									.show();
 							checkHttpRequestResult(key);
 						}
 					}
@@ -148,74 +151,105 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 		String message = null;
 		switch (key) {
 		case UserAuthenticationConstants.RESPONSE_CODE_SUCCESS:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"SignupFragment - checkHttpRequestResult(): " + key
-								+ ": SUCCESS");
-			}
 			message = getResources().getText(R.string.response_code_success)
 					.toString();
 			Toast.makeText(getActivity().getApplicationContext(), message,
 					Toast.LENGTH_LONG).show();
 			onFragmentTransaction(TAG_SIGNUP_FRAGMENT);
 			break;
-		case UserAuthenticationConstants.RESPONSE_CODE_EMPTY_FIELDS:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"SignupFragment - checkHttpRequestResult(): " + key
-								+ ": EMPTY FIELDS");
-			}
-			message = getResources().getText(
-					R.string.response_code_empty_fields).toString();
-			Toast.makeText(getActivity().getApplicationContext(), message,
-					Toast.LENGTH_LONG).show();
-			break;
-		case UserAuthenticationConstants.RESPONSE_CODE_INVALID_DATA:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"SignupFragment - checkHttpRequestResult(): " + key
-								+ ": INVALID DATA");
-			}
-			message = getResources().getText(
-					R.string.response_code_invalid_data).toString();
-			Toast.makeText(getActivity().getApplicationContext(), message,
-					Toast.LENGTH_LONG).show();
-			break;
 		case UserAuthenticationConstants.RESPONSE_CODE_NO_POST:
-			if (BuildConfig.DEBUG) {
-				Log.d(Constants.LOG_TAG,
-						"SignupFragment - checkHttpRequestResult(): " + key
-								+ ": NO POST");
-			}
 			message = getResources().getText(R.string.response_code_no_post)
 					.toString();
 			Toast.makeText(getActivity().getApplicationContext(), message,
 					Toast.LENGTH_LONG).show();
 			break;
+		case UserAuthenticationConstants.RESPONSE_CODE_USER_EXISTS:
+			message = getResources()
+					.getText(R.string.response_code_user_exists).toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			break;
+		case UserAuthenticationConstants.RESPONSE_CODE_ERROR:
+			message = getResources().getText(
+					R.string.response_code_error_saving).toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			break;
+
 		default:
 			break;
 
 		}
 	}
 
-	// listener callback methods
 	@Override
 	public void onClick(View view) {
 		if (view == mButtonSignup) {
-			String passOne = mEditPassword.getText().toString();
-			String passTwo = mEditConfirmPassword.getText().toString();
-			if (passOne.equals(passTwo)) {
+			if (clearForRequest()) {
 				requestSignup();
-			} else {
-				String message = getResources().getString(
-						R.string.passwords_not_identical);
-				Toast.makeText(getActivity().getApplicationContext(), message,
-						Toast.LENGTH_LONG).show();
 			}
 		}
 		if (view == mTextLoginLink) {
 			onFragmentTransaction(TAG_SIGNUP_FRAGMENT);
 		}
+	}
+
+	private boolean formIsFilled() {
+		String firstName = mEditFirstname.getText().toString();
+		String lastName = mEditLastname.getText().toString();
+		String email = mEditEmail.getText().toString();
+		String password = mEditPassword.getText().toString();
+		String confirmPassword = mEditConfirmPassword.getText().toString();
+		if (firstName.equals("") || lastName.equals("") || email.equals("")
+				|| password.equals("") || confirmPassword.equals("")) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean emailIsValid() {
+		String email = mEditEmail.getText().toString();
+		if (!mEmailValidator.validate(email)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private boolean passwordsMatching() {
+		String passOne = mEditPassword.getText().toString();
+		String passTwo = mEditConfirmPassword.getText().toString();
+		if (passOne.equals(passTwo)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean clearForRequest() {
+		String message = null;
+		if (!formIsFilled()) {
+			message = getResources().getText(
+					R.string.response_code_empty_fields).toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+		if (!emailIsValid()) {
+			message = getResources().getText(
+					R.string.response_code_invalid_email).toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+		if (!passwordsMatching()) {
+			message = getResources().getText(R.string.passwords_not_identical)
+					.toString();
+			Toast.makeText(getActivity().getApplicationContext(), message,
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -231,10 +265,6 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 
 	@Override
 	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onAttach()");
-		}
 		try {
 			mFragmentTransactionListener = (OnFragmentTransactionListener) activity;
 		} catch (ClassCastException e) {
@@ -242,13 +272,17 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 					.getSimpleName()
 					+ " must implement OnFragmentTransactionListener.");
 		}
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		mEmailValidator = new EmailValidator();
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	@Override
 	public void onResume() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onResume()");
-		}
 		setHasOptionsMenu(true);
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		super.onResume();
@@ -256,9 +290,6 @@ public class SignupFragment extends Fragment implements View.OnClickListener,
 
 	@Override
 	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "SignupFragment - onPause()");
-		}
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		super.onPause();
 	}

@@ -7,10 +7,10 @@ public interface UserAuthenticationConstants {
 	int DEFAULT_TIMEOUT = 20 * 1000;
 
 	int RESPONSE_CODE_SUCCESS = 0;
-	int RESPONSE_CODE_EMPTY_FIELDS = 1;
-	int RESPONSE_CODE_INVALID_DATA = 2;
-	int RESPONSE_CODE_INVALID_EMAIL = 3;
-	int RESPONSE_CODE_NO_POST = 4;
+	int RESPONSE_CODE_NO_POST = 1;
+	int RESPONSE_CODE_USER_EXISTS = 2;
+	int RESPONSE_CODE_ERROR = 3;
+	int RESPONSE_CODE_INVALID_DATA = 4;
 	
 	String KEY_EMAIL = "de.canberkdemirkan.mediaboxmngr.key_email";
 	String KEY_EMAIL_STATE = "de.canberkdemirkan.mediaboxmngr.key_email_state";

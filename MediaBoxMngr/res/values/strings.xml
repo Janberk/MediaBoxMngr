@@ -65,17 +65,19 @@
         <item>Book</item>
         <item>Movie</item>
     </string-array>
-    
+
     <string name="progress_dialog_text">Requesting user access. Please wait...</string>
     <string name="progress_dialog_delete">Deleting account. Please wait...</string>
     <string name="passwords_not_identical">Passwords do not match.\nPlease confirm your password.</string>
     <string name="response_code_success">User registration successful.</string>
-    <string name="response_code_delete_success">Account was deleted successfully.</string>
-    <string name="response_code_empty_fields">Please fill in all fields.</string>
+    <string name="response_code_no_post">ERROR while trying to connect to server!</string>
+    <string name="response_code_user_exists">User already exists. Try different E-mail.</string>
+    <string name="response_code_error_saving">ERROR while saving user account!</string>
     <string name="response_code_invalid_data">Invalid user data.\nPlease try again.</string>
+    <string name="response_code_empty_fields">Please fill in all fields.</string>
     <string name="response_code_invalid_email">Invalid E-mail.\nPlease try again.</string>
+    <string name="response_code_delete_success">Account was deleted successfully.</string>
     <string name="response_code_no_email">No E-mail found.</string>
     <string name="response_code_fail">Failed to delete account.</string>
-    <string name="response_code_no_post">ERROR while trying to connect to server!</string>
 
 </resources>

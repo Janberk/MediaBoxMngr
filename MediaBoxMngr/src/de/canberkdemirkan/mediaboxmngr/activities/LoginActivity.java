@@ -4,12 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.fragments.LoginFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.SignupFragment;
-import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 
 public class LoginActivity extends FragmentActivityBuilder implements
@@ -20,9 +17,6 @@ public class LoginActivity extends FragmentActivityBuilder implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "LoginActivity - onCreate()");
-		}
 		mFragmentManager = getSupportFragmentManager();
 	}
 
@@ -45,7 +39,7 @@ public class LoginActivity extends FragmentActivityBuilder implements
 					backStateName, 0);
 			if (!fragmentPopped) {
 				ft.replace(R.id.fragmentContainer, fragment, backStateName);
-				ft.addToBackStack(null);
+				ft.addToBackStack(LoginFragment.class.getName());
 				ft.commit();
 			}
 		}
@@ -57,7 +51,7 @@ public class LoginActivity extends FragmentActivityBuilder implements
 					backStateName, 0);
 			if (!fragmentPopped) {
 				ft.replace(R.id.fragmentContainer, fragment, backStateName);
-				ft.addToBackStack(null);
+				ft.addToBackStack(SignupFragment.class.getName());
 				ft.commit();
 			}
 		}
@@ -66,7 +60,16 @@ public class LoginActivity extends FragmentActivityBuilder implements
 
 	@Override
 	public void onBackPressed() {
-		if (mFragmentManager.getBackStackEntryCount() > 1) {
+		int count = mFragmentManager.getBackStackEntryCount();
+		String name = null;
+		String loginFragment = LoginFragment.class.getName();
+		if (count != 0) {
+			FragmentManager.BackStackEntry latest = mFragmentManager
+					.getBackStackEntryAt(count - 1);
+			name = latest.getName();
+		}
+		if (mFragmentManager.getBackStackEntryCount() > 1
+				&& !name.equals(loginFragment)) {
 			finish();
 		} else {
 			super.onBackPressed();

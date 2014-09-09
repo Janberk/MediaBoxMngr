@@ -70,12 +70,14 @@
     <string name="progress_dialog_delete">Lösche Account. Bitte warten...</string>
     <string name="passwords_not_identical">Passwörter stimmen nicht überein.\nBitte erneut versuchen.</string>
     <string name="response_code_success">Registrierung erfolgreich abgeschlossen..</string>
-    <string name="response_code_delete_success">Account erfolgreich gelöscht.</string>
-    <string name="response_code_empty_fields">Bitte alle Felder ausfüllen.</string>
+    <string name="response_code_no_post">FEHLER bei der Verbindung zum Server!</string>
+    <string name="response_code_user_exists">Ein Account mit dieser E-Mail existiert bereits.\nBitte neue E-Mail eingeben.</string>
+    <string name="response_code_error_saving">FEHLER bei der Registrierung!</string>
     <string name="response_code_invalid_data">Ungültige Benutzerdaten.\nBitte erneut versuchen.</string>
+    <string name="response_code_empty_fields">Bitte alle Felder ausfüllen.</string>
     <string name="response_code_invalid_email">Ungültige E-Mail.\nBitte erneut versuchen.</string>
+    <string name="response_code_delete_success">Account erfolgreich gelöscht.</string>
     <string name="response_code_no_email">Keine E-Mail gefunden.</string>
     <string name="response_code_fail">Löschen des Accounts fehlgeschlagen.</string>
-    <string name="response_code_no_post">ERROR bei der Verbindung zum Server!</string>
 
 </resources>
