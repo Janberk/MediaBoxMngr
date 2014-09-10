@@ -1,0 +1,173 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/custom_value_8dp" >
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_director" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemDirector"
+            style="@style/textViewDetails.content"
+            android:text="" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/gray" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_genre" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemGenre"
+            style="@style/textViewDetails.content"
+            android:text="" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/gray" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_country_year" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemCountryYear"
+            style="@style/textViewDetails.content"
+            android:text="" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/gray" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_length" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemLength"
+            style="@style/textViewDetails.content"
+            android:text="" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="@color/gray" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            style="@style/textViewDetails"
+            android:text="@string/details_music" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_value_4dp"
+        android:layout_marginRight="@dimen/custom_value_4dp" >
+
+        <TextView
+            android:id="@+id/tv_fragmentDetails_itemMusic"
+            style="@style/textViewDetails.content"
+            android:text="" />
+    </TableRow>
+
+</TableLayout>

@@ -8,7 +8,7 @@ public class SettingsActivity extends FragmentActivityBuilder {
 
 	@Override
 	protected Fragment createFragment() {
-		return new SettingsFragment();
+		return SettingsFragment.newInstance();
 	}
 
 	@Override

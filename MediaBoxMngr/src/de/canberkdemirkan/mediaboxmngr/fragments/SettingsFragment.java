@@ -1,18 +1,13 @@
 package de.canberkdemirkan.mediaboxmngr.fragments;
 
-import java.util.Locale;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.preference.PreferenceFragment;
-import android.util.DisplayMetrics;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeleteAccount;
 
@@ -21,6 +16,11 @@ public class SettingsFragment extends PreferenceFragment implements
 
 	SharedPreferences mSharedPreferences;
 	Preference mButtonDeleteAccount;
+
+	public static Fragment newInstance() {
+		SettingsFragment newInstance = new SettingsFragment();
+		return newInstance;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,30 +51,6 @@ public class SettingsFragment extends PreferenceFragment implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		switch (key) {
-		case "l10n":
-			Preference pref = findPreference(key);
-
-			if (pref instanceof ListPreference) {
-				ListPreference listPref = (ListPreference) pref;
-				String entry = listPref.getEntry().toString();
-				if (entry.equals("English")) {
-					if (isAdded()) {
-						setLocale("en_US");
-					}
-				}
-				if (entry.equals("German")) {
-					if (isAdded()) {
-						setLocale("de");
-					}
-				}
-			}
-			break;
-
-		default:
-			break;
-		}
-
 	}
 
 	@Override
@@ -88,15 +64,6 @@ public class SettingsFragment extends PreferenceFragment implements
 			return true;
 		}
 		return false;
-	}
-
-	public void setLocale(String lang) {
-		Locale locale = new Locale(lang);
-		Resources resources = getResources();
-		DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-		Configuration configuration = resources.getConfiguration();
-		configuration.locale = locale;
-		resources.updateConfiguration(configuration, displayMetrics);
 	}
 
 }

@@ -25,7 +25,7 @@
             android:layout_marginTop="@dimen/custom_value_16dp"
             android:baselineAligned="false"
             android:orientation="horizontal"
-            android:weightSum="5" >
+            android:weightSum="8" >
 
             <ImageView
                 android:id="@+id/iv_fragmentDetails_itemCover"
@@ -35,18 +35,18 @@
                 android:layout_marginLeft="@dimen/custom_value_12dp"
                 android:layout_marginRight="@dimen/custom_value_12dp"
                 android:layout_marginTop="@dimen/custom_value_4dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/item_cover_label"
                 android:scaleType="centerCrop"
                 android:src="@drawable/cover_placeholder" />
 
             <include
-                android:id="@+id/fragmentItem_music"
+                android:id="@+id/fragmentItem_book"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                layout="@layout/fragment_info_music" >
+                android:layout_weight="7"
+                layout="@layout/fragment_info_book" >
             </include>
         </LinearLayout>
 
@@ -69,7 +69,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/rb_fragmentDetails_itemRating"
             android:layout_margin="@dimen/custom_value_8dp"
-            android:text="@string/details_content_music" />
+            android:text="@string/details_content_book" />
 
         <TextView
             android:id="@+id/tv_fragmentDetails_itemContent"

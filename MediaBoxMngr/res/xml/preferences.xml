@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <ListPreference
-        android:dialogTitle="Select Language"
-        android:entries="@array/language"
-        android:entryValues="@array/values"        
-        android:defaultValue="en_US"
-        android:key="l10n"
-        android:title="Select Language" />
-
     <Preference
         android:key="deleteAccount"
         android:summary="This will delete your account."

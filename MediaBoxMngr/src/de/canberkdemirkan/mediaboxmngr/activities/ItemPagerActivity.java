@@ -21,6 +21,7 @@ public class ItemPagerActivity extends FragmentActivity implements
 	private Context mContext;
 	private ViewPager mViewPager;
 	private ArrayList<Item> mItemList;
+	private FragmentManager mFragmentManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,9 +39,9 @@ public class ItemPagerActivity extends FragmentActivity implements
 
 		mItemList = ItemStock.get(this, userTag).getItemList();
 
-		FragmentManager fm = getSupportFragmentManager();
-		mViewPager
-				.setAdapter(new ScreenSlidePagerAdapter(mContext, fm, userTag));
+		mFragmentManager = getSupportFragmentManager();
+		mViewPager.setAdapter(new ScreenSlidePagerAdapter(mContext,
+				mFragmentManager, userTag));
 
 		for (int i = 0; i < mItemList.size(); i++) {
 			if (mItemList.get(i).getUniqueId().equals(itemId)) {

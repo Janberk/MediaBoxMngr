@@ -3,7 +3,6 @@ package de.canberkdemirkan.mediaboxmngr.fragments;
 import java.io.Serializable;
 import java.util.UUID;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +26,6 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
-import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemEditorActivity;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
@@ -51,11 +48,11 @@ public class ItemFragment extends Fragment implements Serializable,
 
 	private static final int REQUEST_CODE = 0;
 
-	private FragmentManager mFragmentManager;
+	public static String sItemType;
 
+	private FragmentManager mFragmentManager;
 	private Item mItem;
 	private UUID mItemId;
-	public static String sItemType;
 	private String mUser;
 
 	private EditText mEditItemTitle;
@@ -80,9 +77,6 @@ public class ItemFragment extends Fragment implements Serializable,
 	private RatingBar mRatingBarItemRating;
 
 	public static ItemFragment newInstance(UUID itemId, String userTag) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemFragment - onCreate()");
-		}
 		Bundle args = new Bundle();
 
 		args.putSerializable(Constants.KEY_ITEM_UID, itemId);
@@ -147,20 +141,14 @@ public class ItemFragment extends Fragment implements Serializable,
 				.findViewById(R.id.cb_fragmentDetails_itemFavorite);
 		mRatingBarItemRating = (RatingBar) view
 				.findViewById(R.id.rb_fragmentDetails_itemRating);
-		// mSpinnerItemGenre = (Spinner) view
-		// .findViewById(R.id.sp_fragmentBasics_itemGenre);
-		// mSpinnerItemCountry = (Spinner) view
-		// .findViewById(R.id.sp_fragmentBasics_itemCountry);
-		// mSpinnerItemYear = (Spinner) view
-		// .findViewById(R.id.sp_fragmentBasics_itemYear);
 	}
 
-	@TargetApi(11)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		View view = null;
+
 		switch (ItemType.valueOf(sItemType)) {
 		case Album:
 			view = inflater.inflate(R.layout.fragment_view_music, container,
@@ -208,21 +196,9 @@ public class ItemFragment extends Fragment implements Serializable,
 
 		mRatingBarItemRating.setOnRatingBarChangeListener(this);
 
-		// mSpinnerItemGenre.setAdapter(new CustomSpinnerAdapter(getActivity(),
-		// R.layout.custom_spinner, R.id.tv_customSpinner_label,
-		// CustomSpinnerAdapter.getContent()));
-
 		updateItemDetails(mItem);
 
 		return view;
-	}
-
-	private void setTextIfNotNull(TextView view, String s) {
-		if (s != null) {
-			view.setText(s);
-		} else {
-			view.setText("");
-		}
 	}
 
 	@Override
@@ -245,13 +221,6 @@ public class ItemFragment extends Fragment implements Serializable,
 			intent.putExtra(Constants.KEY_ITEM_UID, mItem.getUniqueId());
 			intent.putExtra(Constants.EXTRA_DETAILS_ITEM, mItem);
 			startActivityForResult(intent, REQUEST_CODE);
-			// FragmentTransaction ft = mFragmentManager.beginTransaction();
-			// ItemEditorFragment itemEditor = ItemEditorFragment.newInstance(
-			// mItemId, mUser, mItem);
-			// itemEditor.getParentFragment();
-			// ft.add(R.id.fragmentContainer, itemEditor);
-			// ft.addToBackStack(null);
-			// ft.commit();
 			return true;
 		case R.id.menu_deleteItem:
 			final String header = getActivity().getResources().getString(
@@ -261,13 +230,11 @@ public class ItemFragment extends Fragment implements Serializable,
 					AlertDialogDeletion.DIALOG_TAG_DETAIL_SINGLE);
 			dialogDelete.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
 			dialogDelete.show(mFragmentManager, "");
-
 			return true;
 		case R.id.menu_logout:
 			AlertDialogLogout dialogLogout = AlertDialogLogout.newInstance();
 			dialogLogout.show(mFragmentManager, "");
 			return true;
-
 		default:
 			return super.onOptionsItemSelected(menuItem);
 		}
@@ -341,6 +308,14 @@ public class ItemFragment extends Fragment implements Serializable,
 			setTextIfNotNull(mTextItemFormatTitleCount, itemFormatTracks);
 		}
 
+	}
+
+	private void setTextIfNotNull(TextView view, String s) {
+		if (s != null) {
+			view.setText(s);
+		} else {
+			view.setText("");
+		}
 	}
 
 	private void updateItem() {

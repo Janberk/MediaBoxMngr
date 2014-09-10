@@ -25,7 +25,7 @@
             android:layout_marginTop="@dimen/custom_value_16dp"
             android:baselineAligned="false"
             android:orientation="horizontal"
-            android:weightSum="5" >
+            android:weightSum="8" >
 
             <ImageView
                 android:id="@+id/iv_fragmentDetails_itemCover"
@@ -35,7 +35,7 @@
                 android:layout_marginLeft="@dimen/custom_value_12dp"
                 android:layout_marginRight="@dimen/custom_value_12dp"
                 android:layout_marginTop="@dimen/custom_value_4dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/item_cover_label"
                 android:scaleType="centerCrop"
@@ -45,7 +45,7 @@
                 android:id="@+id/fragmentItem_music"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
+                android:layout_weight="7"
                 layout="@layout/fragment_info_music" >
             </include>
         </LinearLayout>
