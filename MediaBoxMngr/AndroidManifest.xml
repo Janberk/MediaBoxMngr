@@ -21,7 +21,9 @@
         android:theme="@style/CustomActionBarTheme" >
         <activity
             android:name="de.canberkdemirkan.mediaboxmngr.activities.SplashScreenActivity"
-            android:theme="@style/CustomActionBarTheme.NoTitleBar" >
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/CustomActionBarTheme.NoTitleBar"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

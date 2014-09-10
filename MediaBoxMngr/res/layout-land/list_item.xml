@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_background"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical"
+    android:padding="@dimen/custom_value_8dp" >
+
+    <TextView
+        android:id="@+id/tv_listItem_itemTitle"
+        style="@style/textViewList"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/rb_listItem_itemRating"
+        android:layout_toRightOf="@+id/iv_listItem_itemIcon"
+        android:text="@string/item_title_label" />
+
+    <ImageView
+        android:id="@+id/iv_listItem_itemIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/item_cover_label"
+        android:src="@drawable/ic_launcher" />
+
+    <CheckBox
+        android:id="@+id/cb_listItem_itemFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:button="@drawable/custom_checkbox_favorites"
+        android:enabled="false"
+        android:focusable="false"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tv_listItem_itemGenre"
+        style="@style/textViewList"
+        android:layout_alignRight="@+id/tv_listItem_itemTitle"
+        android:layout_below="@+id/tv_listItem_itemTitle"
+        android:layout_toRightOf="@+id/iv_listItem_itemIcon"
+        android:text="@string/item_genre_label"
+        android:textSize="12sp"
+        android:textStyle="normal" />
+
+    <RatingBar
+        android:id="@+id/rb_listItem_itemRating"
+        style="@style/ratingBar.small"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tv_listItem_itemGenre" />
+
+</RelativeLayout>

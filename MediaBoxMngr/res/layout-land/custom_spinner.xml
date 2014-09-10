@@ -9,7 +9,7 @@
         android:layout_height="@dimen/custom_value_32dp"
         android:layout_margin="@dimen/custom_value_8dp"
         android:background="@color/background_000022"
-        android:paddingLeft="@dimen/custom_value_72dp" >
+        android:paddingLeft="@dimen/custom_value_4dp" >
 
         <ImageView
             android:id="@+id/iv_customSpinner_icon"

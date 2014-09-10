@@ -43,18 +43,21 @@
             android:id="@+id/sp_fragmentEditTitle_itemType"
             android:layout_width="256dp"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/btn_fragmentEditTitle_saveItem"
-            android:layout_alignRight="@+id/btn_fragmentEditTitle_saveItem"
-            android:layout_below="@+id/tv_fragmentEditTitle_itemType"
-            android:layout_marginBottom="@dimen/custom_value_8dp"
-            android:layout_marginTop="@dimen/custom_value_8dp" />
+            android:layout_alignLeft="@+id/et_fragmentEditTitle_editTitle"
+            android:layout_alignRight="@+id/tv_fragmentEditTitle_itemType"
+            android:layout_below="@+id/tv_fragmentEditTitle_itemType" />
 
         <Button
             android:id="@+id/btn_fragmentEditTitle_saveItem"
             style="@style/buttonForm.textStyle.big"
-            android:layout_alignLeft="@+id/et_fragmentEditTitle_editTitle"
-            android:layout_below="@+id/sp_fragmentEditTitle_itemType"
-            android:layout_marginBottom="@dimen/custom_value_16dp"
+            android:layout_alignBottom="@+id/sp_fragmentEditTitle_itemType"
+            android:layout_alignRight="@+id/et_fragmentEditTitle_editTitle"
+            android:layout_alignTop="@+id/sp_fragmentEditTitle_itemType"
+            android:layout_marginBottom="@dimen/custom_value_0dp"
+            android:layout_marginLeft="@dimen/custom_value_8dp"
+            android:layout_marginRight="@dimen/custom_value_0dp"
+            android:layout_marginTop="@dimen/custom_value_0dp"
+            android:layout_toRightOf="@+id/sp_fragmentEditTitle_itemType"
             android:text="@string/save" />
     </RelativeLayout>
 

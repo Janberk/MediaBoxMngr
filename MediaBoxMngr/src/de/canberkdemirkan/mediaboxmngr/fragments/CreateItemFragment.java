@@ -2,6 +2,7 @@ package de.canberkdemirkan.mediaboxmngr.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -93,6 +94,33 @@ public class CreateItemFragment extends Fragment implements
 				.findViewById(R.id.sp_fragmentEditTitle_itemType);
 		mButtonSaveItem = (Button) view
 				.findViewById(R.id.btn_fragmentEditTitle_saveItem);
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		refreshView(inflater, (ViewGroup) getView());
+	}
+
+	private void refreshView(LayoutInflater inflater, ViewGroup viewGroup) {
+		viewGroup.removeAllViewsInLayout();
+		View view = inflater.inflate(R.layout.fragment_create_item, viewGroup);
+
+		initViews(view);
+
+		mEditEditTitle.requestFocus();
+		InputMethodManager imm = (InputMethodManager) getActivity()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.showSoftInput(mEditEditTitle, InputMethodManager.SHOW_IMPLICIT);
+
+		mSpinnerItemType.setAdapter(new CustomSpinnerAdapter(getActivity(),
+				R.layout.custom_spinner, R.id.tv_customSpinner_label,
+				CustomSpinnerAdapter.getContent(mTypeSpinner)));
+		mSpinnerItemType.setOnItemSelectedListener(this);
+		mSpinnerItemType.setSelection(0);
+
+		mButtonSaveItem.setOnClickListener(this);
 	}
 
 	private Item createItem(ItemType type) {
