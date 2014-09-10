@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import de.canberkdemirkan.mediaboxmngr.R;
+import de.canberkdemirkan.mediaboxmngr.activities.ItemListActivity;
 import de.canberkdemirkan.mediaboxmngr.activities.LoginActivity;
+import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 import de.canberkdemirkan.mediaboxmngr.util.AppContextUtil;
@@ -59,6 +61,13 @@ public class AlertDialogLogout extends DialogFragment {
 		editor.remove(UserAuthenticationConstants.KEY_EMAIL);
 		editor.remove(UserAuthenticationConstants.KEY_PASSWORD);
 		editor.commit();
+		if (getActivity() instanceof ItemListActivity) {
+			ItemListActivity activity = (ItemListActivity) getActivity();
+			if (ItemListFragment.sCreateMode == true) {
+				ItemListFragment.sCreateMode = false;
+				activity.onFragmentTransaction(ItemListFragment.TAG_ITEMLIST_FRAGMENT);
+			}
+		}
 		getActivity().finish();
 		Intent intent = new Intent(getActivity().getApplicationContext(),
 				LoginActivity.class);

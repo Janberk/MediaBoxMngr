@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.adapters.CustomItemAdapter;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
+import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.fragments.CreateItemFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
@@ -32,7 +34,6 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 
 	@Override
 	protected Fragment createFragment() {
-
 		ListTag listTag = (ListTag) getIntent().getSerializableExtra(
 				Constants.KEY_LIST_TAG);
 		if (listTag == null) {
@@ -43,10 +44,28 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 
 	@Override
 	public void onFragmentTransaction(String tag) {
-		if (tag.equals(CreateItemFragment.TAG_CREATE_ITEM_FRAGMENT)) {
-			CreateItemFragment fragment = (CreateItemFragment) mFragmentManager
-					.findFragmentById(R.id.fragmentContainer);
-			mFragmentManager.beginTransaction().remove(fragment).commit();
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
+		if (tag.equals(ItemListFragment.TAG_ITEMLIST_FRAGMENT)) {
+			if (ItemListFragment.sCreateMode) {
+				ItemListFragment itemListFragment = (ItemListFragment) mFragmentManager
+						.findFragmentByTag(ItemListFragment.class.getName());
+				String user = itemListFragment.getUser();
+				CreateItemFragment createItemFragment = (CreateItemFragment) mFragmentManager
+						.findFragmentByTag(CreateItemFragment.class.getName());
+				if (createItemFragment == null) {
+					createItemFragment = CreateItemFragment.newInstance(user);
+				}
+				ft.add(R.id.fragmentContainer, createItemFragment,
+						CreateItemFragment.class.getName());
+				ft.addToBackStack(ItemListFragment.class.getName());
+				ft.commit();
+			}
+			if (!ItemListFragment.sCreateMode) {
+				CreateItemFragment createItemFragment = (CreateItemFragment) mFragmentManager
+						.findFragmentByTag(CreateItemFragment.class.getName());
+				ft.remove(createItemFragment);
+				ft.commit();
+			}
 		}
 	}
 
@@ -56,19 +75,11 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 				.findFragmentByTag(ItemListFragment.class.getName());
 		ArrayList<Item> list = UtilMethods.createListFromTag(this, user,
 				ListTag.ALL);
-		int count = 0;
-		for (Item item : list) {
-			if (!item.isSynced()) {
-				count++;
-			}
-		}
 		CustomItemAdapter adapter = ((CustomItemAdapter) fragment.getListView()
 				.getAdapter());
 		adapter.refresh(list);
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		if (count > 0) {
-			fragment.showSyncStatus();
-		}
+		ItemListFragment.sCreateMode = false;
 	}
 
 	@Override
@@ -80,11 +91,18 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 
 	@Override
 	public void onBackPressed() {
-		int count = mFragmentManager.getBackStackEntryCount();
-		if (count == 0) {
-			finish();
-		} else {
-			super.onBackPressed();
+		if (getSupportActionBar().getNavigationMode() == ActionBar.NAVIGATION_MODE_STANDARD) {
+			getSupportActionBar().setNavigationMode(
+					ActionBar.NAVIGATION_MODE_TABS);
+		}
+		if (ItemListFragment.sCreateMode == true) {
+			ItemListFragment.sCreateMode = false;
+			onFragmentTransaction(ItemListFragment.TAG_ITEMLIST_FRAGMENT);
+			return;
+		}
+		if (ItemListFragment.sCreateMode == false) {
+			AlertDialogLogout dialog = AlertDialogLogout.newInstance();
+			dialog.show(mFragmentManager, "");
 		}
 	}
 

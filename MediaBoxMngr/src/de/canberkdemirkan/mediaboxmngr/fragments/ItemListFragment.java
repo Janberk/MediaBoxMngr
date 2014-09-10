@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -28,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import de.canberkdemirkan.mediaboxmngr.BuildConfig;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.activities.ItemPagerActivity;
@@ -41,33 +38,35 @@ import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.CustomTabListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class ItemListFragment extends Fragment implements Serializable,
-		AdapterView.OnItemClickListener, MultiChoiceModeListener, TextWatcher {
+		AdapterView.OnItemClickListener, MultiChoiceModeListener, TextWatcher,
+		OnFragmentTransactionListener {
+
+	public static final String TAG_ITEMLIST_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.tag_itemlist_fragment";
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 14051981L;
 
-	// public static int LOKAL_DB_VERSION = 0;
-	// public static int REMOTE_DB_VERSION = 0;
+	private OnFragmentTransactionListener mFragmentTransactionListener;
+
+	public static boolean sCreateMode;
+	public static ListTag sListTag;
+
+	private String mUser;
+	private int mCABSelectionCount = 0;
 
 	private SharedPreferences mSharedPreferences;
 	private FragmentManager mFragmentManager;
-	private ProgressDialog mProgressDialog;
 	private ActionBar mActionBar;
 	private ActionBar.Tab tabAll, tabMusic, tabBooks, tabMovies, tabFavorites,
 			tabTopRated;
-
-	private String mUser;
-
-	public static ListTag sListTag;
-	public static boolean sCreateMode;
-	private int mCABSelectionCount = 0;
 
 	private ListView mListView;
 	private ArrayList<Item> mItemList;
@@ -76,32 +75,26 @@ public class ItemListFragment extends Fragment implements Serializable,
 	private ActionMode mActionMode;
 
 	public static ItemListFragment newInstance(ListTag listTag) {
+		Bundle args = new Bundle();
+		args.putSerializable(Constants.KEY_LIST_TAG, listTag);
 
-		Bundle passedData = new Bundle();
-		passedData.putSerializable(Constants.KEY_LIST_TAG, listTag);
+		ItemListFragment fragment = new ItemListFragment();
+		fragment.setArguments(args);
 
-		ItemListFragment itemListFragment = new ItemListFragment();
-		itemListFragment.setArguments(passedData);
-
-		return itemListFragment;
-
+		return fragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreate()");
-		}
 
 		setHasOptionsMenu(true);
 
+		mFragmentManager = getActivity().getSupportFragmentManager();
 		mSharedPreferences = getActivity().getSharedPreferences(
 				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
-		mUser = getUserFromPrefs();
-		getActivity().setTitle(mUser);
-
-		mFragmentManager = getActivity().getSupportFragmentManager();
+		mUser = mSharedPreferences.getString(
+				UserAuthenticationConstants.KEY_EMAIL, "");
 
 		Bundle bundle = getArguments();
 
@@ -113,59 +106,28 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 		mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
 				sListTag);
-
-		mProgressDialog = new ProgressDialog(getActivity());
-		mProgressDialog
-				.setMessage("Synchronizing SQLite DB with Remote MySQL DB. Please wait...");
-		mProgressDialog.setCancelable(false);
-	}
-
-	private void initViews(View view) {
-		mListView = (ListView) view
-				.findViewById(R.id.listView_fragmentItemList);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onCreateView()");
-		}
 
 		View view = inflater.inflate(R.layout.fragment_item_list, null);
 
-		initViews(view);
+		mListView = (ListView) view
+				.findViewById(R.id.listView_fragmentItemList);
 
 		mActionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		// LOKAL_DB_VERSION = ItemStock.get(getActivity(),
-		// getUser()).getDAOItem()
-		// .getTableVersion(Constants.VERSION);
-		// REMOTE_DB_VERSION = getRemoteDbVersion();
-		//
-		// if (LOKAL_DB_VERSION < REMOTE_DB_VERSION) {
-		// loadItemsFromRemoteDb();
-		// } else if (LOKAL_DB_VERSION > REMOTE_DB_VERSION) {
-		// try {
-		// syncWithRemoteDb();
-		// } catch (JSONException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		// }
-
-		mItemAdapter = new CustomItemAdapter(getActivity(), this, mItemList);
+		mItemAdapter = new CustomItemAdapter(getActivity(), mItemList);
 		mItemAdapter.setNotifyOnChange(true);
 
 		mListView.setAdapter(mItemAdapter);
 
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-			// Use floating context menus on Froyo and Gingerbread
 			registerForContextMenu(mListView);
 		} else {
-			// Use contextual action bar on Honeycomb and higher
 			mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 			mListView.setMultiChoiceModeListener(this);
 		}
@@ -279,21 +241,20 @@ public class ItemListFragment extends Fragment implements Serializable,
 	}
 
 	private void switchEditMode() {
-		FragmentTransaction ft = mFragmentManager.beginTransaction();
-		CreateItemFragment createItem = CreateItemFragment.newInstance(mUser);
 		if (!sCreateMode) {
-			sCreateMode = true;
 			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-			ft.add(R.id.fragmentContainer, createItem);
-			ft.addToBackStack(null);
-			ft.commit();
+			sCreateMode = true;
+			onFragmentTransaction(TAG_ITEMLIST_FRAGMENT);
 		} else if (sCreateMode) {
-			ft.replace(R.id.fragmentContainer, this);
-			ft.addToBackStack(null);
-			ft.commit();
-			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			sCreateMode = false;
+			onFragmentTransaction(TAG_ITEMLIST_FRAGMENT);
+			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		}
+	}
+
+	@Override
+	public void onFragmentTransaction(String tag) {
+		mFragmentTransactionListener.onFragmentTransaction(tag);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -328,17 +289,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		case R.id.menu_newItem:
 			switchEditMode();
 			return true;
-			// case R.id.menu_sync:
-			// Toast.makeText(getActivity(), "Sync DB?",
-			// Toast.LENGTH_LONG).show();
-			// DatabaseSynchronizer dbSyncer = new DatabaseSynchronizer(
-			// getActivity(), mUser);
-			// try {
-			// dbSyncer.syncWithRemoteDb();
-			// } catch (JSONException | IOException e) {
-			// e.printStackTrace();
-			// }
-			// return true;
 		case R.id.menu_deleteAll:
 			deleteAllItems();
 			return true;
@@ -348,12 +298,7 @@ public class ItemListFragment extends Fragment implements Serializable,
 		case R.id.menu_settings:
 			Intent i = new Intent(getActivity(), SettingsActivity.class);
 			startActivity(i);
-			// FragmentTransaction ft = mFragmentManager.beginTransaction();
-			// ft.replace(R.id.fragmentContainer, new SettingsFragment());
-			// ft.addToBackStack(null);
-			// ft.commit();
 			return true;
-
 		case R.id.menu_logout:
 			AlertDialogLogout dialog = AlertDialogLogout.newInstance();
 			dialog.show(mFragmentManager, "");
@@ -374,6 +319,18 @@ public class ItemListFragment extends Fragment implements Serializable,
 	}
 
 	@Override
+	public void onAttach(Activity activity) {
+		try {
+			mFragmentTransactionListener = (OnFragmentTransactionListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(getActivity().getClass()
+					.getSimpleName()
+					+ " must implement OnFragmentTransactionListener.");
+		}
+		super.onAttach(activity);
+	}
+
+	@Override
 	public void onResume() {
 		if (BuildConfig.DEBUG) {
 			Log.d(Constants.LOG_TAG, "ItemListFragment - onResume()");
@@ -382,12 +339,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 				sListTag);
 		mItemAdapter.refresh(mItemList);
 		super.onResume();
-	}
-
-	public String getUserFromPrefs() {
-		String user = mSharedPreferences.getString(
-				UserAuthenticationConstants.KEY_EMAIL, "");
-		return user;
 	}
 
 	public String getUser() {
@@ -490,57 +441,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	@Override
 	public void afterTextChanged(Editable s) {
-	}
-
-	/*
-	 * 
-	 * Logging callback methods for debug purposes
-	 */
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onActivityCreated()");
-		}
-		super.onActivityCreated(savedInstanceState);
-	}
-
-	@Override
-	public void onStart() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onStart()");
-		}
-		int count = 0;
-		for (Item item : mItemList) {
-			if (!item.isSynced()) {
-				count++;
-			}
-		}
-		if (count > 0) {
-			showSyncStatus();
-		}
-		super.onStart();
-	}
-
-	public void showSyncStatus() {
-		Toast.makeText(getActivity(), "DB out of sync!", Toast.LENGTH_LONG)
-				.show();
-	}
-
-	@Override
-	public void onPause() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onPause()");
-		}
-		super.onPause();
-	}
-
-	@Override
-	public void onStop() {
-		if (BuildConfig.DEBUG) {
-			Log.d(Constants.LOG_TAG, "ItemListFragment - onStop()");
-		}
-		super.onStop();
 	}
 
 }

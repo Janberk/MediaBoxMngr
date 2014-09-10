@@ -12,9 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.adapters.CustomSpinnerAdapter;
 import de.canberkdemirkan.mediaboxmngr.adapters.CustomSpinnerAdapter.SpinnerTag;
@@ -133,9 +131,8 @@ public class CreateItemFragment extends Fragment implements
 	public void onClick(View view) {
 		if (view == mButtonSaveItem) {
 			saveItem();
-			onFragmentTransaction(TAG_CREATE_ITEM_FRAGMENT);
 			onItemCreated(mUser);
-			ItemListFragment.sCreateMode = false;
+			onFragmentTransaction(ItemListFragment.TAG_ITEMLIST_FRAGMENT);
 		}
 	}
 
@@ -143,9 +140,11 @@ public class CreateItemFragment extends Fragment implements
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
 		mTypeAsString = (String) parent.getItemAtPosition(position);
-		RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
-		((TextView) layout.findViewById(R.id.tv_customSpinner_label))
-				.setTextAppearance(getActivity(), R.style.spinnerTextStyle);
+		// RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
+		// if (layout != null) {
+		// ((TextView) layout.findViewById(R.id.tv_customSpinner_label))
+		// .setTextAppearance(getActivity(), R.style.spinnerTextStyle);
+		// }
 	}
 
 	@Override

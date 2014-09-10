@@ -3,8 +3,6 @@ package de.canberkdemirkan.mediaboxmngr.adapters;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +13,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.content.ItemType;
-import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
-import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
-import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
@@ -33,23 +28,13 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 	}
 
 	private final Context mContext;
-	private ItemListFragment mFragment;
 	private ArrayList<Item> mItemList;
-	private FragmentManager mFragmentManager;
 
-	public CustomItemAdapter(Context context, ItemListFragment fragment,
-			ArrayList<Item> itemList) {
+	public CustomItemAdapter(Context context, ArrayList<Item> itemList) {
 		super(context, android.R.layout.simple_list_item_multiple_choice,
 				itemList);
 		this.mContext = context;
-		this.mFragment = fragment;
 		this.mItemList = itemList;
-
-		if (getContext() instanceof FragmentActivity) {
-			mFragmentManager = ((FragmentActivity) context)
-					.getSupportFragmentManager();
-		}
-
 	}
 
 	@Override
@@ -102,42 +87,10 @@ public class CustomItemAdapter extends ArrayAdapter<Item> {
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
-		holder.mImageItemIcon.setFadingEdgeLength(2);
 		UtilMethods.setCustomIconToTypeOfMedia(holder.mImageItemIcon, type,
 				UtilMethods.ICON_DARK_TAG);
 
 		return convertView;
-	}
-
-	public void setClickListenerCheckBox(final CheckBox checkBox,
-			final Item item, final int position) {
-		checkBox.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (checkBox.isChecked()) {
-				} else if (!checkBox.isChecked()) {
-				}
-			}
-		});
-	}
-
-	public void setClickListenerImageView(final ImageView image,
-			final Item item, final int position) {
-		final String header = mContext.getResources().getString(
-				R.string.dialog_header_delete);
-		image.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(
-						mFragment, mItemList, null, header,
-						AlertDialogDeletion.DIALOG_TAG_SINGLE);
-				dialog.setTargetFragment(mFragment,
-						Constants.REQUEST_LIST_DELETE);
-				dialog.show(mFragmentManager, "");
-			}
-		});
 	}
 
 	public void refresh(ArrayList<Item> itemList) {
