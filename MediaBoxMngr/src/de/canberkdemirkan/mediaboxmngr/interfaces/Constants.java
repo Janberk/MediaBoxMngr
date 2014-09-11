@@ -42,10 +42,10 @@ public interface Constants {
 	String KEY_USER_TAG = "de.canberkdemirkan.mediaboxmngr.user_tag";
 	String KEY_LIST_TAG = "de.canberkdemirkan.mediaboxmngr.list_tag";
 	String KEY_DIALOG_TAG = "de.canberkdemirkan.mediaboxmngr.dialog_tag";
+	String KEY_DIALOG_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.dialog_fragment";
 	String KEY_DIALOG_ITEM_LIST = "de.canberkdemirkan.mediaboxmngr.dialog_item_list";
 	String KEY_DIALOG_ITEM = "de.canberkdemirkan.mediaboxmngr.dialog_item";
 	String KEY_DIALOG_TITLE = "de.canberkdemirkan.mediaboxmngr.dialog_title";
-	String KEY_DIALOG_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.dialog_fragment";
 	String EXTRA_DIALOG_LIST = "de.canberkdemirkan.mediaboxmngr.extra_dialog_list";
 	String EXTRA_DETAILS_ITEM = "de.canberkdemirkan.mediaboxmngr.extra_details_item";
 	String EXTRA_DETAILS_CONTENT = "de.canberkdemirkan.mediaboxmngr.extra_details_content";
@@ -55,6 +55,7 @@ public interface Constants {
 	String EXTRA_DETAILS_YEAR = "de.canberkdemirkan.mediaboxmngr.extra_details_year";
 	String KEY_ITEMLIST_CONTEXT = "de.canberkdemirkan.mediaboxmngr.itemlist_context";
 	String KEY_ITEMLIST_USER = "de.canberkdemirkan.mediaboxmngr.itemlist_user";
+	String TAG_LOGOUT = "de.canberkdemirkan.mediaboxmngr.logout";
 	
 	String TAG_ALBUM = ItemType.Album.name();
 	String TAG_BOOK = ItemType.Book.name();

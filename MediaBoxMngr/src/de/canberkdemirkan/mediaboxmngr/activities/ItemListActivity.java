@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import de.canberkdemirkan.mediaboxmngr.R;
 import de.canberkdemirkan.mediaboxmngr.adapters.CustomItemAdapter;
 import de.canberkdemirkan.mediaboxmngr.content.ListTag;
+import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.fragments.CreateItemFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
@@ -17,12 +18,13 @@ import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnItemCreatedListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnListAdapterRefreshedListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnShowAlertDialogListener;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class ItemListActivity extends FragmentActivityBuilder implements
 		OnFragmentTransactionListener, OnItemCreatedListener,
-		OnListAdapterRefreshedListener {
+		OnListAdapterRefreshedListener, OnShowAlertDialogListener {
 
 	private FragmentManager mFragmentManager;
 
@@ -80,6 +82,45 @@ public class ItemListActivity extends FragmentActivityBuilder implements
 		adapter.refresh(list);
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		ItemListFragment.sCreateMode = false;
+	}
+
+	@Override
+	public void onShowAlertDialog(String tag, String header,
+			String intentionTag, ArrayList<Item> items) {
+		if (tag.equals(ItemListFragment.TAG_ITEMLIST_FRAGMENT)) {
+			if (intentionTag.equals(Constants.TAG_LOGOUT)) {
+				AlertDialogLogout dialog = AlertDialogLogout.newInstance();
+				dialog.show(mFragmentManager, "");
+				return;
+			}
+			if (intentionTag.equals(AlertDialogDeletion.DIALOG_TAG_SINGLE)) {
+				ItemListFragment fragment = (ItemListFragment) mFragmentManager
+						.findFragmentByTag(ItemListFragment.class.getName());
+				AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(
+						fragment, items, null, header, intentionTag);
+				dialog.setTargetFragment(fragment,
+						Constants.REQUEST_LIST_DELETE);
+				dialog.show(mFragmentManager, "");
+				return;
+			}
+			if (intentionTag.equals(AlertDialogDeletion.DIALOG_TAG_SELECTED)) {
+				ItemListFragment fragment = (ItemListFragment) mFragmentManager
+						.findFragmentByTag(ItemListFragment.class.getName());
+				AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(
+						fragment, items, null, header, intentionTag);
+				dialog.setTargetFragment(fragment,
+						Constants.REQUEST_LIST_DELETE);
+				dialog.show(mFragmentManager, "");
+				return;
+			}
+			ItemListFragment fragment = (ItemListFragment) mFragmentManager
+					.findFragmentByTag(ItemListFragment.class.getName());
+			AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(
+					fragment, fragment.getItemList(), null, header,
+					intentionTag);
+			dialog.setTargetFragment(fragment, Constants.REQUEST_LIST_DELETE);
+			dialog.show(mFragmentManager, "");
+		}
 	}
 
 	@Override

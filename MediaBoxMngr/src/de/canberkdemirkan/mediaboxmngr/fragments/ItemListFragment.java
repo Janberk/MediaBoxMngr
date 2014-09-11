@@ -35,26 +35,27 @@ import de.canberkdemirkan.mediaboxmngr.content.ListTag;
 import de.canberkdemirkan.mediaboxmngr.data.DummyDataProvider;
 import de.canberkdemirkan.mediaboxmngr.data.ItemStock;
 import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogDeletion;
-import de.canberkdemirkan.mediaboxmngr.dialogs.AlertDialogLogout;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.CustomTabListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.OnFragmentTransactionListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.OnShowAlertDialogListener;
 import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class ItemListFragment extends Fragment implements Serializable,
 		AdapterView.OnItemClickListener, MultiChoiceModeListener, TextWatcher,
-		OnFragmentTransactionListener {
-
-	public static final String TAG_ITEMLIST_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.tag_itemlist_fragment";
+		OnFragmentTransactionListener, OnShowAlertDialogListener {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 14051981L;
+	private static final long serialVersionUID = -1188941681931560001L;
+
+	public static final String TAG_ITEMLIST_FRAGMENT = "de.canberkdemirkan.mediaboxmngr.tag_itemlist_fragment";
 
 	private OnFragmentTransactionListener mFragmentTransactionListener;
+	private OnShowAlertDialogListener mShowAlertDialogListener;
 
 	public static boolean sCreateMode;
 	public static ListTag sListTag;
@@ -175,15 +176,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 		mActionBar.addTab(tabTopRated);
 	}
 
-	private void deleteAllItems() {
-		final String header = getActivity().getResources().getString(
-				R.string.dialog_header_delete_all);
-		AlertDialogDeletion dialog = AlertDialogDeletion.newInstance(this,
-				mItemList, null, header, AlertDialogDeletion.DIALOG_TAG_ALL);
-		dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
-		dialog.show(mFragmentManager, "");
-	}
-
 	private void showItemDetails() {
 		int count = 0;
 
@@ -205,6 +197,13 @@ public class ItemListFragment extends Fragment implements Serializable,
 		}
 	}
 
+	private void deleteAllItems() {
+		String header = getActivity().getResources().getString(
+				R.string.dialog_header_delete_all);
+		onShowAlertDialog(TAG_ITEMLIST_FRAGMENT, header,
+				AlertDialogDeletion.DIALOG_TAG_ALL, null);
+	}
+
 	private void deleteSelectedItems() {
 		final String header = getActivity().getResources().getString(
 				R.string.dialog_header_delete_selected);
@@ -223,21 +222,17 @@ public class ItemListFragment extends Fragment implements Serializable,
 				}
 			}
 		}
-		AlertDialogDeletion dialog = null;
+
 		if (count == 1) {
-			dialog = AlertDialogDeletion.newInstance(this, selectedItems, null,
-					header + "\n" + addition,
-					AlertDialogDeletion.DIALOG_TAG_SINGLE);
+			onShowAlertDialog(TAG_ITEMLIST_FRAGMENT, header + "\n" + addition,
+					AlertDialogDeletion.DIALOG_TAG_SINGLE, selectedItems);
 		}
 		if (count > 1) {
 			addition = count + " of " + mItemAdapter.getCount();
-			dialog = AlertDialogDeletion.newInstance(this, selectedItems, null,
-					header + "\n" + addition,
-					AlertDialogDeletion.DIALOG_TAG_SELECTED);
+			onShowAlertDialog(TAG_ITEMLIST_FRAGMENT, header + "\n" + addition,
+					AlertDialogDeletion.DIALOG_TAG_SELECTED, selectedItems);
 		}
 
-		dialog.setTargetFragment(this, Constants.REQUEST_LIST_DELETE);
-		dialog.show(mFragmentManager, "");
 	}
 
 	private void switchEditMode() {
@@ -250,11 +245,6 @@ public class ItemListFragment extends Fragment implements Serializable,
 			onFragmentTransaction(TAG_ITEMLIST_FRAGMENT);
 			mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		}
-	}
-
-	@Override
-	public void onFragmentTransaction(String tag) {
-		mFragmentTransactionListener.onFragmentTransaction(tag);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -300,8 +290,10 @@ public class ItemListFragment extends Fragment implements Serializable,
 			startActivity(i);
 			return true;
 		case R.id.menu_logout:
-			AlertDialogLogout dialog = AlertDialogLogout.newInstance();
-			dialog.show(mFragmentManager, "");
+			String header = getActivity().getResources().getString(
+					R.string.dialog_header_logout);
+			onShowAlertDialog(TAG_ITEMLIST_FRAGMENT, header,
+					Constants.TAG_LOGOUT, null);
 			return true;
 		default:
 			return super.onOptionsItemSelected(menuItem);
@@ -326,6 +318,13 @@ public class ItemListFragment extends Fragment implements Serializable,
 			throw new ClassCastException(getActivity().getClass()
 					.getSimpleName()
 					+ " must implement OnFragmentTransactionListener.");
+		}
+		try {
+			mShowAlertDialogListener = (OnShowAlertDialogListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(getActivity().getClass()
+					.getSimpleName()
+					+ " must implement OnShowAlertDialogListener.");
 		}
 		super.onAttach(activity);
 	}
@@ -355,6 +354,10 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	public CustomItemAdapter getItemAdapter() {
 		return mItemAdapter;
+	}
+
+	public ArrayList<Item> getItemList() {
+		return mItemList;
 	}
 
 	// click listeners
@@ -441,6 +444,18 @@ public class ItemListFragment extends Fragment implements Serializable,
 
 	@Override
 	public void afterTextChanged(Editable s) {
+	}
+
+	@Override
+	public void onFragmentTransaction(String tag) {
+		mFragmentTransactionListener.onFragmentTransaction(tag);
+	}
+
+	@Override
+	public void onShowAlertDialog(String tag, String header,
+			String intentionTag, ArrayList<Item> items) {
+		mShowAlertDialogListener.onShowAlertDialog(tag, header, intentionTag,
+				items);
 	}
 
 }

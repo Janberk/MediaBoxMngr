@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -19,6 +21,7 @@ import de.canberkdemirkan.mediaboxmngr.fragments.ItemFragment;
 import de.canberkdemirkan.mediaboxmngr.fragments.ItemListFragment;
 import de.canberkdemirkan.mediaboxmngr.interfaces.Constants;
 import de.canberkdemirkan.mediaboxmngr.interfaces.CustomTabListener;
+import de.canberkdemirkan.mediaboxmngr.interfaces.UserAuthenticationConstants;
 import de.canberkdemirkan.mediaboxmngr.model.Item;
 import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
@@ -30,9 +33,9 @@ public class AlertDialogDeletion extends DialogFragment {
 	public static final String DIALOG_TAG_DETAIL_SINGLE = "de.canberkdemirkan.mediaboxmngr.delete_detail_single";
 
 	private ItemListFragment mItemListFragment;
-	private ItemFragment mItemFragment;
 	private ArrayList<Item> mItemList;
 	private Item mItem;
+	private String mUser;
 	private String mTitle;
 	private String mTag;
 
@@ -69,6 +72,10 @@ public class AlertDialogDeletion extends DialogFragment {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		SharedPreferences preferences = getActivity().getSharedPreferences(
+				Constants.KEY_MY_PREFERENCES, Context.MODE_PRIVATE);
+		mUser = preferences
+				.getString(UserAuthenticationConstants.KEY_EMAIL, "");
 
 		if (getArguments().getSerializable(Constants.KEY_DIALOG_FRAGMENT) instanceof ItemListFragment) {
 			mItemListFragment = (ItemListFragment) getArguments()
@@ -83,8 +90,6 @@ public class AlertDialogDeletion extends DialogFragment {
 
 		} else if (getArguments()
 				.getSerializable(Constants.KEY_DIALOG_FRAGMENT) instanceof ItemFragment) {
-			mItemFragment = (ItemFragment) getArguments().getSerializable(
-					Constants.KEY_DIALOG_FRAGMENT);
 			mItem = (Item) getArguments().getSerializable(
 					Constants.KEY_DIALOG_ITEM);
 		}
@@ -130,38 +135,38 @@ public class AlertDialogDeletion extends DialogFragment {
 	}
 
 	private void deleteSelectedItem() {
+
 		for (Item item : mItemList) {
-			ItemStock.get(getActivity(), mItemListFragment.getUser())
-					.getDAOItem().deleteItem(item);
+			ItemStock.get(getActivity(), mUser).getDAOItem().deleteItem(item);
 		}
 		if (CustomTabListener.sTag != null) {
 			mItemList.clear();
 			switch (CustomTabListener.sTag) {
 			case ALL:
-				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mItemListFragment.getUser(), ListTag.ALL);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.ALL);
 				break;
 			case MUSIC:
-				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mItemListFragment.getUser(), ListTag.MUSIC);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.MUSIC);
 				break;
 			case BOOKS:
-				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mItemListFragment.getUser(), ListTag.BOOKS);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.BOOKS);
 				break;
 			case MOVIES:
-				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mItemListFragment.getUser(), ListTag.MOVIES);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.MOVIES);
 				break;
 
 			case FAVORITES:
-				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mItemListFragment.getUser(), ListTag.FAVORITES);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.FAVORITES);
 				break;
 
 			default:
-				mItemList = UtilMethods.createListFromTag(getActivity(),
-						mItemListFragment.getUser(), ListTag.ALL);
+				mItemList = UtilMethods.createListFromTag(getActivity(), mUser,
+						ListTag.ALL);
 				break;
 			}
 		}
@@ -169,15 +174,12 @@ public class AlertDialogDeletion extends DialogFragment {
 
 	private void deleteAllItems() {
 		mItemList.clear();
-		ItemStock
-				.get(mItemListFragment.getActivity(),
-						mItemListFragment.getUser()).getDAOItem()
-				.deleteAllItems(mItemListFragment.getUser());
+		ItemStock.get(mItemListFragment.getActivity(), mUser).getDAOItem()
+				.deleteAllItems(mUser);
 	}
 
 	private void deleteItem() {
-		ItemStock.get(getActivity(), mItemFragment.getUser()).getDAOItem()
-				.deleteItem(mItem);
+		ItemStock.get(getActivity(), mUser).getDAOItem().deleteItem(mItem);
 		getActivity().finish();
 	}
 
