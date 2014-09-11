@@ -3,7 +3,7 @@
 
     <Preference
         android:key="deleteAccount"
-        android:summary="This will delete your account."
-        android:title="Delete account?" />
+        android:summary="@string/settings_delete_account_summary"
+        android:title="@string/settings_delete_account" />
 
 </PreferenceScreen>

@@ -59,7 +59,7 @@ public class SettingsFragment extends PreferenceFragment implements
 			String header = getResources().getString(
 					R.string.dialog_header_delete_account);
 			AlertDialogDeleteAccount alertDialog = AlertDialogDeleteAccount
-					.newInstance(getActivity(), header);
+					.newInstance(header);
 			alertDialog.show(getActivity().getSupportFragmentManager(), "");
 			return true;
 		}

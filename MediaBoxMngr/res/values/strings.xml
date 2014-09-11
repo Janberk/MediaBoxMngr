@@ -28,7 +28,6 @@
     <string name="enter_Login_label">Enter E-mail and password.</string>
     <string name="new_item">New Item</string>
     <string name="edit">Edit</string>
-    <!-- <string name="search">Enter search filter.</string> -->
     <string name="menu">Menu</string>
     <string name="delete_all">Delete All</string>
     <string name="delete_item">Delete</string>
@@ -59,6 +58,8 @@
     <string name="details_content_music">Content/Track list:</string>
     <string name="details_rating">Rating:</string>
     <string name="details_format_tracks">Format, Number o Tracks:</string>
+    <string name="settings_delete_account">Delete account?</string>
+    <string name="settings_delete_account_summary">This will delete your account.</string>
 
     <string-array name="item_types">
         <item>Music</item>

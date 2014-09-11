@@ -18,8 +18,7 @@ public class AlertDialogDeleteAccount extends DialogFragment {
 
 	private String mTitle;
 
-	public static AlertDialogDeleteAccount newInstance(Context context,
-			String title) {
+	public static AlertDialogDeleteAccount newInstance(String title) {
 
 		Bundle args = new Bundle();
 		if (title != null) {
