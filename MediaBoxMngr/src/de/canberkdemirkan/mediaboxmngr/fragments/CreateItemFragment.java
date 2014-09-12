@@ -168,11 +168,6 @@ public class CreateItemFragment extends Fragment implements
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
 		mTypeAsString = (String) parent.getItemAtPosition(position);
-		// RelativeLayout layout = (RelativeLayout) parent.getChildAt(0);
-		// if (layout != null) {
-		// ((TextView) layout.findViewById(R.id.tv_customSpinner_label))
-		// .setTextAppearance(getActivity(), R.style.spinnerTextStyle);
-		// }
 	}
 
 	@Override
@@ -184,11 +179,16 @@ public class CreateItemFragment extends Fragment implements
 		super.onAttach(activity);
 		try {
 			mOnFragmentTransactionListener = (OnFragmentTransactionListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(getActivity().getClass()
+					.getSimpleName()
+					+ " must implement OnFragmentTransactionListener.");
+		}
+		try {
 			mOnItemCreatedListener = (OnItemCreatedListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(
-					getActivity().getClass().getSimpleName()
-							+ " must implement OnFragmentTransactionListener and OnItemCreatedListener.");
+			throw new ClassCastException(getActivity().getClass()
+					.getSimpleName() + " must implement OnItemCreatedListener.");
 		}
 	}
 
