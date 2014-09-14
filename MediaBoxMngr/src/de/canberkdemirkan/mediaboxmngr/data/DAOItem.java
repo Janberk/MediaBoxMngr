@@ -21,8 +21,6 @@ import de.canberkdemirkan.mediaboxmngr.util.UtilMethods;
 
 public class DAOItem {
 
-	private static int sTableVersion = 0;
-
 	public int mColId;
 	public int mColSQLiteId;
 	public int mColUser;
