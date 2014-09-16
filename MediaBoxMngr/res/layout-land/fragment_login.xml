@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_000022"
+    android:background="@color/dark"
     android:fillViewport="true" >
 
     <RelativeLayout
@@ -62,8 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/cb_fragmentLogin_rememberMe"
             android:layout_centerHorizontal="true"
-            android:text="@string/sign_up_link_label"
-            android:layout_marginTop="@dimen/custom_value_0dp" />
+            android:layout_marginTop="@dimen/custom_value_0dp"
+            android:text="@string/sign_up_link_label" />
     </RelativeLayout>
 
 </ScrollView>

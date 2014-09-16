@@ -4,8 +4,8 @@
     <item android:drawable="@drawable/ic_menu_check">
         <shape android:shape="rectangle" >
             <size
-                android:height="24dp"
-                android:width="24dp" />
+                android:height="@dimen/custom_value_24dp"
+                android:width="@dimen/custom_value_24dp" />
         </shape>
     </item>
 

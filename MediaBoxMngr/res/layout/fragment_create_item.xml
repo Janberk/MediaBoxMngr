@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_000022"
+    android:background="@color/dark"
     android:fillViewport="true" >
 
     <RelativeLayout
@@ -37,7 +37,7 @@
             android:layout_below="@+id/et_fragmentEditTitle_editTitle"
             android:layout_centerHorizontal="true"
             android:text="@string/item_type_label"
-            android:textColor="@color/pastel_red" />
+            android:textColor="@color/gold" />
 
         <Spinner
             android:id="@+id/sp_fragmentEditTitle_itemType"

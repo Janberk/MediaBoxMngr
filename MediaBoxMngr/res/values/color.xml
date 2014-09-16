@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="baby_blue_eyes">#a1caf1</color>
-    <color name="pastel_red">#ff6961</color>
-    <color name="background_000022">#000022</color>
-    <color name="light_grey">#e8e8e8</color>
-    <color name="salmon">#fa8072</color>
-    
-    <color name="yellow">#FFFF00</color>
-    <color name="fuchsia">#FF00FF</color>
-    <color name="red">#FF0000</color>
-    <color name="silver">#C0C0C0</color>
-    <color name="gray">#808080</color>
-    <color name="olive">#808000</color>
-    <color name="purple">#800080</color>
-    <color name="maroon">#800000</color>
-    <color name="aqua">#00FFFF</color>
-    <color name="lime">#00FF00</color>
-    <color name="teal">#008080</color>
-    <color name="green">#008000</color>
-    <color name="blue">#0000FF</color>
-    <color name="navy">#000080</color>
+    <color name="dark">#14110d</color>
+    <color name="bright">#fbffff</color>
+    <color name="gold">#f68400</color>
+    <color name="red">#d52600</color>
+    <color name="gray_blue">#30363b</color>
+    <color name="gray_blue_light">#435361</color>
+    <color name="gray">#6d6e71</color>
     <color name="black">#000000</color>
-    <color name="white">#ffffff</color>
 
 </resources>

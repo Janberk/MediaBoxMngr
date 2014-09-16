@@ -11,7 +11,6 @@
         android:layout_alignParentTop="true"
         android:choiceMode="multipleChoice"
         android:clipToPadding="false"
-        android:dividerHeight="@dimen/custom_value_4dp"
-        android:padding="@dimen/custom_value_4dp" />
+        android:dividerHeight="@dimen/custom_value_2dp" />
 
 </RelativeLayout>

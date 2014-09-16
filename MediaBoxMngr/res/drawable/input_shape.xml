@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<item android:state_focused="true"><shape android:shape="rectangle">
-            <corners android:radius="4dp" />
-            <solid android:color="#e0ffff"/>
-            <stroke android:width="2dp" android:color="#0197fd"/>
+    <item android:state_focused="true"><shape android:shape="rectangle">
+            <corners android:radius="@dimen/custom_value_4dp" />
+
+            <solid android:color="@color/bright" />
+
+            <stroke android:width="@dimen/custom_value_2dp" android:color="@color/red" />
         </shape></item>
     <item><shape android:shape="rectangle">
-            <corners android:radius="4dp" />
-            <solid android:color="#e0ffff"/>
+            <corners android:radius="@dimen/custom_value_4dp" />
+
+            <solid android:color="@color/bright" />
         </shape></item>
 
 </selector>
